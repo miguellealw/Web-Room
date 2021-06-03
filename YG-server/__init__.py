@@ -3,11 +3,17 @@ import os
 from flask import Flask
 
 
+# TODO: setup postgresql
+
 def create_app(test_config=None):
     # create and configure the app
+    # __name__ is the name of the current python module
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
+        # TODO: change this to random value when deploying
         SECRET_KEY='dev',
+        # instance folder is located outside YG-server package and 
+        # can hold local data that shouldn't be commited to version control, like config secrets and DB files
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
     )
 
