@@ -29,7 +29,7 @@ CREATE TABLE channels (
   fk_user INTEGER NOT NULL,
 
   -- FOREIGN KEY <name of foreign key in table> REFERENCES <table> <column in table>
-  -- FIXME: figure out if composition table is needed
+  -- TODO: figure out if composition table is needed
   FOREIGN KEY (fk_category) REFERENCES categories (category_id),
   FOREIGN KEY (fk_user) REFERENCES users (user_id)
 );
