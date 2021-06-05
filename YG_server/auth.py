@@ -10,7 +10,7 @@ from YG_server.db import get_db
 
 # create blueprint named 'auth'
 # __name__ - tells blueprint where it is defined
-bp = Blueprint('auth', __name__, url_prefix='/auth')
+bp = Blueprint('auth', __name__)
 
 # TODO: edit so json is returned and not templates
     
