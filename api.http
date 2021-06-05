@@ -1,0 +1,21 @@
+@hostname = 127.0.0.1
+@port = 5000
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+@apiVersion = v1.0
+
+
+
+###
+GET http://{{host}}/api/{{apiVersion}}/categories
+
+###
+GET http://{{host}}/api/{{apiVersion}}/categories/3
+
+###
+POST http://{{host}}/api/{{apiVersion}}/categories
+
+{
+  "id": "1",
+  "title": "test title"
+}
