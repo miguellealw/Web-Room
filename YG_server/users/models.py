@@ -1,4 +1,5 @@
 from .. import db
+from datetime import datetime
 
 class User(db.Model):
   __tablename__ = 'user'
@@ -14,6 +15,12 @@ class User(db.Model):
     nullable=False
   )
 
+  created = db.Column(
+    db.DateTime, 
+    nullable=False,
+    default=datetime.utcnow
+  )
+
   password = db.Column(
     db.String(25),
     nullable=False
@@ -21,3 +28,10 @@ class User(db.Model):
 
   def __repr__(self):
     return '<User %r>' % self.username
+
+  # @password.setter                                                           
+  # def password(self, password):                                              
+  #   self.password_hash = bcrypt.hashpw(password, bcrypt.gensalt(12))       
+
+  # def verify_password(self, password):                                       
+  #   return bcrypt.hashpw(password, self.password_hash) == self.password_hash    

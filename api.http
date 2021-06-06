@@ -19,3 +19,24 @@ content-type: application/json
 {
   "name": "test title"
 }
+
+
+###
+
+POST http://{{host}}/api/{{apiVersion}}/users/register
+content-type: application/json
+
+{
+  "username": "user3",
+  "password": "test_password"
+}
+
+###
+GET http://{{host}}/api/{{apiVersion}}/users?id=2
+content-type: application/json
+
+### 
+GET http://{{host}}/api/{{apiVersion}}/users/current_user
+content-type: application/json
+
+# PASS TOKEN IN BODY
