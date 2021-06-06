@@ -1,7 +1,4 @@
-import os
-
 from flask import Flask, make_response, jsonify
-
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -30,10 +27,11 @@ def create_app(test_config=None):
   with app.app_context():
     from . import auth
     # from .channels import routes as channels
+    # from .users import routes as users
     from .categories import routes as categories
 
     url_version = '/api/v1.0'
-    app.register_blueprint(auth.bp, url_prefix=f'{url_version}/auth')
+    # app.register_blueprint(auth.bp, url_prefix=f'{url_version}/auth')
     app.register_blueprint(categories.categories_bp, url_prefix=f'{url_version}/categories')
 
   return app
