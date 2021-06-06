@@ -14,8 +14,8 @@ GET http://{{host}}/api/{{apiVersion}}/categories/3
 
 ###
 POST http://{{host}}/api/{{apiVersion}}/categories
+content-type: application/json
 
 {
-  "id": "1",
-  "title": "test title"
+  "name": "test title"
 }
