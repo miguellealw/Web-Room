@@ -14,7 +14,8 @@ setup(
   zip_safe=False,
   install_requires=[
     'flask',
-    'flask-sqlalchemy'
+    'flask-sqlalchemy',
+    'psycopg2'
   ]
 
 )
