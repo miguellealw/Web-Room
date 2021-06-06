@@ -9,6 +9,13 @@ class Channel(db.Model):
     primary_key=True
   )
 
+  # will contain the id of the channel from the YouTube API
+  yt_channel_id = db.Column(
+    db.String,
+    nullable=False,
+    unique=False
+  )
+
   name = db.Column(
     db.String,
     nullable=False,
