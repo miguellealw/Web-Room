@@ -12,9 +12,9 @@ def all():
       abort(400)
 
     # TODO: create category
-    new_category = Category(
-      
-    )
+    # new_category = Category(
+
+    # )
     return jsonify(name), 201
 
   return jsonify({'message': 'all categoriies'})
