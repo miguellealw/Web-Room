@@ -44,13 +44,23 @@ class User(db.Model):
     nullable=False
   )
 
+  # user_instance.user_channel - gets channels(subscriptions) of user 
+  # NOTE: do not rename to channels or error occurs
   user_channel = db.relationship(
     'Channel', 
     secondary=user_channel,
-    # load channels when loading category
+    # load channels when loading user
     lazy='subquery',
-    # backref=db.backref('channels', lazy=True)
-    # backref='channels'
+    # channel.users - get users of channel (consider removing)
+    backref=db.backref('users', lazy=True)
+  )
+
+  # user_instance.categories = gets categories of user
+  categories = db.relationship(
+    'Category',
+    lazy='subquery',
+    # category.users = get user/s of category (should only be 1 user)
+    backref=db.backref('user', lazy=True)
   )
 
   def __repr__(self):

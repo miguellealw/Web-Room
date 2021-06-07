@@ -1,4 +1,5 @@
 from .. import db
+from YG_server.users.models import user_channel
 
 class Channel(db.Model):
   __tablename__ = 'channel'
@@ -21,22 +22,22 @@ class Channel(db.Model):
     unique=False
   )
 
-  # category_id = db.Column(
-  #   db.Integer,
-  #   db.ForeignKey('category.id'),
-  #   nullable=False
-  # )
-
   # backref - declare 'channels' property on Channel class
   # category = db.relationship(
   #   'Category', 
   #   backref=db.backref('channels', lazy=True)
   # )
 
-  # channel_category = 
+  # channel_instance.user - gets user of channel
+  user = db.relationship(
+    'User', 
+    secondary=user_channel,
+    lazy='subquery',
+    # user.channels - gets channels of user
+    backref=db.backref('channels', lazy=True)
+  )
 
-  # TODO: figure out if relating to user is necessary b/c channels will be fetchanble from the YouTube API
-  # Maybe join table may work
+  # channel_category = 
 
   def __repr__(self):
     return '<Channel %r>' % self.name
