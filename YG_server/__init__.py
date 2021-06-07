@@ -4,8 +4,17 @@ from werkzeug.exceptions import HTTPException
 
 db = SQLAlchemy()
 
-def default_err_handler(e):
-  return jsonify(error=str(e))
+def resource_not_found(e):
+  return jsonify(error=str(e)), 404
+
+def resource_conflict(e):
+  return jsonify(error=str(e)), 409
+
+def default_handler(e):
+  if isinstance(e, HTTPException):
+    return jsonify(error=str(e)), 404
+
+  return jsonify({"error": "Non-HTTP Error"}), 500
 
 def create_app(test_config=None):
   # __name__ is the name of the current python module
@@ -17,9 +26,9 @@ def create_app(test_config=None):
   # app.config.from_object('config.ProdConfig')
 
   ## SETUP ERROR HANDLERS
-  app.register_error_handler(404, default_err_handler)
-  app.register_error_handler(409, default_err_handler)
-  app.register_error_handler(Exception, default_err_handler)
+  app.register_error_handler(404, resource_not_found)
+  app.register_error_handler(409, resource_conflict)
+  app.register_error_handler(Exception, default_handler)
 
   ## REGISTER PLUGINS - make globally accessible to other parts of app
   # register db
