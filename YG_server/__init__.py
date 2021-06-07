@@ -1,11 +1,11 @@
 from flask import Flask, make_response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import HTTPException
-from .error_handlers import resource_not_found, resource_could_not_be_created, default_handler
 
 db = SQLAlchemy()
 
-# TODO: setup postgresql
+def default_err_handler(e):
+  return jsonify(error=str(e))
 
 def create_app(test_config=None):
   # __name__ is the name of the current python module
@@ -17,9 +17,9 @@ def create_app(test_config=None):
   # app.config.from_object('config.ProdConfig')
 
   ## SETUP ERROR HANDLERS
-  app.register_error_handler(404, resource_not_found)
-  app.register_error_handler(409, resource_could_not_be_created)
-  app.register_error_handler(Exception, resource_could_not_be_created)
+  app.register_error_handler(404, default_err_handler)
+  app.register_error_handler(409, default_err_handler)
+  app.register_error_handler(Exception, default_err_handler)
 
   ## REGISTER PLUGINS - make globally accessible to other parts of app
   # register db
