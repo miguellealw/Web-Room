@@ -2,44 +2,66 @@ from flask import Blueprint, jsonify, request, abort
 from YG_server import db
 from .models import Channel
 from YG_server.categories.models import Category
+from YG_server.users.models import User
 
 
 channels_bp = Blueprint('channels', __name__)
 @channels_bp.route('', methods=['GET', 'POST'])
 def all():
+  created_channel = request.get_json()
+  user_id = created_channel['user_id']
+  ## ==== POST ====
+  # TODO: only create channel when adding to category
   if request.method == 'POST':
-    created_channel = request.get_json()
     name = created_channel['name']
     yt_channel_id = created_channel['yt_channel_id']
     category_id = created_channel['category_id']
 
+
     if name is None or yt_channel_id is None:
       abort(400, description="Name or yt_channel_id not passed in body")
 
-    # TODO: check if channel is already in DB, if it is just add skip creation and relate to category
+    # TODO: check if channel is already in DB, if it is skip creation; fetch channel and relate to category
 
     new_channel = Channel(
       name=name,
       yt_channel_id=yt_channel_id,
     )
 
+    if new_channel is None:
+      abort(409, description="Channel could not be created")
+
     # relate channel to category
     # TODO: read about security in getting primary keys from client
-    category = Category.query.filter(Category.id == category_id).first()
-    category.channel_category.append(new_channel)
+    category_found = Category.query.filter(Category.id == category_id).first()
+    if(category_found is None):   
+      abort(409, description="Channel could not be created; category does not exist")
+    # Access channels from category
+    category_found.channel_category.append(new_channel)
+
+    # relate channel to user
+    user_found = User.query.filter(User.id == user_id).first()
+    if(user_found is None):   
+      abort(409, description="Channel could not be created; user does not exist")
+    user_found.user_channel.append(new_channel)
 
     db.session.add(new_channel)
     db.session.commit()
 
-    if new_channel is None:
-      abort(409, description="Channel could not be created")
-
     return jsonify(f'channel created: {new_channel.name}'), 201
 
-  channels = Channel.query.all()
+  ## ==== GET ====
+
+  # only get current user channels
+  user_found = User.query.filter(User.id == user_id).first()
+  if(user_found is None):   
+    abort(409, description="Channel could not be fetched; user does not exist")
+
+  channels = user_found.channels
   channel_str = []
 
   for channel in channels:
+    # Access categories from channel
     # backrefs allow me to access categories related to each individual channel
     channel_str.append(f"{channel} is in categories: {channel.categories}")
 
@@ -47,5 +69,3 @@ def all():
     abort(404, description="Channels could be not fetched")
   # return jsonify({"channels": str(channels), "categories": str(categories)})
   return jsonify({"message:": str(channel_str)})
-
-
