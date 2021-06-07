@@ -51,13 +51,14 @@ class Category(db.Model):
   #   backref=db.backref('users', lazy=True)
   # )
 
-  # TODO: channel_category is expected as object but got table
   # this will relate channel to a category
+  # category_instance.channel_category - get channels of category
   channel_category = db.relationship(
     'Channel', 
     secondary=channel_category,
     # load channels when loading category
     lazy='subquery',
+    # channel.categories - get categories of channel
     backref=db.backref('categories', lazy=True)
     # backref='categories'
   )
