@@ -1,4 +1,3 @@
-from datetime import datetime
 from .. import db
 
 class Channel(db.Model):
@@ -13,7 +12,7 @@ class Channel(db.Model):
   yt_channel_id = db.Column(
     db.String,
     nullable=False,
-    unique=False
+    unique=True
   )
 
   name = db.Column(
@@ -22,11 +21,11 @@ class Channel(db.Model):
     unique=False
   )
 
-  category_id = db.Column(
-    db.Integer,
-    db.ForeignKey('category.id'),
-    nullable=False
-  )
+  # category_id = db.Column(
+  #   db.Integer,
+  #   db.ForeignKey('category.id'),
+  #   nullable=False
+  # )
 
   # backref - declare 'channels' property on Channel class
   # category = db.relationship(
