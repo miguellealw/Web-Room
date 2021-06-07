@@ -1,6 +1,26 @@
 from datetime import datetime
-from .. import db
-from .. import channel_category
+# from YG_server import db, channel_category 
+from YG_server import db
+from YG_server.channels.models import Channel
+
+channel_category = db.Table(
+  'channel_category',
+
+  db.Column(
+    'channel_id',
+    db.Integer,
+    db.ForeignKey('channel.id'),
+    # primary_key=True
+  ),
+
+  db.Column(
+    'category_id',
+    db.Integer,
+    db.ForeignKey('category.id'),
+    # primary_key=True
+  ),
+)
+
 class Category(db.Model):
   __tablename__ = 'category'
 
@@ -26,18 +46,20 @@ class Category(db.Model):
     nullable=False
   )
 
-  user = db.relationship(
-    'User',
-    backref=db.backref('users', lazy=True)
-  )
+  # user = db.relationship(
+  #   'User',
+  #   backref=db.backref('users', lazy=True)
+  # )
 
+  # TODO: channel_category is expected as object but got table
   # this will relate channel to a category
   channel_category = db.relationship(
     'Channel', 
     secondary=channel_category,
     # load channels when loading category
     lazy='subquery',
-    backref=db.backref('channels', lazy='True')
+    backref=db.backref('categories', lazy=True)
+    # backref='categories'
   )
 
   def __repr__(self):
