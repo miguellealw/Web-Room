@@ -15,7 +15,7 @@ def register():
     password = user['password']
     error = None
 
-    # Check if user or password were note provided.
+    # Check if user or password were not provided.
     # Otherwise check if user already exists in db
     if not username:
       error = 'Username is required.'
@@ -42,6 +42,7 @@ def register():
 
 @users_bp.route('/login', methods=['GET'])
 def login():
+  # TODO: use flask-login
   pass
 
 
@@ -58,7 +59,20 @@ def get_user():
 
 @users_bp.route('/current_user', methods=['GET'])
 def current_user():
-  user_found = User.query.filter(User.username == 'test_username').first()
+  id = request.get_json()['user_id']
+
+  # TODO: get jwt token and find user
+  user_found = User.query.filter(User.id == id).first()
+
   if user_found is None:
-    abort(404)
-  return jsonify({"username": user_found.username})
+    abort(404, description="User not found")
+
+  channels = user_found.channels
+  categories = user_found.categories
+
+  # TODO: get channels of current user
+  return jsonify({
+    "username": user_found.username, 
+    "channels": str(channels),
+    "categories": str(categories)
+  })
