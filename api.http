@@ -63,10 +63,13 @@ content-type: application/json
 }
 
 ###
-# get all channels
+# get all channels of current user
 GET http://{{host}}/api/{{apiVersion}}/channels
 
-# TODO: send token
+# TODO: send token in header
+# {
+#   "Authorization": "Bearer sdfsdf"
+# }
 
 
 # RETURNS
