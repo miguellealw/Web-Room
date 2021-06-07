@@ -1,6 +1,24 @@
 from .. import db
 from datetime import datetime
 
+user_channel = db.Table(
+  'user_channel',
+
+  db.Column(
+    'channel_id',
+    db.Integer ,
+    db.ForeignKey('channel.id'),
+    primary_key=True
+  ),
+
+  db.Column(
+    'user_id',
+    db.Integer,
+    db.ForeignKey('user.id'),
+    primary_key=True
+  ),
+)
+
 class User(db.Model):
   __tablename__ = 'user'
 
@@ -24,6 +42,15 @@ class User(db.Model):
   password = db.Column(
     db.String(25),
     nullable=False
+  )
+
+  user_channel = db.relationship(
+    'Channel', 
+    secondary=user_channel,
+    # load channels when loading category
+    lazy='subquery',
+    # backref=db.backref('channels', lazy=True)
+    # backref='channels'
   )
 
   def __repr__(self):
