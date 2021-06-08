@@ -26,19 +26,17 @@ def current_user():
   if user_found is None:
     abort(404, description="User not found")
 
-  channels = user_found.channels
-  if channels is None:
-    abort(404, description="User has no channels")
+  # channels = user_found.channels
+  # if channels is None:
+  #   abort(404, description="User has no channels")
 
-  categories = user_found.categories
-  if categories is None:
-    abort(404, description="User has no categories")
+  # categories = user_found.categories
+  # if categories is None:
+  #   abort(404, description="User has no categories")
 
   # TODO: get channels of current user
   return jsonify({
     "username": user_found.username, 
-    "channels": str(channels),
-    "categories": str(categories)
   })
 
 @users_bp.route('/current_user/channels', methods=['GET'])
