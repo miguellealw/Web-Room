@@ -6,6 +6,7 @@ from YG_server.users.models import User
 
 
 channels_bp = Blueprint('channels', __name__)
+
 @channels_bp.route('', methods=['GET', 'POST'])
 def all():
   created_channel = request.get_json()
@@ -33,14 +34,14 @@ def all():
 
     # relate channel to category
     # TODO: read about security in getting primary keys from client
-    category_found = Category.query.filter(Category.id == category_id).first()
+    category_found = Category.query.get(category_id)
     if(category_found is None):   
       abort(409, description="Channel could not be created; category does not exist")
     # Access channels from category
     category_found.channel_category.append(new_channel)
 
     # relate channel to user
-    user_found = User.query.filter(User.id == user_id).first()
+    user_found = User.query.get(user_id)
     if(user_found is None):   
       abort(409, description="Channel could not be created; user does not exist")
     user_found.user_channel.append(new_channel)
@@ -48,7 +49,7 @@ def all():
     db.session.add(new_channel)
     db.session.commit()
 
-    return jsonify(f'channel created: {new_channel.name}'), 201
+    return jsonify({'name': f'{new_channel.name}'}), 201
 
   ## ==== GET ====
 
@@ -58,14 +59,30 @@ def all():
     abort(409, description="Channel could not be fetched; user does not exist")
 
   channels = user_found.channels
-  channel_str = []
-
-  for channel in channels:
-    # Access categories from channel
-    # backrefs allow me to access categories related to each individual channel
-    channel_str.append(f"{channel} is in categories: {channel.categories}")
 
   if channels is None:
     abort(404, description="Channels could be not fetched")
-  # return jsonify({"channels": str(channels), "categories": str(categories)})
-  return jsonify({"message:": str(channel_str)})
+
+  res = []
+  for channel in channels:
+    # Access categories from channel
+    # backrefs allow me to access categories related to each individual channel
+    # channel_str.append(f"{channel} is in categories: {channel.categories}")
+    res.append({
+      'name': f'{channel.name}',
+      'yt_channel_id': f'{channel.yt_channel_id}',
+      'uri': f'http://localhost:5000/api/v1.0/channels/{channel.id}',
+    })
+
+  # return jsonify({"message:": str(channel_str)})
+  return jsonify(res)
+
+
+@channels_bp.route('/<int:channel_id>', methods=['GET', 'POST'])
+def get_channel(channel_id):
+  pass
+
+# /users/<id>/categories - get categories channel belongs to
+@channels_bp.route('/<int:channel_id>/categories', methods=['GET', 'POST'])
+def get_categories_of_channel(channel_id):
+  pass
