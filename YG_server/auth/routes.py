@@ -1,15 +1,14 @@
 from flask import jsonify, request, abort
-from datetime import datetime as dt
+from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from YG_server.auth import bp
-from YG_server.users.models import User
-
-from YG_server.users.models import db, User
+from YG_server.models import db, User
 
 
 @bp.route('/register', methods=['POST'])
 def register():
+  # TODO: verify password 
   if request.method == 'POST':
     user = request.get_json()
     username = user['username']
@@ -33,8 +32,9 @@ def register():
     new_user = User(
       username = username,
       password = generate_password_hash(password),
-      created = dt.now()
+      created = datetime.now()
     )
+    # new_user.set_password(password)
 
     db.session.add(new_user)
     db.session.commit()
@@ -45,4 +45,3 @@ def register():
 def login():
   # TODO: use flask-login, flask-praetorian, or Auth0
   return jsonify(message="LOGIN NOT IMPLMENTED")
-  pass
