@@ -1,3 +1,4 @@
+from os import environ
 from flask import Flask, make_response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import HTTPException
@@ -35,15 +36,11 @@ def create_app():
 
   ## REGISTER BLUEPRINTS
   with app.app_context():
-    from .auth import routes as auth
-    from .channels import routes as channels
-    from .users import routes as users
-    from .categories import routes as categories
+    from YG_server.auth import bp as auth_bp
+    from YG_server.api import bp as api_bp
 
-    url_version = '/api/v1.0'
-    app.register_blueprint(categories.categories_bp, url_prefix=f'{url_version}/categories')
-    app.register_blueprint(channels.channels_bp, url_prefix=f'{url_version}/channels')
-    app.register_blueprint(users.users_bp, url_prefix=f'{url_version}/users')
-    app.register_blueprint(auth.bp, url_prefix=f'{url_version}/auth')
+    API_VERSION = environ.get("API_VERSION")
+    app.register_blueprint(api_bp, url_prefix=f'/api/{API_VERSION}')
+    app.register_blueprint(auth_bp, url_prefix=f'/{API_VERSION}/auth')
 
   return app

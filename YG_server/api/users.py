@@ -1,13 +1,13 @@
-from YG_server.categories.models import Category
 from flask import Blueprint, jsonify, request, abort, redirect, url_for
 from datetime import datetime as dt
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from YG_server.users.models import db, User
+from YG_server.models import db, User, Category
+from YG_server.api import bp
 
-users_bp = Blueprint('User', __name__)
+# users_bp = Blueprint('User', __name__, url_prefix='/users')
 
-@users_bp.route('', methods=['GET'])
+@bp.route('/users', methods=['GET'])
 def get_user():
   user_id = request.args.get('id')
   user_found = User.query.get(user_id)
@@ -17,7 +17,7 @@ def get_user():
 
   return jsonify({"username": user_found.username})
 
-@users_bp.route('/current_user', methods=['GET'])
+@bp.route('/users/current_user', methods=['GET'])
 def current_user():
   # TODO: get jwt token and find user
   id = request.get_json()['user_id']
@@ -39,8 +39,8 @@ def current_user():
     "username": user_found.username, 
   })
 
-@users_bp.route('/current_user/channels', methods=['GET'])
-def get_channels():
+@bp.route('/current_user/channels', methods=['GET'])
+def get_user_channels():
   id = request.get_json()['user_id']
   user_found = User.query.get(id)
 
@@ -55,8 +55,8 @@ def get_channels():
     "channels": str(channels),
   })
 
-@users_bp.route('/current_user/categories', methods=['GET'])
-def get_categories():
+@bp.route('/users/current_user/categories', methods=['GET'])
+def get_user_categories():
   id = request.get_json()['user_id']
   user_found = User.query.get(id)
 
@@ -71,8 +71,8 @@ def get_categories():
     "categories": str(categories),
   })
 
-@users_bp.route('/current_user/categories/<int:category_id>', methods=['GET'])
-def get_category(category_id):
+@bp.route('/users/current_user/categories/<int:category_id>', methods=['GET'])
+def get_user_category(category_id):
   user_id = request.get_json()['user_id']
   category = Category.query.get(category_id)
 

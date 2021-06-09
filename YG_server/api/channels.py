@@ -1,14 +1,12 @@
+
 from flask import Blueprint, jsonify, request, abort
-from YG_server import db
-from .models import Channel
-from YG_server.categories.models import Category
-from YG_server.users.models import User
+from YG_server.models import db, Category, User, Channel
+from YG_server.api import bp
 
+# channels_bp = Blueprint('channels', __name__, url_prefix='/channels')
 
-channels_bp = Blueprint('channels', __name__)
-
-@channels_bp.route('', methods=['GET', 'POST'])
-def all():
+@bp.route('/channels', methods=['GET', 'POST'])
+def get_channels():
   created_channel = request.get_json()
   user_id = created_channel['user_id']
   ## ==== POST ====
@@ -78,11 +76,11 @@ def all():
   return jsonify(res)
 
 
-@channels_bp.route('/<int:channel_id>', methods=['GET', 'POST'])
+@bp.route('/channels/<int:channel_id>', methods=['GET', 'POST'])
 def get_channel(channel_id):
   pass
 
 # /users/<id>/categories - get categories channel belongs to
-@channels_bp.route('/<int:channel_id>/categories', methods=['GET', 'POST'])
+@bp.route('/channels/<int:channel_id>/categories', methods=['GET', 'POST'])
 def get_categories_of_channel(channel_id):
   pass

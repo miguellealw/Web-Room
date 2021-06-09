@@ -1,15 +1,13 @@
 from flask import Blueprint, jsonify, request, abort
 from datetime import datetime as dt
-
 from flask.helpers import url_for
+from YG_server.models import db, Category, User
+from YG_server.api import bp
 
-from .models import db, Category
-from YG_server.users.models import User
+# categories_bp = Blueprint('categories', __name__, url_prefix='/categories')
 
-categories_bp = Blueprint('categories', __name__)
-
-@categories_bp.route('', methods=['GET', 'POST'])
-def all():
+@bp.route('/categories', methods=['GET', 'POST'])
+def get_categories():
   if request.method == 'POST':
     created_category = request.get_json()
     name = created_category['name']
@@ -53,7 +51,7 @@ def all():
 
   return jsonify(res), 200
 
-@categories_bp.route('/<int:category_id>', methods=['GET', 'DELETE', 'PUT'])
+@bp.route('/categories/<int:category_id>', methods=['GET', 'DELETE', 'PUT'])
 def get_category(category_id):
 
   # TODO: only get category if user owns it
