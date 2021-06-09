@@ -15,7 +15,10 @@ setup(
   install_requires=[
     'flask',
     'flask-sqlalchemy',
-    'psycopg2'
+    'psycopg2',
+    'flask-login',
+    'flask-praetorian',
+    'flask-cors'
   ]
 
 )
