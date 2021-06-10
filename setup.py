@@ -17,8 +17,11 @@ setup(
     'flask-sqlalchemy',
     'psycopg2',
     'flask-login',
-    'flask-praetorian',
-    'flask-cors'
+    'flask-cors',
+    'Flask-HTTPAuth',
+    'flask-wtf',
+    'wtforms',
+    'email-validator'
   ]
 
 )
