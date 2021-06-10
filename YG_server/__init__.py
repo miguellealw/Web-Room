@@ -3,16 +3,15 @@ from flask import Flask, make_response, jsonify
 from werkzeug.exceptions import HTTPException
 from flask_login import LoginManager
 from flask_httpauth import HTTPBasicAuth
+from flask_marshmallow import Marshmallow
 
 import flask_cors
 
 from YG_server.models import User, db
 
-auth = HTTPBasicAuth()
 login_manager = LoginManager()
 cors = flask_cors.CORS()
-
-
+ma = Marshmallow()
 
 def resource_not_found(e):
   return jsonify(error=str(e)), 404
@@ -45,7 +44,7 @@ def create_app():
   db.init_app(app) # register db
   login_manager.init_app(app) # register login_manager
   cors.init_app(app)
-  # guard.init_app(app, User)
+  ma.init_app(app)
 
   ## REGISTER BLUEPRINTS
   with app.app_context():

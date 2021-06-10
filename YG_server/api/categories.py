@@ -4,54 +4,22 @@ from flask.helpers import url_for
 from YG_server.models import db, Category, User
 from YG_server.api import bp
 
-# categories_bp = Blueprint('categories', __name__, url_prefix='/categories')
+from flask_login import login_required, current_user as fl_current_user
+
+from YG_server.schemas import category_schema, categories_schema
 
 @bp.route('/categories', methods=['GET', 'POST'])
+@login_required
 def get_categories():
-  if request.method == 'POST':
-    created_category = request.get_json()
-    name = created_category['name']
-    user_id = created_category['user_id']
-
-    if user_id is None:
-      abort(400, description="user_id not passed from client")
-    if name is None: 
-      abort(400, description="name not passed from client")
-    
-    user = User.query.get(user_id)
-    if user is None:
-      abort(409, description="Category could not be created; User does not exist")
-      
-    new_category = Category(
-      name=name,
-      user_id=user_id,
-      created=dt.now()
-    )
-
-    if new_category is None:
-      abort(409, description="Category could not be created")
-
-    db.session.add(new_category)
-    db.session.commit()
-
-    return jsonify({'name': f'{new_category.name}'}), 201
-
-
   categories = Category.query.all()
   if categories is None:
     abort(404, description="No categories available")
 
-  res = []
-  for category in categories:
-    res.append({
-      'title': f'{category.name}',
-      'uri': f'http://localhost:5000/api/v1.0/categories/{category.id}',
-      # 'uri': url_for('get_cateogry', category_id = f'{category.id}')
-    })
+  return jsonify(categories_schema.dump(categories)), 200
 
-  return jsonify(res), 200
 
 @bp.route('/categories/<int:category_id>', methods=['GET', 'DELETE', 'PUT'])
+@login_required
 def get_category(category_id):
 
   # TODO: only get category if user owns it
@@ -59,25 +27,6 @@ def get_category(category_id):
   if found_category is None:
     abort(404, description="Category does not exist")
 
-  if request.method == 'PUT':
-    new_name = request.get_json()['name']
-    found_category.name = new_name
-    db.session.commit()
-    return jsonify({
-      'name': f'{found_category.name}', 
-      'uri': f'http://localhost:5000/api/v1.0/categories/{found_category.id}',
-      # 'created': f'{found_category.created}'
-    })
-
-  if request.method == 'DELETE':
-    db.session.delete(found_category)
-    db.session.commit()
-    return jsonify({'message': f'category \'{found_category.name}\' has been deleted'})
-
   # instead of returning category id return URI
-  return jsonify({
-    'name': f'{found_category.name}', 
-    'uri': f'http://localhost:5000/api/v1.0/categories/{found_category.id}',
-    # 'created': f'{found_category.created}'
-  })
+  return jsonify(category_schema.dump(found_category))
 
