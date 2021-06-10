@@ -19,9 +19,11 @@ setup(
     'flask-login',
     'flask-cors',
     'Flask-HTTPAuth',
-    'flask-wtf',
-    'wtforms',
-    'email-validator'
+    # 'flask-wtf',
+    # 'wtforms',
+    # 'email-validator',
+    'flask-marshmallow',
+    'marshmallow-sqlalchemy'
   ]
 
 )
