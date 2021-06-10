@@ -1,11 +1,18 @@
 from os import environ
 from flask import Flask, make_response, jsonify
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import HTTPException
 from flask_login import LoginManager
+from flask_httpauth import HTTPBasicAuth
 
-db = SQLAlchemy()
+import flask_cors
+
+from YG_server.models import User, db
+
+auth = HTTPBasicAuth()
 login_manager = LoginManager()
+cors = flask_cors.CORS()
+
+
 
 def resource_not_found(e):
   return jsonify(error=str(e)), 404
@@ -13,11 +20,14 @@ def resource_not_found(e):
 def resource_conflict(e):
   return jsonify(error=str(e)), 409
 
+def resource_forbidden(e):
+  return jsonify(error=str(e)), 403
+
 def default_handler(e):
   if isinstance(e, HTTPException):
     return jsonify(error=str(e)), 404
 
-  return jsonify({"error": "Non-HTTP Error"}), 500
+  return jsonify({"error": f"Non-HTTP Error: {e}"}), 500
 
 def create_app():
   ## CREATE APP AND LOAD CONFIG
@@ -28,11 +38,14 @@ def create_app():
   ## SETUP ERROR HANDLERS
   app.register_error_handler(404, resource_not_found)
   app.register_error_handler(409, resource_conflict)
+  app.register_error_handler(403, resource_forbidden)
   app.register_error_handler(Exception, default_handler)
 
   ## REGISTER PLUGINS - make globally accessible to other parts of app
   db.init_app(app) # register db
   login_manager.init_app(app) # register login_manager
+  cors.init_app(app)
+  # guard.init_app(app, User)
 
   ## REGISTER BLUEPRINTS
   with app.app_context():
@@ -41,6 +54,6 @@ def create_app():
 
     API_VERSION = environ.get("API_VERSION")
     app.register_blueprint(api_bp, url_prefix=f'/api/{API_VERSION}')
-    app.register_blueprint(auth_bp, url_prefix=f'/{API_VERSION}/auth')
+    app.register_blueprint(auth_bp, url_prefix=f'/auth/{API_VERSION}')
 
   return app
