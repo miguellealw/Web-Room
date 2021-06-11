@@ -34,56 +34,60 @@ def current_user():
     "username": fl_current_user.username, 
   })
 
-
-@bp.route('/users/current_user/channels', methods=['GET', 'POST'])
+@bp.route('/users/current_user/channels', methods=['GET'])
 @login_required
 def get_user_channels():
   user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
-
-  # TODO: only create channel when adding to category
-  if request.method == 'POST':
-    created_channel = request.get_json()
-    name = created_channel['name']
-    yt_channel_id = created_channel['yt_channel_id']
-    category_id = created_channel['category_id']
-
-    if name is None or yt_channel_id is None:
-      abort(400, description="Name or yt_channel_id not passed in body")
-
-    # TODO: check if channel is already in DB, if it is skip creation; fetch channel and relate to category
-    new_channel = Channel(
-      name=name,
-      yt_channel_id=yt_channel_id,
-    )
-
-    if new_channel is None:
-      abort(409, description="Channel could not be created")
-
-    # relate channel to category
-    category_found = Category.query.get(category_id)
-    if(category_found is None):   
-      abort(409, description="Channel could not be created; category does not exist")
-
-    # Access channels from category
-    category_found.channels.append(new_channel)
-
-    # relate channel to user
-    user_found = User.query.get_or_404(fl_current_user.id, description="Channel could not be created because user does not Exist")
-    user_found.channels.append(new_channel)
-    db.session.add(new_channel)
-    db.session.commit()
-
-    return jsonify({
-      'name': f'{new_channel.name}', 
-      'flash': f'Channel created and added to category {category_found.name}.'
-    }), 201
-
-
   channels = user_found.channels
   if channels is None:
     abort(404, description="User channels could not be loaded")
 
   return jsonify( channels_schema.dump(user_found.channels) )
+
+@bp.route('/users/current_user/categories/<int:category_id>/add_channel', methods=['POST'])
+@login_required
+def add_channel_to_category(category_id):
+  req_data = request.get_json()
+  name = req_data["name"]
+  yt_channel_id = req_data["yt_channel_id"]
+
+  if name is None or yt_channel_id is None:
+    abort(400, description="Name or yt_channel_id not passed in body")
+
+  if request.method == 'POST':
+    # Find category
+    category_found = Category.query.get_or_404(category_id, description="Channel could not be created because category does not exist")
+
+    # check if channel is already in DB, if it is skip creation; fetch channel and relate to category
+    channel_to_add = Channel.query.filter_by(yt_channel_id = yt_channel_id).first()
+
+    # if channel is not in db create it 
+    if channel_to_add is None:
+      channel_to_add = Channel(
+        name=name,
+        yt_channel_id=yt_channel_id,
+      )
+      if channel_to_add is None:
+        abort(409, description="Channel could not be created")
+
+    # Relate category with new channel
+    category_found.channels.append(channel_to_add)
+
+    # relate channel to user
+    user_found = User.query.get_or_404(fl_current_user.id, description="Channel could not be created because user does not Exist")
+    user_found.channels.append(channel_to_add)
+
+    db.session.add(channel_to_add)
+    db.session.commit()
+
+    return jsonify( channel_schema.dump(channel_to_add))
+
+    # return jsonify({
+    #   'name': f'{channel_to_add.name}', 
+    #   'flash': f'Channel added to category {category_found.name}.'
+    # }), 201
+
+  pass
 
 @bp.route('/users/current_user/channels/<int:channel_id>', methods=['GET'])
 @login_required
