@@ -82,13 +82,6 @@ def add_channel_to_category(category_id):
 
     return jsonify( channel_schema.dump(channel_to_add))
 
-    # return jsonify({
-    #   'name': f'{channel_to_add.name}', 
-    #   'flash': f'Channel added to category {category_found.name}.'
-    # }), 201
-
-  pass
-
 @bp.route('/users/current_user/channels/<int:channel_id>', methods=['GET'])
 @login_required
 def get_user_channel(channel_id):
@@ -99,7 +92,6 @@ def get_user_channel(channel_id):
   if channel_found is None:
     abort(404, description="User does not own channel")
 
-   
   return jsonify( channel_schema.dump(channel_found) )
 
 
@@ -137,7 +129,7 @@ def get_user_categories():
     db.session.add(new_category)
     db.session.commit()
 
-    return jsonify({'name': new_category.name, 'flash': 'New Category Created!'}), 201 
+    return jsonify( category_schema.dump(new_category) )
 
   # ==== GET ====
   return jsonify(categories_schema.dump(categories))
