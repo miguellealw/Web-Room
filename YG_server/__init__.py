@@ -41,8 +41,8 @@ def create_app():
   app.register_error_handler(Exception, default_handler)
 
   ## REGISTER PLUGINS - make globally accessible to other parts of app
-  db.init_app(app) # register db
-  login_manager.init_app(app) # register login_manager
+  db.init_app(app)
+  login_manager.init_app(app)
   cors.init_app(app)
   ma.init_app(app)
 
