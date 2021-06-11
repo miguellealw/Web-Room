@@ -1,18 +1,28 @@
 from YG_server import ma
-import flask_marshmallow
 from YG_server.models import Channel, User, Category
+from marshmallow import fields, validate
+
+## SQLAlchemyAutoSchema automatically generates fields based on model
 
 #### User #### 
-class UserSchema(ma.SQLAlchemySchema):
+class UserSchema(ma.SQLAlchemyAutoSchema):
   class Meta:
-    fields = ("email", "username", "created")
+    fields = ("email", "username", "hashed_password", "created")
     model =  User
+    include_relationships = True
 
-    username = ma.auto_field()
-    email = ma.auto_field()
-    created = ma.auto_field()
-    hashed_password = ma.auto_field()
-    categories = ma.auto_field()
+  username = fields.String(required=True, validate=validate.Length(5,25))
+  hashed_password = fields.String(
+    required=True, 
+    validate=validate.And(
+      validate.Length(10, 30),
+      validate.Regexp(
+        r"^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[@#$])[\w\d@#$]{10,30}$", 
+        error="Password must contain 1 digit, 1 uppercase letter, at least 1 lowercase letter, and at least 1 special character"
+      )
+    )
+  )
+  email = fields.Email(required=True)
 
   #  _links = ma.Hyperlinks(
   #      {
@@ -23,14 +33,13 @@ class UserSchema(ma.SQLAlchemySchema):
 
 
 #### Channels #### 
-class ChannelSchema(ma.SQLAlchemySchema):
+class ChannelSchema(ma.SQLAlchemyAutoSchema):
   class Meta:
     model = Channel
     fields = ("name", "yt_channel_id", "_links")
+    include_relationships = True
 
-  id = ma.auto_field()
-  yt_channel_id = ma.auto_field()
-  name = ma.auto_field()
+  # yt_channel_id = fields.UUID
 
   _links = ma.Hyperlinks(
     {
@@ -44,16 +53,17 @@ channels_schema = ChannelSchema(many=True)
 
 
 #### Category #### 
-class CategorySchema(ma.SQLAlchemySchema):
+class CategorySchema(ma.SQLAlchemyAutoSchema):
   class Meta:
     model =  Category
     fields = ("name", "created", "_links", "channels")
+    include_relationships = True
 
-  id = ma.auto_field()
-  name = ma.auto_field()
-  created = ma.auto_field()
-  user_id = ma.auto_field()
-  channels = ma.Nested(ChannelSchema(many=True))
+  name = fields.String(
+    required=True,
+    validate=validate.Length(1, 30)
+  )
+  channels = ma.Nested(ChannelSchema, many=True)
 
   _links = ma.Hyperlinks(
     {
@@ -62,5 +72,6 @@ class CategorySchema(ma.SQLAlchemySchema):
     }
   )
 
+
 category_schema = CategorySchema()
-categories_schema = CategorySchema(many=True)
+categories_schema = CategorySchema(many=True, only=("name", "created"))

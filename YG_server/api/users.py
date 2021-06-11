@@ -1,9 +1,11 @@
 from flask import Blueprint, jsonify, request, abort, redirect, url_for
 from datetime import datetime as dt
+from marshmallow.exceptions import ValidationError
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from YG_server.models import db, User, Category, Channel
 from YG_server.schemas import (
+  CategorySchema,
   category_schema, 
   categories_schema, 
   channels_schema, 
@@ -110,13 +112,17 @@ def get_user_categories():
 
   if request.method == 'POST':
     name = request.get_json()['name']
-    if name is None: 
-      abort(400, description="name not passed from client")
 
-    # TODO: validate user input
+    valid_data = None
+    try:
+      valid_data = CategorySchema().load({
+        "name": name
+      })
+    except ValidationError as err:
+      return jsonify(err.messages)
       
     new_category = Category(
-      name=name,
+      name=valid_data["name"],
       user_id=fl_current_user.id,
       created=dt.now()
     )
@@ -140,7 +146,15 @@ def get_user_category(category_id):
 
   if request.method == 'PUT':
     new_name = request.get_json()['name']
-    found_category.name = new_name
+    valid_data = None
+    try:
+      valid_data = CategorySchema().load({
+        "name": new_name
+      })
+    except ValidationError as err:
+      return jsonify(err.messages)
+
+    found_category.name = valid_data["name"]
     db.session.commit()
     return jsonify(category_schema.dump(found_category))
 
@@ -150,7 +164,6 @@ def get_user_category(category_id):
     return jsonify({'flash': f'Category \'{found_category.name}\' was deleted'})
 
   # TODO consider using user_found.categories
-
   category = Category.query.get(category_id)
   if category is None:
     abort(404, description=f"Category does not exist")
@@ -158,7 +171,6 @@ def get_user_category(category_id):
   # check if user owns category
   if category.user_id != int(user_found.id):
     abort(404, description=f"User does not own provided category")
-
 
   return jsonify( category_schema.dump(found_category) )
 
