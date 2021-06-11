@@ -53,8 +53,7 @@ class CategorySchema(ma.SQLAlchemySchema):
   name = ma.auto_field()
   created = ma.auto_field()
   user_id = ma.auto_field()
-  # channels = ma.Nested("api.get_user_channels")
-  channels = ma.auto_field()
+  channels = ma.Nested(ChannelSchema(many=True))
 
   _links = ma.Hyperlinks(
     {
@@ -62,11 +61,6 @@ class CategorySchema(ma.SQLAlchemySchema):
       "collection": ma.URLFor("api.get_user_categories"),
     }
   )
-
-  # TODO: add channels array when many=False
-  # _channels = ma.Hyperlinks({
-  #   "channels": ma.URLFor("api.get_user_category_channels", values=dict( category_id="<id>") )
-  # })
 
 category_schema = CategorySchema()
 categories_schema = CategorySchema(many=True)
