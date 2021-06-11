@@ -53,7 +53,7 @@ def register():
 
   new_user = User(
     username = valid_data["username"],
-    created = datetime.now(),
+    created_at = datetime.now(),
     email = valid_data["email"],
   )
   new_user.set_password(valid_data["hashed_password"])
