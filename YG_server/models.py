@@ -1,8 +1,7 @@
-# from YG_server import db
 from datetime import datetime
-from werkzeug.security import check_password_hash, generate_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
+from werkzeug.security import check_password_hash, generate_password_hash
 
 # Create db here and register in __init__ to avoid circular imports
 db = SQLAlchemy()
@@ -19,15 +18,15 @@ user_channel = db.Table(
 # relate category and channel
 channel_category = db.Table(
   'channel_category',
-  db.Column( 'channel_id', db.Integer, db.ForeignKey('channel.id')),
-  db.Column( 'category_id', db.Integer, db.ForeignKey('category.id')),
+  db.Column( 'channel_id', db.Integer, db.ForeignKey('channel.id') ),
+  db.Column( 'category_id', db.Integer, db.ForeignKey('category.id') ),
 )
 
 ######## Categories ########
 
 class Category(db.Model):
   __tablename__ = 'category'
-  id = db.Column( db.Integer, primary_key=True)
+  id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(30), nullable=False)  
   created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -40,7 +39,9 @@ class Category(db.Model):
     # load channels when loading category
     lazy='subquery',
     # channel.categories - get categories of channel
-    backref=db.backref('categories', lazy=True)
+    backref=db.backref('categories', lazy=True),
+    # if category is deleted then relation in channel_category is also deleted
+    cascade="all, delete"
   )
 
   def __repr__(self):
@@ -70,6 +71,8 @@ class Channel(db.Model):
     lazy='subquery',
     # user.channels - gets channels of user
     backref=db.backref('channels', lazy=True),
+    # if channel is deleted then relation in user_channel is also deleted
+    cascade="all, delete"
   )
 
   def __repr__(self):
