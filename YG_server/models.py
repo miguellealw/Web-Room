@@ -82,7 +82,8 @@ class User(UserMixin, db.Model):
   id = db.Column(db.Integer, primary_key=True)
   username = db.Column(db.String(25), unique=True, nullable=False, index=True)
   email = db.Column(db.String(40), unique=True, nullable=False, index=True)
-  created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+  created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+  updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
   hashed_password = db.Column(db.String(200), nullable=False)
 
   # user.categories = gets categories of user

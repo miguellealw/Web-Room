@@ -2,16 +2,17 @@ from os import environ
 from flask import Flask, make_response, jsonify
 from werkzeug.exceptions import HTTPException
 from flask_login import LoginManager
-from flask_httpauth import HTTPBasicAuth
 from flask_marshmallow import Marshmallow
+from flask_migrate import Migrate
 
 import flask_cors
 
-from YG_server.models import User, db
+from YG_server.models import db
 
 login_manager = LoginManager()
 cors = flask_cors.CORS()
 ma = Marshmallow()
+migrate = Migrate()
 
 def resource_not_found(e):
   return jsonify(error=str(e)), 404
@@ -45,6 +46,7 @@ def create_app():
   login_manager.init_app(app)
   cors.init_app(app)
   ma.init_app(app)
+  migrate.init_app(app, db)
 
   ## REGISTER BLUEPRINTS
   with app.app_context():
