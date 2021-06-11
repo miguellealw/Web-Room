@@ -33,7 +33,7 @@ class Category(db.Model):
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
   # this will relate channel to a category
-  # category_instance.channel - get channels of category
+  # category.channel - get channels of category
   channels = db.relationship(
     'Channel', 
     secondary=channel_category,
@@ -85,18 +85,7 @@ class User(UserMixin, db.Model):
   created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
   hashed_password = db.Column(db.String(200), nullable=False)
 
-  # user.user_channel - gets channels(subscriptions) of user 
-  # user_channel = db.relationship(
-  #   'Channel', 
-  #   secondary=user_channel,
-  #   # load channels when loading user
-  #   lazy='subquery',
-  #   # channel.users - get users of channel (consider removing)
-  #   backref=db.backref('users', lazy=True),
-  #   # back_populates="users"
-  # )
-
-  # user_instance.categories = gets categories of user
+  # user.categories = gets categories of user
   categories = db.relationship(
     'Category',
     lazy='subquery',
