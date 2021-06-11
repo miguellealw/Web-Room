@@ -49,7 +49,6 @@ def get_user_channels():
       abort(400, description="Name or yt_channel_id not passed in body")
 
     # TODO: check if channel is already in DB, if it is skip creation; fetch channel and relate to category
-
     new_channel = Channel(
       name=name,
       yt_channel_id=yt_channel_id,
@@ -59,7 +58,6 @@ def get_user_channels():
       abort(409, description="Channel could not be created")
 
     # relate channel to category
-    # TODO: read about security in getting primary keys from client
     category_found = Category.query.get(category_id)
     if(category_found is None):   
       abort(409, description="Channel could not be created; category does not exist")
@@ -73,26 +71,17 @@ def get_user_channels():
     db.session.add(new_channel)
     db.session.commit()
 
-    return jsonify({'name': f'{new_channel.name}', 'flash': f"Channel created and added to category {category_found.name}."}), 201
+    return jsonify({
+      'name': f'{new_channel.name}', 
+      'flash': f'Channel created and added to category {category_found.name}.'
+    }), 201
 
 
   channels = user_found.channels
   if channels is None:
     abort(404, description="User channels could not be loaded")
 
-  # FIXME: channel_schema is not callable (not a function)
   return jsonify( channels_schema.dump(user_found.channels) )
-
-  return jsonify([
-    {
-      "name": channel.name, 
-      "uri": url_for('api.get_user_category', category_id = channel.id),
-      "yt_channel_id": channel.yt_channel_id
-    }
-    for channel in channels
-  ])
-
-
 
 @bp.route('/users/current_user/channels/<int:channel_id>', methods=['GET'])
 @login_required
@@ -105,13 +94,8 @@ def get_user_channel(channel_id):
     abort(404, description="User does not own channel")
 
    
-  # FIXME: channel_schema is not callable (not a function)
   return jsonify( channel_schema.dump(channel_found) )
 
-  return jsonify({
-    "name": channel_found.name, 
-    "yt_channel_id": channel_found.yt_channel_id
-  })
 
 
 
@@ -145,15 +129,8 @@ def get_user_categories():
 
     return jsonify({'name': new_category.name, 'flash': 'New Category Created!'}), 201 
 
-  return jsonify(categories_schema.dump(categories))
   # ==== GET ====
-  # return jsonify([
-  #   {
-  #     "name": category.name, 
-  #     "uri": url_for('api.get_user_category', category_id = category.id),
-  #   }
-  #   for category in categories
-  # ])
+  return jsonify(categories_schema.dump(categories))
 
 @bp.route('/users/current_user/categories/<int:category_id>', methods=['GET', 'PUT', 'DELETE'])
 @login_required
@@ -182,33 +159,8 @@ def get_user_category(category_id):
   if category.user_id != int(user_found.id):
     abort(404, description=f"User does not own provided category")
 
-  # return jsonify([{
-  #   "name": category[0],
-  #   "created": category[1],
-  #   "channels": [{
-  #     "name": channel.name, 
-  #     "yt_channel_id": channel.yt_channel_id,
-  #     "uri": url_for("api.get_channel", channel_id=channel.id)
-  #   } for channel in category.channels],
-
-  # } for category in category_schema.dump(found_category)])
 
   return jsonify( category_schema.dump(found_category) )
-
-
-  # return jsonify({
-  #   "name": category.name,
-  #   "channels": [{
-  #     "name": channel.name, 
-  #     "yt_channel_id": channel.yt_channel_id,
-  #     "uri": url_for("api.get_channel", channel_id=channel.id)
-  #   } for channel in category.channels],
-  # })
-
-# TODO: this was created for the schema. may not be necessary
-@bp.route('/users/current_user/categories/<int:category_id>/channels', methods=['GET'])
-def get_user_category_channels():
-  pass
 
 
 # /users/<id>/categories - get categories channel belongs to
