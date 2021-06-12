@@ -47,25 +47,27 @@ def get_user_channels():
 @bp.route('/users/current_user/categories/<int:category_id>/add_channel', methods=['POST'])
 @login_required
 def add_channel_to_category(category_id):
-  req_data = request.get_json()
-  name = req_data["name"]
-  yt_channel_id = req_data["yt_channel_id"]
-
-  if name is None or yt_channel_id is None:
-    abort(400, description="Name or yt_channel_id not passed in body")
+  valid_data = None
+  try:
+    valid_data = CategorySchema().load({
+      "name": request.get_json()["name"],
+      "yt_channel_id": request.get_json()["yt_channel_id"]
+    })
+  except ValidationError as err:
+    return jsonify(err.messages)
 
   if request.method == 'POST':
     # Find category
     category_found = Category.query.get_or_404(category_id, description="Channel could not be created because category does not exist")
 
     # check if channel is already in DB, if it is skip creation; fetch channel and relate to category
-    channel_to_add = Channel.query.filter_by(yt_channel_id = yt_channel_id).first()
+    channel_to_add = Channel.query.filter_by(yt_channel_id = valid_data["yt_channel_id"]).first()
 
-    # if channel is not in db create it 
+    # if channel is not in db, create it 
     if channel_to_add is None:
       channel_to_add = Channel(
-        name=name,
-        yt_channel_id=yt_channel_id,
+        name= valid_data["name"],
+        yt_channel_id= valid_data["yt_channel_id"],
       )
       if channel_to_add is None:
         abort(409, description="Channel could not be created")
@@ -120,7 +122,7 @@ def get_user_categories():
     new_category = Category(
       name=valid_data["name"],
       user_id=fl_current_user.id,
-      created=dt.now()
+      created_at=dt.now(),
     )
 
     if new_category is None:
@@ -151,6 +153,8 @@ def get_user_category(category_id):
       return jsonify(err.messages)
 
     found_category.name = valid_data["name"]
+    found_category.updated_at = dt.now()
+
     db.session.commit()
     return jsonify(category_schema.dump(found_category))
 

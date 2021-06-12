@@ -39,8 +39,6 @@ class ChannelSchema(ma.SQLAlchemyAutoSchema):
     fields = ("name", "yt_channel_id", "_links")
     include_relationships = True
 
-  # yt_channel_id = fields.UUID
-
   _links = ma.Hyperlinks(
     {
       "self": ma.URLFor("api.get_user_channel", values=dict( channel_id="<id>" )),
@@ -56,7 +54,7 @@ channels_schema = ChannelSchema(many=True)
 class CategorySchema(ma.SQLAlchemyAutoSchema):
   class Meta:
     model =  Category
-    fields = ("name", "created", "_links", "channels")
+    fields = ("name", "created_at", "updated_at", "_links", "channels")
     include_relationships = True
 
   name = fields.String(
@@ -75,4 +73,4 @@ class CategorySchema(ma.SQLAlchemyAutoSchema):
 
 category_schema = CategorySchema()
 # don't send back list of channels in category when fetching all categories
-categories_schema = CategorySchema(many=True, only=("name", "created"))
+categories_schema = CategorySchema(many=True, only=("name", "created_at", "updated_at"))
