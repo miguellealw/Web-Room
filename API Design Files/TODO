@@ -1,0 +1,58 @@
+General:
+  ☐ Setup DB migrations
+  ☐ setup tests
+
+
+All Categories:
+  ✔ GET All @done(21-06-10 00:44)
+    ☐ paginate data
+    ✔ return schema dump @done(21-06-10 15:03)
+  ✔ GET by ID @done(21-06-10 00:44)
+    ✔ return schema dump @done(21-06-10 15:03)
+
+All Channels:
+  ✔ GET All @done(21-06-10 00:44)
+    ☐ paginate data
+    ✔ return schema dump @done(21-06-10 19:18)
+  ✔ GET by ID @done(21-06-10 00:44)
+    ✔ return schema dump @done(21-06-10 19:18)
+
+User Categories:
+  ✔ GET all categories of user @done(21-06-10 00:41)
+    ✔ return schema dump @done(21-06-10 15:05)
+    ☐ paginate data
+  ✔ GET category of user by ID @done(21-06-10 00:41)
+    ✔ return schema dump @done(21-06-10 15:05)
+  ✔ POST category @done(21-06-10 00:41)
+    ✔ validate user input @done(21-06-10 23:31)
+    ✔ return schema dump @done(21-06-10 19:15)
+  ✔ PUT category @done(21-06-10 13:11)
+    ✔ validate user input @done(21-06-10 23:31)
+    ✔ return schema dump @done(21-06-10 22:57)
+  ✔ DELETE category @done(21-06-10 13:11)
+
+User Channels:
+  ✔ GET all channels of user @done(21-06-10 13:14)
+    ✔ return schema dump @done(21-06-11 17:02)
+    ☐ paginate data
+  ✔ GET channel of user by ID @done(21-06-11 17:02)
+    ✔ return schema dump @done(21-06-10 19:18)
+  ☐ POST channel; only when added to category
+    ✔ return schema dump @done(21-06-10 19:19)
+    ☐ validate yt_channel_id
+    ✔ check if channel is already in db by yt_channel_id @done(21-06-11 17:05)
+  ☐ DELETE channel
+    ☐ 
+    ☐ only when nothing is referencing it remove from DB(no user is subscribed to it)
+
+Users:
+  ✔ current_user @done(21-06-10 00:18)
+
+Auth:
+  ✔ Login @done(21-06-10 22:56)
+    ✔ Validate user input @done(21-06-10 22:56)
+      ✔  see if you can do differnt validations on login and register since on login it expects an email b/c it is required @done(21-06-10 22:56)
+    ✔ Send cookie to client @done(21-06-10 00:18)
+  ✔ Register @done(21-06-10 22:56)
+    ✔ Validate user input @done(21-06-10 22:06)
+    ✔ Send cookie to client @done(21-06-10 00:18)
