@@ -6,6 +6,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from YG_server.models import db, User, Category, Channel
 from YG_server.schemas import (
   CategorySchema,
+  ChannelSchema,
   category_schema, 
   categories_schema, 
   channels_schema, 
@@ -49,7 +50,7 @@ def get_user_channels():
 def add_channel_to_category(category_id):
   valid_data = None
   try:
-    valid_data = CategorySchema().load({
+    valid_data = ChannelSchema().load({
       "name": request.get_json()["name"],
       "yt_channel_id": request.get_json()["yt_channel_id"]
     })
