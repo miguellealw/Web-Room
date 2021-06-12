@@ -11,15 +11,15 @@ db = SQLAlchemy()
 # relate user and channel
 user_channel = db.Table(
   'user_channel',
-  db.Column('channel_id', db.Integer , db.ForeignKey('channel.id')),
-  db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+  db.Column('channel_id', db.Integer , db.ForeignKey('channel.id', ondelete="CASCADE")),
+  db.Column('user_id', db.Integer, db.ForeignKey('user.id', ondelete="CASCADE")),
 )
 
 # relate category and channel
 channel_category = db.Table(
   'channel_category',
-  db.Column( 'channel_id', db.Integer, db.ForeignKey('channel.id') ),
-  db.Column( 'category_id', db.Integer, db.ForeignKey('category.id') ),
+  db.Column( 'channel_id', db.Integer, db.ForeignKey('channel.id', ondelete="CASCADE") ),
+  db.Column( 'category_id', db.Integer, db.ForeignKey('category.id', ondelete="CASCADE") ),
 )
 
 ######## Categories ########
@@ -28,7 +28,8 @@ class Category(db.Model):
   __tablename__ = 'category'
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(30), nullable=False)  
-  created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+  created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+  updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
   # this will relate channel to a category
@@ -40,8 +41,8 @@ class Category(db.Model):
     lazy='subquery',
     # channel.categories - get categories of channel
     backref=db.backref('categories', lazy=True),
-    # if category is deleted then relation in channel_category is also deleted
-    cascade="all, delete"
+    # if category is deleted then relation to channel in channel_category is also deleted
+    # cascade="all, delete"
   )
 
   def __repr__(self):
@@ -71,8 +72,8 @@ class Channel(db.Model):
     lazy='subquery',
     # user.channels - gets channels of user
     backref=db.backref('channels', lazy=True),
-    # if channel is deleted then relation in user_channel is also deleted
-    cascade="all, delete"
+    # if channel is deleted then relation to user in user_channel is also deleted
+    # cascade="all, delete"
   )
 
   def __repr__(self):
