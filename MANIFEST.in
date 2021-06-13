@@ -1,3 +1,0 @@
-include YG-server/schema.sql
-graft YG-server/static
-global-exclude *.pyc
