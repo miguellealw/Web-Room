@@ -1,4 +1,3 @@
-import unittest
 from datetime import datetime as dt
 import json
 
@@ -23,44 +22,46 @@ class TestCategory(BaseTestCase):
 		db.session.commit()
 
 		## ACT
-		response = self.client.get('/api/v1/categories', json={})
-		# json_data = json.dumps(response)
-		print("JSON _DATA", response)
+		res = self.client.get('/api/v1.0/categories', json={})
+		categories = json.loads(res.data)
+		# print("JSON _DATA", json_data)
 
 		## ASSERT
 		# categories = Category.query.all()
-		self.assertEqual(response.status_code, 200)
-		# self.assertIn(new_category, categories)
-		# self.assertEqual(len(categories), 3)
+		self.assertEqual(res.status_code, 200)
+		self.assertEqual(new_category.name, categories[0]['name'])
+		self.assertEqual(new_category_2.name, categories[1]['name'])
+		self.assertEqual(new_category_3.name, categories[2]['name'])
+		self.assertEqual(len(categories), 3)
 
-	## TODO: figure out how to send cookies
-	# ADD test_ to add back to tests
-	def post_category(self):
-		new_user = User(username = "testuser", created_at = dt.now(), email = "test@email.com")
-		new_user.set_password("Password123@")
-		db.session.add(new_user)
-		db.session.commit()
+	def test_post_category(self):
 
-		# API REQUEST
-		response = self.client.post('/api/v1/users/current_user/categories', json={
+		# ARRANGE
+		# Create user
+		user_res = self.client.post('/auth/v1.0/register', json={
+			"username": "testuser",
+			"email": "test@email.com",
+			"password": "Password123@",
+			"confirm_password": "Password123@"
+		})
+		user = json.loads(user_res.data)
+		print("USER", user)
+
+		## ACT
+		category_res = self.client.post('/api/v1.0/users/current_user/categories', json={
 			"name": "Test Category"
 		})
-		self.assertEqual(response.status_code, 200)
-		# json_data = test_category.get_json()
-		print("TEST CATEGORY", response)
-		json_data = json.dumps(response)
+		category = json.loads(category_res.data)
 
-		# new_category = Category(name=json_data['name'], user_id=new_user.id, created_at=dt.now())
-		new_category = Category(name='Test Category', user_id=new_user.id, created_at=dt.now())
-		db.session.add(new_category)
-		db.session.commit()
+		## ASSERT
+		self.assertEqual(user_res.status_code, 201)
+		self.assertEqual(category_res.status_code, 200)
 
-
-	# 	## ASSERT
-	# 	category = Category.query.filter_by(name = json_data["name"]).first()
-	# 	self.assertEqual(category.name, "Test Category")
+		self.assertEqual(user['username'], "testuser")
+		self.assertEqual(category['name'], "Test Category")
 
 
+	# NOTE: MAY REMOVE
 	def test_creation(self):
 		# Setup User
 		new_user = User(username = "testuser", created_at = dt.now(), email = "test@email.com")
