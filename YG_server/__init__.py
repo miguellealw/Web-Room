@@ -1,4 +1,5 @@
 from os import environ
+import os
 from flask import Flask, make_response, jsonify
 from werkzeug.exceptions import HTTPException
 from flask_login import LoginManager
@@ -8,6 +9,7 @@ from flask_migrate import Migrate
 import flask_cors
 
 from YG_server.models import db
+# from ..config import app_config
 
 login_manager = LoginManager()
 cors = flask_cors.CORS()
@@ -29,17 +31,26 @@ def default_handler(e):
 
   return jsonify({"error": f"Non-HTTP Error: {e}"}), 500
 
-def create_app():
+# config_name will be development, production, testing
+def create_app(is_test_config=None):
   ## CREATE APP AND LOAD CONFIG
   app = Flask(__name__, instance_relative_config=True)
-  app.config.from_object('config.DevConfig')
-  # app.config.from_object('config.ProdConfig')
 
-  ## SETUP ERROR HANDLERS
-  app.register_error_handler(404, resource_not_found)
-  app.register_error_handler(409, resource_conflict)
-  app.register_error_handler(403, resource_forbidden)
-  app.register_error_handler(Exception, default_handler)
+
+  # app.config.from_object('config.DevConfig')
+  # app.config.from_object('config.ProdConfig')
+  # app.config.from_object('config.TestingConfig')
+
+  if is_test_config is None:
+    app.config.from_object('config.DevConfig')
+  else:
+    # load test config if passed in
+    app.config.from_object('config.TestingConfig')
+
+  try:
+    os.makedirs(app.instance_path)
+  except OSError:
+    pass
 
   ## REGISTER PLUGINS - make globally accessible to other parts of app
   db.init_app(app)
@@ -47,6 +58,14 @@ def create_app():
   cors.init_app(app)
   ma.init_app(app)
   migrate.init_app(app, db)
+
+
+  ## SETUP ERROR HANDLERS
+  app.register_error_handler(404, resource_not_found)
+  app.register_error_handler(409, resource_conflict)
+  app.register_error_handler(403, resource_forbidden)
+  app.register_error_handler(Exception, default_handler)
+
 
   ## REGISTER BLUEPRINTS
   with app.app_context():

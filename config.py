@@ -5,20 +5,11 @@ baseddir = path.abspath(path.dirname(__file__))
 load_dotenv(path.join(baseddir, '.env'))
 
 
-"""
-
-SESSION_COOKIE_NAME=
-PROD_DATABASE_URI=
-DEV_DATABASE_URI=
-
-"""
-
-
 # BASE CONFIG
 class Config:
   SECRET_KEY = environ.get('SECRET_KEY')
   FLASK_APP = environ.get('FLASK_APP')
-  FLASK_ENV= environ.get('FLASK_ENV')
+  FLASK_ENV = environ.get('FLASK_ENV')
   SESSION_COOKIE_NAME = environ.get('SESSION_COOKIE_NAME')
   STATIC_FOLDER = 'static'
 
@@ -41,3 +32,10 @@ class DevConfig(Config):
   DEBUG = True
   TESTING = True
   DATABASE_URI = environ.get('DEV_DATABASE_URI')
+
+
+class TestingConfig(Config):
+  FLASK_ENV = 'testing'
+  DEBUG = True
+  TESTING = True
+  DATABASE_URI = environ.get("TEST_DATABASE_URI")

@@ -3,8 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from YG_server.database import db
+
 # Create db here and register in __init__ to avoid circular imports
-db = SQLAlchemy()
+# db = SQLAlchemy()
 
 ######## Join Tables ########
 
@@ -46,6 +48,13 @@ class Category(db.Model):
 
   def __repr__(self):
     return '<Category %r>' % self.name
+
+  # TODO: impelement
+  def add_channel(self, channel):
+    pass
+
+  def remove_channel(self, channel):
+    pass
 
 
 
