@@ -36,6 +36,7 @@ class DevConfig(Config):
 
 class TestingConfig(Config):
   FLASK_ENV = 'testing'
-  DEBUG = True
+  # DEBUG = True
   TESTING = True
-  DATABASE_URI = environ.get("TEST_DATABASE_URI")
+  # DATABASE_URI = environ.get("TEST_DATABASE_URI")
+  SQLALCHEMY_DATABASE_URI = environ.get("TEST_DATABASE_URI")
