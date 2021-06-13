@@ -23,7 +23,8 @@ setup(
     # 'wtforms',
     # 'email-validator',
     'flask-marshmallow',
-    'marshmallow-sqlalchemy'
+    'marshmallow-sqlalchemy',
+    'flask-migrate'
   ]
 
 )
