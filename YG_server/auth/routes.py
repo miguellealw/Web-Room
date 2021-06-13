@@ -23,10 +23,10 @@ def register():
 
   error = None
   ## FORM
-  username = request.form['username']
-  password = request.form['password']
-  password2 = request.form['confirm_password']
-  email = request.form['email']
+  username = request.get_json()['username']
+  password = request.get_json()['password']
+  password2 = request.get_json()['confirm_password']
+  email = request.get_json()['email']
 
   valid_data = None
   try:
@@ -73,8 +73,8 @@ def login():
   if current_user.is_authenticated:
     return jsonify({"username": current_user.username, "flash": "User already logged in"})
 
-  username = request.form['username']
-  password = request.form['password']
+  username = request.get_json()['username']
+  password = request.get_json()['password']
 
   valid_data = None
   try:
