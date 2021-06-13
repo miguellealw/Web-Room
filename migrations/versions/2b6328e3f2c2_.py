@@ -1,4 +1,4 @@
-"""empty message
+"""added_createdat_and_updatedat_to_category
 
 Revision ID: 2b6328e3f2c2
 Revises: aac7a0a3de7c

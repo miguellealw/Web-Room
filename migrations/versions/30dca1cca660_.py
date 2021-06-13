@@ -1,4 +1,4 @@
-"""empty message
+"""category_user_foreign_key_cascades_on_delete
 
 Revision ID: 30dca1cca660
 Revises: 2b6328e3f2c2

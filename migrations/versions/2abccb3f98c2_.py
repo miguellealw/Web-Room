@@ -1,4 +1,4 @@
-"""empty message
+"""init_migration
 
 Revision ID: 2abccb3f98c2
 Revises: 
