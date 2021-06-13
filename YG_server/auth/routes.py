@@ -28,9 +28,6 @@ def register():
   password2 = request.form['confirm_password']
   email = request.form['email']
 
-  if password != password2:
-    error = 'Passwords do not match'
-
   valid_data = None
   try:
     valid_data = UserSchema().load({
@@ -40,6 +37,9 @@ def register():
     })
   except ValidationError as err:
     return jsonify(err.messages)
+
+  if password != password2:
+    error = 'Passwords do not match'
 
   # Check if user already exists in db
   if User.query.filter(User.username == valid_data["username"]).first() is not None:
@@ -63,7 +63,7 @@ def register():
 
   login_user(new_user)
 
-  return jsonify({"username": new_user.username}), \
+  return jsonify({"username": new_user.username, "flash": f"User {new_user.username} is now registered"}), \
     201, \
     {'Location': url_for('api.get_user', user_id = new_user.id, _external = True)}
 
@@ -92,7 +92,7 @@ def login():
   #TODO: consider using 'next' to send user to page they were initially trying to visit
   login_user(user)
 
-  return jsonify({"username": f"{user.username}"})
+  return jsonify({"username": f"{user.username}", "flash": "User logged in"})
 
 @bp.route('/logout')
 @login_required
