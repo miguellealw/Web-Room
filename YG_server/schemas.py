@@ -11,7 +11,17 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     model =  User
     include_relationships = True
 
-  username = fields.String(required=True, validate=validate.Length(5,25))
+  username = fields.String(
+    required=True, 
+    validate=validate.And(
+      validate.Length(5,25),
+      # TODO: check for spaces in username
+      # validate.Regexp(
+      #   r"[\s]",
+      #   error = "Username must not contain spaces"
+      # )
+    )
+  )
   hashed_password = fields.String(
     required=True, 
     validate=validate.And(
@@ -23,13 +33,6 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     )
   )
   email = fields.Email(required=True)
-
-  #  _links = ma.Hyperlinks(
-  #      {
-  #       "self": ma.URLFor("api.get_user", values=dict(user_id="<id>")),
-  #       "collection": ma.URLFor("api.users"),
-  #      }
-  #  )
 
 
 #### Channels #### 
