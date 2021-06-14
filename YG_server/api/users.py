@@ -132,7 +132,7 @@ def get_user_categories():
     db.session.add(new_category)
     db.session.commit()
 
-    return jsonify( category_schema.dump(new_category) )
+    return jsonify( category_schema.dump(new_category) ), 201
 
   # ==== GET ====
   return jsonify(categories_schema.dump(categories))
@@ -154,6 +154,7 @@ def get_user_category(category_id):
       return jsonify(err.messages)
 
     found_category.name = valid_data["name"]
+    # TODO: consider adding onupdate=db.func.current_timestamp() to category updated_at column in model
     found_category.updated_at = dt.now()
 
     db.session.commit()
