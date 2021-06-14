@@ -1,15 +1,10 @@
-from functools import partial
 from flask import jsonify, request, abort
 from datetime import datetime
-from flask.helpers import url_for
 from flask_login import login_required, logout_user, current_user, login_user
-
 from YG_server.auth import bp
 from YG_server.models import db, User
-
 from YG_server import login_manager
-
-from YG_server.schemas import UserSchema
+from YG_server.schemas import UserSchema, user_schema
 from marshmallow import ValidationError
 
 @login_manager.user_loader
@@ -63,9 +58,11 @@ def register():
 
   login_user(new_user)
 
-  return jsonify({"username": new_user.username, "flash": f"User {new_user.username} is now registered"}), \
-    201, \
-    {'Location': url_for('api.get_user', user_id = new_user.id, _external = True)}
+  # return jsonify({"username": new_user.username, "flash": f"User {new_user.username} is now registered"}), \
+  #   201, \
+  #   {'Location': url_for('api.get_user', user_id = new_user.id, _external = True)}
+
+  return jsonify( user_schema.dump(new_user) ), 201
 
 
 @bp.route('/login', methods=['GET'])

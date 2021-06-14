@@ -7,8 +7,8 @@ from marshmallow import fields, validate
 #### User #### 
 class UserSchema(ma.SQLAlchemyAutoSchema):
   class Meta:
-    fields = ("email", "username", "hashed_password", "created")
     model =  User
+    fields = ("email", "username", "hashed_password", "created_at", "id")
     include_relationships = True
 
   username = fields.String(
@@ -34,6 +34,8 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
   )
   email = fields.Email(required=True)
 
+user_schema = UserSchema(only=("email", "username", "created_at", "id"))
+# users_schema = UserSchema(many=True)
 
 #### Channels #### 
 class ChannelSchema(ma.SQLAlchemyAutoSchema):
@@ -57,7 +59,7 @@ channels_schema = ChannelSchema(many=True)
 class CategorySchema(ma.SQLAlchemyAutoSchema):
   class Meta:
     model =  Category
-    fields = ("name", "created_at", "updated_at", "_links", "channels")
+    fields = ("name", "created_at", "updated_at", "_links", "channels", "_owner")
     include_relationships = True
 
   name = fields.String(
@@ -66,6 +68,7 @@ class CategorySchema(ma.SQLAlchemyAutoSchema):
   )
   channels = ma.Nested(ChannelSchema, many=True)
 
+  _owner = ma.URLFor("api.get_user", values=dict( user_id="<user_id>"))
   _links = ma.Hyperlinks(
     {
       "self": ma.URLFor("api.get_user_category", values=dict( category_id="<id>" )),
@@ -74,6 +77,8 @@ class CategorySchema(ma.SQLAlchemyAutoSchema):
   )
 
 
+
+
 category_schema = CategorySchema()
 # don't send back list of channels in category when fetching all categories
-categories_schema = CategorySchema(many=True, only=("name", "created_at", "updated_at"))
+categories_schema = CategorySchema(many=True, only=("name", "created_at", "updated_at", "_owner"))
