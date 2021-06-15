@@ -1,6 +1,6 @@
 General:
-  ☐ Setup DB migrations
-  ☐ setup tests
+  ✔ Setup DB migrations @done(21-06-14 12:31)
+  ✔ setup tests @done(21-06-14 12:31)
 
 
 All Categories:
@@ -9,6 +9,9 @@ All Categories:
     ✔ return schema dump @done(21-06-10 15:03)
   ✔ GET by ID @done(21-06-10 00:44)
     ✔ return schema dump @done(21-06-10 15:03)
+  Testing:
+    ✔ GET All @done(21-06-14 12:35)
+    ☐ GET by ID
 
 All Channels:
   ✔ GET All @done(21-06-10 00:44)
@@ -16,6 +19,9 @@ All Channels:
     ✔ return schema dump @done(21-06-10 19:18)
   ✔ GET by ID @done(21-06-10 00:44)
     ✔ return schema dump @done(21-06-10 19:18)
+  Testing:
+    ☐ GET All
+    ☐ GET by ID
 
 User Categories:
   ✔ GET all categories of user @done(21-06-10 00:41)
@@ -30,6 +36,10 @@ User Categories:
     ✔ validate user input @done(21-06-10 23:31)
     ✔ return schema dump @done(21-06-10 22:57)
   ✔ DELETE category @done(21-06-10 13:11)
+  Testing:
+    ☐ GET All user categories
+    ✔ GET user category by ID @done(21-06-14 12:34)
+    ✔ POST user category @done(21-06-14 12:35)
 
 User Channels:
   ✔ GET all channels of user @done(21-06-10 13:14)
@@ -42,8 +52,11 @@ User Channels:
     ☐ validate yt_channel_id
     ✔ check if channel is already in db by yt_channel_id @done(21-06-11 17:05)
   ☐ DELETE channel
-    ☐ 
     ☐ only when nothing is referencing it remove from DB(no user is subscribed to it)
+  Testing:
+    ☐ GET All user channels
+    ☐ GET user channel by ID
+    ☐ POST channel in category
 
 Users:
   ✔ current_user @done(21-06-10 00:18)
@@ -56,3 +69,7 @@ Auth:
   ✔ Register @done(21-06-10 22:56)
     ✔ Validate user input @done(21-06-10 22:06)
     ✔ Send cookie to client @done(21-06-10 00:18)
+  Testing:
+    ✔ Register User @done(21-06-14 12:34)
+    ☐ Login User
+    ☐ Logout User
