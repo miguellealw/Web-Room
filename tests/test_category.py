@@ -6,6 +6,7 @@ from tests.base import BaseTestCase
 from YG_server.models import db, Category, User
 
 class TestCategory(BaseTestCase):
+	# * GET /api/v1.0/categories
 	def test_get_all_categories(self):
 		## ARRANGE
 		new_user = User(username = "testuser", created_at = dt.now(), email = "test@email.com")
@@ -50,23 +51,29 @@ class TestCategory(BaseTestCase):
 		self.assertEqual(categories[2]["_owner"], f"/api/v1.0/users/{new_category_3.user_id}")
 		self.assertEqual(categories[3]["_owner"], f"/api/v1.0/users/{new_category_4.user_id}")
 
+		# Check if all categories were returned
 		self.assertEqual(len(categories), 4)
 
-	def test_specified_category(self):
-		pass
-
-	# NOTE: MAY REMOVE
-	# def test_creation(self):
-	# 	# Setup User
+	# * GET /api/v1.0/categories/<category_id>
+	# def test_specified_category(self):
+	# 	# ARRANGE
 	# 	new_user = User(username = "testuser", created_at = dt.now(), email = "test@email.com")
 	# 	new_user.set_password("Password123@")
 	# 	db.session.add(new_user)
 	# 	db.session.commit()
 
-	# 	new_category = Category(name="Test Category", user_id=new_user.id, created_at=dt.now())
+	# 	# categories
+	# 	new_category = Category(id=1, name="Test Category", user_id=new_user.id, created_at=dt.now())
+	# 	new_category_2 = Category(name="Test Category 2", user_id=new_user.id, created_at=dt.now())
 	# 	db.session.add(new_category)
+	# 	db.session.add(new_category_2)
 	# 	db.session.commit()
 
-	# 	categories = Category.query.all()
-	# 	self.assertIn(new_category, categories)
-	# 	self.assertEqual(len(categories), 1)
+	# 	# ACT
+	# 	res = self.client.get('/api/v1.0/categories/1')
+	# 	category = json.loads(res.data)
+
+	# 	self.assertEqual(new_category.name, category['name'])
+	# 	self.assertIn("_links", category)
+	# 	self.assertIn("_owner", category)
+	# 	self.assertIn("channels", category)
