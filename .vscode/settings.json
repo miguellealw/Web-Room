@@ -1,0 +1,10 @@
+{
+	"python.autoComplete.extraPaths": [
+			"./YG-server",
+	],
+	"python.analysis.extraPaths": [
+		"./YG-server",
+	],
+	// "python.pythonPath": "C:\\Python38\\python.exe",
+	"python.pythonPath": "YG-server\\venv\\Scripts\\python.exe",
+}
