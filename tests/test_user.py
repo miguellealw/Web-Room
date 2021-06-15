@@ -21,7 +21,6 @@ class TestUser(BaseTestCase):
 		self.user = json.loads(self.user_res.data)
 
 	# def tearDown(self):
-		# super().teardDown()
 		# pass
 
 	# * POST /api/v1.0/users/current_user/categories
@@ -39,14 +38,7 @@ class TestUser(BaseTestCase):
 		self.assertEqual(category['name'], "Test Category")
 
 	def test_create_user_specified_category_404(self):
-		## ACT
-		category_res = self.client.get('/api/v1.0/users/current_user/categories/1')
-		category = json.loads(category_res.data)
-
-		## ASSERT
-		self.assertEqual(category_res.status_code, 404)
-		self.assertEqual(category["error"], '404 Not Found: Category does not exist')
-
+		pass
 	
 	# * GET /api/v1.0/users/current_user/categories
 	def test_get_user_categories(self):
@@ -68,8 +60,6 @@ class TestUser(BaseTestCase):
 		self.assertEqual(categories_res.status_code, 200)
 		self.assertEqual(len(categories), 3)
 
-
-	
 	# * GET /api/v1.0/users/current_user/categories/<category_id>
 	def test_get_user_specified_category(self):
 		## ARRANGE
@@ -113,7 +103,6 @@ class TestUser(BaseTestCase):
 		self.assertEqual(channel["name"], "Test YouTube Channel")
 		self.assertEqual(channel["yt_channel_id"], "test_id_test")
 		self.assertIn("_links", channel)
-
 
 	# * GET /api/v1.0/users/current_user/channels
 	def test_get_user_channels(self):
@@ -169,7 +158,6 @@ class TestUser(BaseTestCase):
 		self.assertEqual(channel["name"], "Test YouTube Channel")
 		self.assertEqual(channel["yt_channel_id"], "test_id_test")
 		self.assertIn("_links", channel)
-
 
 	# * GET /api/v1.0/users/current_user
 	def test_get_current_user(self):
