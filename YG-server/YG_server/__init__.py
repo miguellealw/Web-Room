@@ -41,6 +41,7 @@ def create_app(is_test_config=None):
   # app.config.from_object('config.ProdConfig')
   # app.config.from_object('config.TestingConfig')
 
+  # TODO: allow for ProdConfig
   if is_test_config is None:
     app.config.from_object('config.DevConfig')
   else:

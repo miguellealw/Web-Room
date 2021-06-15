@@ -97,9 +97,6 @@ def get_user_channel(channel_id):
 
   return jsonify( channel_schema.dump(channel_found) )
 
-
-
-
 @bp.route('/users/current_user/categories', methods=['GET', 'POST'])
 @login_required
 def get_user_categories():
