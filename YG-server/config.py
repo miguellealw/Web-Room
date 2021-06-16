@@ -32,6 +32,8 @@ class DevConfig(Config):
   DEBUG = True
   TESTING = True
   DATABASE_URI = environ.get('DEV_DATABASE_URI')
+  # FOR OAUTH TESTING
+  OAUTHLIB_INSECURE_TRANSPORT = environ.get('OAUTHLIB_INSECURE_TRANSPORT')
 
 
 class TestingConfig(Config):
