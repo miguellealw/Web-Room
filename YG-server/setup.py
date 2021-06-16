@@ -19,12 +19,13 @@ setup(
     'flask-login',
     'flask-cors',
     'Flask-HTTPAuth',
-    # 'flask-wtf',
-    # 'wtforms',
-    # 'email-validator',
     'flask-marshmallow',
     'marshmallow-sqlalchemy',
-    'flask-migrate'
+    'flask-migrate',
+    'google-api-python-client',
+    'google-auth',
+    'google-auth-oauthlib',
+    'google-auth-httplib2'
   ]
 
 )
