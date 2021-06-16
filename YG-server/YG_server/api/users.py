@@ -1,4 +1,5 @@
-from flask import Blueprint, jsonify, request, abort, redirect, url_for
+from YG_server.auth.oauth import API_SERVICE_NAME, API_VERSION, get_authenticated_service, get_subscriptions
+from flask import Blueprint, jsonify, request, abort, redirect, url_for, session
 from datetime import datetime as dt
 from marshmallow.exceptions import ValidationError
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -15,6 +16,10 @@ from YG_server.schemas import (
 
 from YG_server.api import bp
 from YG_server.auth.routes import load_user
+
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+import googleapiclient.discovery
 
 from flask_login import login_required, current_user as fl_current_user
 
@@ -33,6 +38,37 @@ def get_user(user_id):
 def current_user():
   return jsonify({
     "username": fl_current_user.username, 
+  })
+
+@bp.route('/users/current_user/yt-channels', methods=['GET'])
+# @login_required
+def get_user_yt_channels():
+  #TODO: make youtube middleware
+  # Check if user is authed by youtube
+  if 'credentials' not in session:
+    return redirect('authorize')
+
+  # Load the credentials from the session.
+  # credentials = google.oauth2.credentials.Credentials(**session['credentials'])
+
+  # Get client
+  # client = googleapiclient.discovery.build(
+  #   API_SERVICE_NAME, 
+  #   API_VERSION, 
+  #   credentials=credentials
+  # )
+
+  youtube = get_authenticated_service()
+  # channels = get_subscriptions(youtube, 
+  channels = get_subscriptions(youtube, 
+    part='snippet', 
+    mine=True, 
+    order='alphabetical', 
+    maxResults=25
+  )
+
+  return jsonify({
+    "channels": channels
   })
 
 @bp.route('/users/current_user/channels', methods=['GET'])
@@ -172,9 +208,3 @@ def get_user_category(category_id):
     abort(404, description=f"User does not own provided category")
 
   return jsonify( category_schema.dump(found_category) )
-
-
-# /users/<id>/categories - get categories channel belongs to
-# @bp.route('/channels/<int:channel_id>/categories', methods=['GET', 'POST'])
-# def get_categories_of_channel(channel_id):
-#   pass
