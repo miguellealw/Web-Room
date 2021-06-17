@@ -107,12 +107,6 @@ def logout():
 
 ### YOUTUBE API / GOOGLE OAUTH
 
-baseddir = path.abspath(path.dirname(__file__))
-load_dotenv(path.join(baseddir, '.env'))
-# CLIENT_SECRETS_FILE = environ.get('CLIENT_SECRET_FILENAME')
-# SCOPES = ['https://www.googleapis.com/auth/youtube.readonly']
-
-
 @bp.route('/authorize')
 def authorize():
   # Create a flow instance to manage the OAuth 2.0 Authorization Grant Flow
@@ -153,7 +147,6 @@ def oauth2callback():
   #     Store user's access and refresh tokens in your data store if
   #     incorporating this code into your real app.
   credentials = flow.credentials
-  print("CREDENTIALS", credentials)
   session['credentials'] = {
       'token': credentials.token,
       'refresh_token': credentials.refresh_token,
@@ -163,5 +156,5 @@ def oauth2callback():
       'scopes': credentials.scopes
   }
 
-  return jsonify({"message": "AUTHED WITH YOUTUBE"})
-  # return redirect(url_for('api.get_categories'))
+  # TODO: change to client route
+  return redirect(url_for('api.get_user_yt_channels'))
