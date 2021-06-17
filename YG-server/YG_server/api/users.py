@@ -1,3 +1,4 @@
+from YG_server.decorators import yt_auth_required
 from YG_server.auth.oauth import API_SERVICE_NAME, API_VERSION, get_authenticated_service, get_subscriptions
 from flask import Blueprint, jsonify, request, abort, redirect, url_for, session
 from datetime import datetime as dt
@@ -41,29 +42,13 @@ def current_user():
   })
 
 @bp.route('/users/current_user/yt-channels', methods=['GET'])
+@yt_auth_required
 # @login_required
-def get_user_yt_channels():
-  #TODO: make youtube middleware
-  # Check if user is authed by youtube
-  if 'credentials' not in session:
-    return redirect('authorize')
-
-  # Load the credentials from the session.
-  # credentials = google.oauth2.credentials.Credentials(**session['credentials'])
-
-  # Get client
-  # client = googleapiclient.discovery.build(
-  #   API_SERVICE_NAME, 
-  #   API_VERSION, 
-  #   credentials=credentials
-  # )
-
-  youtube = get_authenticated_service()
-  # channels = get_subscriptions(youtube, 
-  channels = get_subscriptions(youtube, 
+def get_user_yt_channels(yt_client):
+  channels = get_subscriptions(yt_client, 
     part='snippet', 
     mine=True, 
-    order='alphabetical', 
+    # order='alphabetical', 
     maxResults=25
   )
 
