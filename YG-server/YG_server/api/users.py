@@ -1,9 +1,8 @@
 from YG_server.decorators import yt_auth_required
-from YG_server.auth.oauth import API_SERVICE_NAME, API_VERSION, get_authenticated_service, get_subscriptions
+from YG_server.auth.oauth import get_channel, get_subscriptions
 from flask import Blueprint, jsonify, request, abort, redirect, url_for, session
 from datetime import datetime as dt
 from marshmallow.exceptions import ValidationError
-from werkzeug.security import check_password_hash, generate_password_hash
 
 from YG_server.models import db, User, Category, Channel
 from YG_server.schemas import (
@@ -42,8 +41,8 @@ def current_user():
   })
 
 @bp.route('/users/current_user/yt-channels', methods=['GET'])
+# @login_required # TODO: uncomment this when frontend register and login is implemented
 @yt_auth_required
-# @login_required
 def get_user_yt_channels(yt_client):
   channels = get_subscriptions(yt_client, 
     part='snippet', 
@@ -57,14 +56,31 @@ def get_user_yt_channels(yt_client):
   })
 
 @bp.route('/users/current_user/channels', methods=['GET'])
+@yt_auth_required
 @login_required
-def get_user_channels():
+def get_user_channels(yt_client):
+# def get_user_channels():
   user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
   channels = user_found.channels
   if channels is None:
     abort(404, description="User channels could not be loaded")
 
-  return jsonify( channels_schema.dump(user_found.channels) )
+  # Get id's of channels and pass to get_channel as dict
+  channel_ids = [channel.yt_channel_id for channel in channels]
+
+  # Get channel data from youtube
+  yt_channels = get_channel(yt_client, 
+    part='snippet', 
+    id=channel_ids
+  )
+
+  res = []
+  for channel in channels_schema.dump(user_found.channels):
+    channel["yt_data"] = next(filter(lambda yt_channel: yt_channel["id"] == channel["yt_channel_id"], yt_channels["items"]), None)
+    res.append(channel)
+
+  return jsonify( res )
+  # return jsonify( channels_schema.dump(user_found.channels) )
 
 @bp.route('/users/current_user/categories/<int:category_id>/add_channel', methods=['POST'])
 @login_required
