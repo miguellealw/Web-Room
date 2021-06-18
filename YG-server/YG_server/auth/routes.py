@@ -73,7 +73,7 @@ def register():
   return jsonify( user_schema.dump(new_user) ), 201
 
 
-@bp.route('/login', methods=['GET'])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
   if current_user.is_authenticated:
     return jsonify({"username": current_user.username, "flash": "User already logged in"})
@@ -88,7 +88,7 @@ def login():
       "hashed_password": password
     })
   except ValidationError as err:
-    return jsonify(err.messages)
+    return jsonify(err.messages), 403
 
   user = User.query.filter_by(username = valid_data["username"]).first()
   if user is None or not user.verify_password(valid_data["hashed_password"]):
