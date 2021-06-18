@@ -16,7 +16,6 @@ CLIENT_SECRETS_FILE = environ.get('CLIENT_SECRET_FILENAME')
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account.
 SCOPES = ['https://www.googleapis.com/auth/youtube.readonly']
-REDIRECT_URI = ''
 API_SERVICE_NAME = 'youtube'
 API_VERSION = 'v3'
 
@@ -43,9 +42,13 @@ def get_authenticated_service():
 #   return add_subscription_response['snippet']['title']
 
 def get_subscriptions(service, **kwargs):
-	list_subscriptions_response = service.subscriptions().list(
-		# part='snippet'
-		**kwargs
-	).execute()
+	list_subscriptions_response = service.subscriptions().list(**kwargs).execute()
 
 	return list_subscriptions_response
+
+# def get_channel(service, channel_id, **kwargs):
+# 	list_channel_response = service.channels().list(**kwargs).execute()
+
+def get_channel(service, **kwargs):
+	list_channel_response = service.channels().list(**kwargs).execute()
+	return list_channel_response
