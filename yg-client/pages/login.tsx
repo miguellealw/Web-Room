@@ -3,9 +3,9 @@ import { AuthApi } from './api/auth'
 
 import {useRouter} from 'next/router'
 
-const LogIn = () => {
+const LogIn : React.FC = () => {
 	const router = useRouter()
-	const [email, setEmail] = useState("");
+	const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isError, setIsError] = useState(false);
 
@@ -15,7 +15,7 @@ const LogIn = () => {
     try {
       const api = new AuthApi();
       api.setup();
-      const response = await api.login(email, password);
+      const response = await api.login(username, password);
 
       if (response.kind === "ok") {
 				router.push('/channels')
@@ -38,7 +38,7 @@ const LogIn = () => {
 						type="text" 
 						id="username" 
 						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-							setEmail(e.target.value)
+							setUsername(e.target.value)
 						}}
 					/>
 				</div>
