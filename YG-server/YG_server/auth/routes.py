@@ -31,6 +31,7 @@ def register():
   password2 = request.get_json()['confirm_password']
   email = request.get_json()['email']
 
+
   valid_data = None
   try:
     valid_data = UserSchema().load({
@@ -39,7 +40,8 @@ def register():
       "hashed_password": password
     })
   except ValidationError as err:
-    return jsonify(err.messages)
+    abort(403, description  = err.messages)
+    # return jsonify(err.messages)
 
   if password != password2:
     error = 'Passwords do not match'
