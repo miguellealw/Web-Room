@@ -3,8 +3,9 @@ import { User } from './types';
 import {AxiosResponse, ResponseType} from 'axios'
 
 type AuthResponse = {
-	kind: "ok",
-	user: User
+	kind: string,
+	user?: User,
+	errorMessage: any
 };
 
 export class AuthApi extends Api {
@@ -19,24 +20,55 @@ export class AuthApi extends Api {
 				}
 			)
 
-			// console.log("AUTH RESPONSE", response)
-
 			return {
 				kind: "ok",
-				user: response.data
+				user: response.data,
+				errorMessage: null
 			}
 		} catch(err) {
-			console.log("AUTH error", err)
-			return { kind: "bad-data", message: err}
+			return { 
+				kind: "bad-data", errorMessage: err
+			}
 		}
 	}
 
-	async logout(): Promise<any> {
-		const response: AxiosResponse<any> = await this.axios.get('/auth/v1.0/logout')
+	async register(username: string, email: string, password: string, confirmPassword: string): Promise<AuthResponse> {
+		try {
+			const response: AxiosResponse<any> = await this.axios.post(
+				'/auth/v1.0/register', 
+				{
+					username, 
+					email,
+					password,
+					confirm_password: confirmPassword
+				}
+			)
 
-		return {
-			kind: "ok",
-			flash: response.data
+			return {
+				kind: "ok",
+				user: response.data,
+				errorMessage: null
+			}
+		} catch(err) {
+			return { kind: "bad-data", errorMessage: err.response.data.error,}
+		}
+	}
+
+
+	async logout(): Promise<any> {
+		try {
+
+			const response: AxiosResponse<any> = await this.axios.get('/auth/v1.0/logout')
+
+			return {
+				kind: "ok",
+				flash: response.data
+			}
+		} catch(err) {
+			return {
+				kind: "bad-data",
+				errorMessage: "LOGOUT FAILED"
+			}
 		}
 	}
 }
