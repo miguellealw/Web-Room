@@ -26,4 +26,23 @@ export class ChannelsApi extends Api {
 			}
 		}
 	}
+
+	async get_yt_channels(): Promise<any> {
+
+		try {
+			const response: AxiosResponse<any> = await this.axios.get('/api/v1.0/users/current_user/yt-channels')
+
+			return {
+				kind: "ok",
+				channels: response.data,
+				errorMessage: null
+			}
+		} catch(err) {
+			return { 
+				kind: "bad-data", 
+				channels: null, 
+				errorMessage: err
+			}
+		}
+	}
 }
