@@ -71,5 +71,11 @@ Auth:
     ✔ Send cookie to client @done(21-06-10 00:18)
   Testing:
     ✔ Register User @done(21-06-14 12:34)
-    ☐ Login User
-    ☐ Logout User
+    ✔ Login User @done(21-06-16 19:31)
+    ✔ Logout User @done(21-06-16 19:31)
+
+
+YOUTUBE API:
+  ✔ create login form in frontend for 'login_required' decorator @done(21-06-20 23:57)
+  ✔ call /users/current_user/channels from frontend @done(21-06-20 23:57)
+    * that will get back channel data for channel user owns
