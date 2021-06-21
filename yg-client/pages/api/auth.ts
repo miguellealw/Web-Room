@@ -1,6 +1,6 @@
 import { Api } from './api'
 import { User } from './types';
-import {AxiosResponse, ResponseType} from 'axios'
+import { AxiosResponse } from 'axios'
 
 type AuthResponse = {
 	kind: string,
@@ -10,7 +10,6 @@ type AuthResponse = {
 
 export class AuthApi extends Api {
 	async login(username: string, password: string): Promise<AuthResponse> {
-		// console.log("LOGIN", username, password)
 		try {
 			const response: AxiosResponse<any> = await this.axios.post(
 				'/auth/v1.0/login', 
@@ -27,7 +26,8 @@ export class AuthApi extends Api {
 			}
 		} catch(err) {
 			return { 
-				kind: "bad-data", errorMessage: err
+				kind: "bad-data", 
+				errorMessage: err
 			}
 		}
 	}
