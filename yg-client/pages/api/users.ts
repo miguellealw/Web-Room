@@ -5,17 +5,20 @@ import { User } from "./types";
 export type GetUserResult = {
 	kind: string, 
 	user: User | null, 
-	errorMessage: any
+	error: any
 }
 
 export class UsersApi extends Api {
-	async currentUser(): Promise<GetUserResult> {
-		try {
-			const response: AxiosResponse<any> = await this.axios.get('/api/v1.0/users/current_user')
+	// async currentUser(): Promise<GetUserResult> {
+	async currentUser() {
+		let res : AxiosResponse<any> 
 
-			return {kind: "ok", user: response.data, errorMessage: null}
+		try {
+			res = await this.axios.get('/api/v1.0/users/current_user')
+			return {kind: "ok", user: res.data, error: null}
 		} catch(err) {
-			return { kind: "bad-data", user: null, errorMessage: err}
+			// return error for swr
+			return { kind: "bad-data", user: {isLoggedIn: false}, error: err}
 		}
 	}
 }

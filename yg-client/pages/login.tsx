@@ -1,13 +1,20 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { AuthApi } from './api/auth'
 
 import {useRouter} from 'next/router'
+import { useAuth } from "../utils/auth/useAuth"
+import useUser from "../utils/auth/useUser"
 
 const LogIn : React.FC = () => {
 	const router = useRouter()
 	const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isError, setIsError] = useState(false);
+
+	const {mutateUser} = useUser({
+		redirectTo: "/channels",
+		redirectIfFound: true
+	})
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,6 +25,7 @@ const LogIn : React.FC = () => {
       const response = await api.login(username, password);
 
       if (response.kind === "ok") {
+				mutateUser(response)
 				router.push('/channels')
       } else {
         setIsError(true);

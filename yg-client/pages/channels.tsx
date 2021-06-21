@@ -5,69 +5,71 @@ import Link from 'next/link'
 import { AuthApi } from "./api/auth";
 import { useRouter } from 'next/router'
 import { useAuth } from '../utils/auth/useAuth'
+import AuthedLayout from './authed_layout'
+import useUser from "../utils/auth/useUser";
 
 function Channels() {
 	const [channels, setChannels] = useState<Channel[] | [] | null>(null);
-	const {isLoggedIn, currentUser} = useAuth()
 	const router = useRouter()
+	const {user, isLoading, isLoggedOut = true} = useUser({
+		redirectTo: '/login',
+	})
+
 
 	useEffect(() => {
-		if(!isLoggedIn) {
-			router.push('/login')
-		}
-
 		let mounted = true;
 		async function fetchChannels() {
 			try {
 				const api = new ChannelsApi();
 				api.setup();
-				const response = await api.get_channels();
+				const res = await api.get_channels();
 
-				// only update state if component is mounted
-				if(mounted)
-					setChannels([...response.channels]);
+				if(res.channels && mounted) {
+					// only update state if compponent is mounted
+					setChannels([...res.channels]);
+				}
 			} catch (err) {
+				// TODO: handle this properly
 				console.log("CHANNELS FETCH ERROR", err)
 			}
 		}
 
-		fetchChannels()
+		if(!isLoggedOut) {
+			fetchChannels()
+		}
 
 		return () => {
 			mounted = false
 		}
-	}, [])
+	}, [isLoggedOut])
 
-	const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
-		const api = new AuthApi();
-		api.setup();
-		const response = await api.logout()
+	// console.log("ISLOADING", isLoading)
 
-		router.push('/login')
+	if(isLoading) {
+		return <div>Loading Dashboard...</div>
 	}
 
-	return (
-		<div>
-			{
-				!channels ? (
-					<div>Loading...</div>
-				) : (
-					<>
-					<button onClick={handleLogout}>Logout</button>	
-					<Link href="/login" passHref>
-						<button>Login</button>	
-					</Link>
-					<h1>User Channels</h1>
-					<ul>
-						{channels.map((channel, index) => (
-							<li key={index}><strong>{channel.name}</strong> - {channel.yt_data.snippet.description}</li>
-						))}
-					</ul>
-					</>
-				)
 
-			}
-		</div>
+	return (
+		<AuthedLayout>
+			<div>
+				{
+					!channels ? (
+						<div>Loading your Subscriptions...</div>
+					) : (
+						<>
+							<h1>Your Subscriptions</h1>
+							<ul>
+								{channels.map((channel, index) => (
+									<li key={index}><strong>{channel.name}</strong> - {channel.yt_data.snippet.description}</li>
+								))}
+							</ul>
+						</>
+					)
+
+				}
+			</div>
+		</AuthedLayout>
 	)
 }
 

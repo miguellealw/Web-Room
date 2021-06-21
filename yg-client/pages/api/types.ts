@@ -6,7 +6,8 @@ export type ResourceLinks = {
 export type User = {
 	// id: number;
 	username: string;
-	email: string
+	email: string,
+	isLoggedIn?: boolean
 }
 
 export type Channel = {
