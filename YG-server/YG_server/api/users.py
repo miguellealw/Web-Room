@@ -38,6 +38,7 @@ def get_user(user_id):
 def current_user():
   return jsonify({
     "username": fl_current_user.username, 
+    "isLoggedIn": True
   })
 
 @bp.route('/users/current_user/yt-channels', methods=['GET'])

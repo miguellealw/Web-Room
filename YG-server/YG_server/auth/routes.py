@@ -19,6 +19,10 @@ from dotenv import load_dotenv
 def load_user(user_id):
   return User.query.get(user_id)
 
+@login_manager.unauthorized_handler
+def unauthorized():
+  return jsonify({"isLoggedIn": False}), 401
+
 @bp.route('/register', methods=['POST'])
 def register():
   if current_user.is_authenticated:
