@@ -22,11 +22,15 @@ function Channels() {
 			try {
 				const api = new ChannelsApi();
 				api.setup();
-				const res = await api.get_channels();
+				// const res = await api.get_channels();
+				const res = await api.get_yt_channels();
+
+				console.log("RESE", res)
 
 				if(res.channels && mounted) {
 					// only update state if compponent is mounted
-					setChannels([...res.channels]);
+					// setChannels([...res.channels]);
+					setChannels([...res.channels.channels.items]);
 				}
 			} catch (err) {
 				// TODO: handle this properly
@@ -58,10 +62,18 @@ function Channels() {
 						<div>Loading your Subscriptions...</div>
 					) : (
 						<>
-							<h1>Your Subscriptions</h1>
+							<h1 className="py-2">Your Subscriptions</h1>
 							<ul>
-								{channels.map((channel, index) => (
+								{/* {channels.map((channel, index) => (
 									<li key={index}><strong>{channel.name}</strong> - {channel.yt_data.snippet.description}</li>
+								))} */}
+								{channels.map((channel, index) => (
+									<li 
+										key={index} 
+										className="py-3"
+									>
+										<strong>{channel.snippet.title}</strong> - {channel.snippet.description}
+									</li>
 								))}
 							</ul>
 						</>
