@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { useAuth } from '../utils/auth/useAuth'
 import AuthedLayout from './authed_layout'
 import useUser from "../utils/auth/useUser";
+import SubscriptionListItem from "../components/SubscriptionListItem";
 
 function Channels() {
 	const [channels, setChannels] = useState<Channel[] | [] | null>(null);
@@ -53,6 +54,8 @@ function Channels() {
 		return <div>Loading Dashboard...</div>
 	}
 
+	console.log("CHANNELS", channels)
+
 
 	return (
 		<AuthedLayout>
@@ -68,12 +71,14 @@ function Channels() {
 									<li key={index}><strong>{channel.name}</strong> - {channel.yt_data.snippet.description}</li>
 								))} */}
 								{channels.map((channel, index) => (
-									<li 
+
+									<SubscriptionListItem
 										key={index} 
-										className="py-3"
-									>
-										<strong>{channel.snippet.title}</strong> - {channel.snippet.description}
-									</li>
+										name={channel.snippet.title} 
+										description={channel.snippet.description}
+										thumbnail={channel.snippet.thumbnails.default.url}
+										channelId={channel.snippet.resourceId.channelId}
+									/>
 								))}
 							</ul>
 						</>
