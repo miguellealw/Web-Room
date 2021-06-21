@@ -6,6 +6,7 @@ import { useAuth } from "../utils/auth/useAuth"
 import useUser from "../utils/auth/useUser"
 import Layout from './layout'
 import Link from "next/link"
+import InputField from "../components/InputField"
 
 const LogIn : React.FC = () => {
 	const router = useRouter()
@@ -44,33 +45,9 @@ const LogIn : React.FC = () => {
 			<div className = "w-full h-screen flex flex-col justify-center items-center">
 				<h1 className="text-5xl font-bold mb-10">Login</h1>
 				<form action="POST" onSubmit={onSubmit}>
-					<div className="pb-3 flex flex-col">
-						<label htmlFor="username">Username</label>
-						<input 
-							type="text" 
-							id="username" 
-							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-								setUsername(e.target.value)
-							}}
-							style={{textIndent: "5px"}}
-						/>
-					</div>
-	
-					<div className="pb-3 flex flex-col">
-						<label htmlFor="password">Password</label>
-						<input 
-							type="password" 
-							id="password"
-							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-								setPassword(e.target.value)
-							}}
-							style={{textIndent: "5px"}}
-						/>
-					</div>
-	
-					<div className="bg-red-600 text-white py-2  text-center font-bold" >
-						<button type="submit">Log In</button>
-					</div>
+					<InputField label="Username" type="text" setValue={setUsername}/>
+					<InputField label="Password" type="password" setValue={setPassword}/>
+					<button type="submit" className="bg-red-600 hover:bg-red-500 text-white py-2  text-center font-bold w-full">Log In</button>
 				</form>
 	
 				{isError && (
@@ -80,7 +57,7 @@ const LogIn : React.FC = () => {
 					)}
 
 				<div className="pt-2">
-					Don't have an account? 
+					Don&apos;t have an account? 
 					<Link href="/register" passHref>
 						<a className="underline text-gray-400 pl-1">Register</a>
 					</Link>

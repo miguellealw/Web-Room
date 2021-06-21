@@ -1,9 +1,12 @@
 import React, { useState, FunctionComponent } from "react"
 import { AuthApi } from './api/auth'
+import InputField from "../components/InputField"
 
 import {useRouter} from 'next/router'
+import Layout from "./layout"
+import Link from "next/link"
 
-const Register : FunctionComponent = () => {
+const Register : React.FC = () => {
 	const router = useRouter()
 	const [email, setEmail] = useState("");
 	const [username, setUsername] = useState("");
@@ -40,70 +43,34 @@ const Register : FunctionComponent = () => {
 
 
 	return (
-		<div>
-			<form action="POST" onSubmit={onSubmit}>
-				<div>
-					<label htmlFor="email">Email</label>
-					<input 
-						type="text" 
-						id="email" 
-						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-							setUsername(e.target.value)
-						}}
-					/>
-				</div>
+		<Layout>
+			<div className = "w-full h-screen flex flex-col justify-center items-center">
+				<h1 className="text-5xl font-bold mb-10">Register</h1>
+				<form action="POST" onSubmit={onSubmit}>
+					<InputField label="Email" type="email" setValue={setEmail}/>
+					<InputField label="Username" type="text" setValue={setUsername}/>
+					<InputField label="Password" type="password" setValue={setPassword}/>
+					<InputField label="ConfirmPassword" type="password" setValue={setConfirmPassword}/>
+					<button type="submit" className="bg-red-600 hover:bg-red-500 text-white py-2  text-center font-bold w-full">Register</button>
+				</form>
 
-				<div>
-					<label htmlFor="username">Username</label>
-					<input 
-						type="text" 
-						id="username" 
-						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-							setEmail(e.target.value)
-						}}
-					/>
-				</div>
-
-				<div>
-					<label htmlFor="password">Password</label>
-					<input 
-						type="password" 
-						id="password"
-						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-							setPassword(e.target.value)
-						}}
-					
-					/>
-				</div>
-
-				<div>
-					<label htmlFor="confirmPassword">Confirm Password</label>
-					<input 
-						type="password" 
-						id="confirmPassword"
-						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-							setConfirmPassword(e.target.value)
-						}}
-					
-					/>
-				</div>
-
-
-				<div>
-					<button type="submit">Register</button>
-				</div>
-			</form>
-
-			{isError && (
-					<div>
-						There`&apos`s an error while login, try again!
+				{isError && (
 						<div>
-							{/* {JSON.stringify(errorMessage)} */}
-							{JSON.stringify(errorMessage)}
+							There&apos;s an error while login, try again!
+							<div>
+								{JSON.stringify(errorMessage)}
+							</div>
 						</div>
-					</div>
-				)}
-		</div>
+					)}
+
+				<div className="pt-2">
+					Already have an account? 
+					<Link href="/login" passHref>
+						<a className="underline text-gray-400 pl-1">Log In</a>
+					</Link>
+				</div>
+			</div>
+		</Layout>
 	)
 
 
