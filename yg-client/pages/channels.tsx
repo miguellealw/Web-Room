@@ -59,13 +59,13 @@ function Channels() {
 
 	return (
 		<AuthedLayout>
-			<div>
+			<div className="py-10">
 				{
 					!channels ? (
 						<div>Loading your Subscriptions...</div>
 					) : (
 						<>
-							<h1 className="py-2">Your Subscriptions</h1>
+							<h1 className="pb-10 text-5xl font-bold">Your Subscriptions</h1>
 							<ul>
 								{/* {channels.map((channel, index) => (
 									<li key={index}><strong>{channel.name}</strong> - {channel.yt_data.snippet.description}</li>
