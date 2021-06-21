@@ -1,4 +1,4 @@
-
+import Image from "next/image"
 
 const ChannelDescription = ({
 	name,
@@ -10,7 +10,13 @@ const ChannelDescription = ({
 	return (
 		<div className="bg-gray-100 p-4 my-4 flex items-center rounded-md">
 			<div className="max-w-28 rounded-full overflow-hidden">
-				<img src={thumbnail} alt={`${name}'s thumbnail`} className="w-full h-full object-cover"/>
+				<Image 
+					src={thumbnail} 
+					alt={`${name}'s thumbnail`} 
+					className="w-full h-full object-cover"
+					width={80}
+					height={80}
+				/>
 			</div>
 			<div className="flex flex-col ml-2">
 				<span className="font-bold">
