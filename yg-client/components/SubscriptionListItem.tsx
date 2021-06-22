@@ -1,6 +1,13 @@
 import Image from "next/image"
 
-const ChannelDescription = ({
+export interface SubscriptionListItem {
+	name: string,
+	description?: string,
+	thumbnail: string, 
+	channelId: string
+}
+
+const SubscriptionListItem : React.FC<SubscriptionListItem> = ({
 	name,
 	description,
 	thumbnail,
@@ -8,14 +15,14 @@ const ChannelDescription = ({
 }) => {
 
 	return (
-		<div className="bg-gray-100 p-4 my-4 flex items-center rounded-md">
-			<div className="max-w-28 rounded-full overflow-hidden">
+		<div className="bg-gray-100 p-4 my-4 flex items-center">
+			<div className="w-20 rounded-full overflow-hidden">
 				<Image 
 					src={thumbnail} 
 					alt={`${name}'s thumbnail`} 
-					className="w-full h-full object-cover"
-					width={80}
-					height={80}
+					className="w-full h-full object-cover object-center"
+					width={200}
+					height={200}
 				/>
 			</div>
 			<div className="flex flex-col ml-2">
@@ -41,4 +48,4 @@ const ChannelDescription = ({
 	)
 }
 
-export default ChannelDescription
+export default SubscriptionListItem
