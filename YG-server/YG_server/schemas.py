@@ -59,7 +59,7 @@ channels_schema = ChannelSchema(many=True)
 class CategorySchema(ma.SQLAlchemyAutoSchema):
   class Meta:
     model =  Category
-    fields = ("name", "created_at", "updated_at", "_links", "channels", "_owner")
+    fields = ("name", "created_at", "updated_at", "_links", "channels", "_owner", "id")
     include_relationships = True
 
   name = fields.String(
@@ -81,4 +81,4 @@ class CategorySchema(ma.SQLAlchemyAutoSchema):
 
 category_schema = CategorySchema()
 # don't send back list of channels in category when fetching all categories
-categories_schema = CategorySchema(many=True, only=("name", "created_at", "updated_at", "_owner"))
+categories_schema = CategorySchema(many=True, only=("name", "_links", "created_at", "updated_at", "_owner", "id"))
