@@ -60,12 +60,12 @@ function Categories() {
 					) : (
 						<>
 							<h1 className="pb-10 text-5xl font-bold">Your Categories</h1>
-							<ul>
+							<ul className="grid grid-cols-3 gap-4">
 								{/* {channels.map((channel, index) => (
 									<li key={index}><strong>{channel.name}</strong> - {channel.yt_data.snippet.description}</li>
 								))} */}
 								{categories.map((category, index) => (
-									<div key={index}>{category.name}</div>
+									<li key={index} className="bg-gray-100 text-lg font-bold h-28 rounded-md flex justify-center items-center">{category.name}</li>
 								))}
 							</ul>
 						</>
