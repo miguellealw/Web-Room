@@ -1,4 +1,4 @@
-import { CollectionIcon, LogoutIcon, ViewGridIcon } from "@heroicons/react/outline"
+import { CollectionIcon, FolderIcon, FolderOpenIcon, LogoutIcon, ViewGridIcon, ViewListIcon } from "@heroicons/react/outline"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
@@ -7,6 +7,7 @@ import { AuthApi } from '../pages/api/auth'
 import { CategoryApi } from "../pages/api/categories"
 import { Category } from "../pages/api/types"
 import useUser from "../utils/auth/useUser"
+import Logo from "./Logo"
 
 
 const DashboardNavigation = () => {
@@ -55,11 +56,19 @@ const DashboardNavigation = () => {
 
 	return (
 		<nav className="h-screen w-1/12 bg-gray-800 text-white flex flex-col items-center fixed left-0">
+			<div className="w-full my-3 flex items-center py-2 px-3">
+				<Logo className="mr-2 w-6 h-6"/>
+				<h1 className="">
+					YouTube +
+				</h1>
+			</div>
+
 			<ul className="w-full">
 				<li className="hover:bg-gray-700 w-full">
 					<Link href="/categories" passHref>
-						<a data-tip="Your Categories" className="flex items-center w-full h-full py-3 px-3">
-							<ViewGridIcon className="h-5 w-5"/>
+						<a data-tip="Your Categories" className="flex items-center w-full h-full p-3">
+							{/* <ViewGridIcon className="h-5 w-5"/> */}
+							<FolderIcon className="h-5 w-5"/>
 							<span className="ml-2">Categories</span>	
 							{/* <ReactTooltip effect="solid"/> */}
 						</a>
@@ -83,7 +92,10 @@ const DashboardNavigation = () => {
 					{ categories?.length === 0 
 						? <span>No categories available</span> :
 						categories?.map((category, index) => (
-							<li key={index} className="pl-6 py-2 hover:bg-gray-700">{category.name}</li>
+							<li key={index} className="pl-3 py-2 hover:bg-gray-700 flex">
+								<FolderOpenIcon className="w-5 h-5 mr-2" />
+								{category.name}
+							</li>
 						))
 					}
 				</ul>
