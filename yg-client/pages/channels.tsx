@@ -4,7 +4,6 @@ import { Channel } from "./api/types";
 import Link from 'next/link'
 import { AuthApi } from "./api/auth";
 import { useRouter } from 'next/router'
-import { useAuth } from '../utils/auth/useAuth'
 import AuthedLayout from './authed_layout'
 import useUser from "../utils/auth/useUser";
 import SubscriptionListItem from "../components/SubscriptionListItem";

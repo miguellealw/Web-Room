@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { AuthApi } from './api/auth'
 
 import {useRouter} from 'next/router'
-import { useAuth } from "../utils/auth/useAuth"
 import useUser from "../utils/auth/useUser"
 import Layout from './layout'
 import Link from "next/link"
