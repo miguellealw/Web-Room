@@ -65,10 +65,7 @@ function Channels() {
 					) : (
 						<>
 							<h1 className="pb-10 text-5xl font-bold">Your Subscriptions</h1>
-							<ul>
-								{/* {channels.map((channel, index) => (
-									<li key={index}><strong>{channel.name}</strong> - {channel.yt_data.snippet.description}</li>
-								))} */}
+							<ul className="grid grid-cols-3 gap-3">
 								{channels.map((channel, index) => (
 
 									<SubscriptionListItem
