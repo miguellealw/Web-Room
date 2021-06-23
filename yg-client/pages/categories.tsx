@@ -7,72 +7,13 @@ import useUser from "../utils/auth/useUser";
 import SubscriptionListItem from "../components/SubscriptionListItem";
 import { CategoryApi } from "./api/categories";
 import { DotsVerticalIcon, FolderRemoveIcon, PencilAltIcon, PlusIcon } from "@heroicons/react/outline";
-
-
-function CategoryDropdown({isDropdownOpen}) {
-	// const [isDropdownOpen, setIsDropDownOpen] = useState(false)
-
-	return (
-		<>
-		{
-			isDropdownOpen && 
-				<ul className="w-32 absolute text-sm font-normal top-8 right-3 bg-white rounded-sm shadow-xl">
-					<li className="border-b-2 border-gray-100 py-1 hover:bg-gray-300 px-2 cursor-pointer flex">
-						<PencilAltIcon className="w-5 h-5 mr-2"/>
-						Rename
-					</li>
-					<li className="border-gray-100 py-1 hover:bg-gray-300 px-2 cursor-pointer flex">
-						<FolderRemoveIcon className="w-5 h-5 mr-2"/>
-						Delete
-					</li>
-				</ul>
-		}
-		</>
-	)
-}
-
-interface CategoryListItemProps {
-
-	category: Category
-	key: number
-}
-
-const CategoryListItem : React.FC<CategoryListItemProps> = ({category, key}) => {
-	const [value, setValue] = useState<string>("")
-	const [isEditing, setIsEditing] = useState<boolean>(false)
-	const [isDropdownOpen, setIsDropDownOpen] = useState(false)
-
-	return (
-		<li key={key} className="bg-gray-100 text-lg font-bold h-28 rounded-md flex justify-center items-center relative">
-			<DotsVerticalIcon 
-				className="w-5 h-5 absolute text-gray-400 top-0 right-0 m-2 cursor-pointer" 
-				onClick={(e) => {
-					// e.preventDefault()
-					e.stopPropagation()
-					setIsDropDownOpen(!isDropdownOpen)
-				}}
-			/>
-			{category.name}
-
-			{ isDropdownOpen && <CategoryDropdown isDropdownOpen={isDropdownOpen}/> }
-
-			{isEditing && (
-				<input 
-					type="text" 
-					value={value === "" ? category.name : value} onChange={(e) => setValue(e.target.value)}
-				/>
-			)}
-		</li>
-	)
-}
+import CategoryListItem from "../components/CategoryListItem";
 
 function Categories() {
-	const [categories, setCategories] = useState<Category[] | [] | null>(null);
+	const [categories, setCategories] = useState<Category[] | null>(null);
 
 	const router = useRouter()
-	const {user, isLoading, isLoggedOut = true} = useUser({
-		redirectTo: '/login',
-	})
+	const {isLoggedOut = true} = useUser()
 
 
 	useEffect(() => {
@@ -82,7 +23,7 @@ function Categories() {
 				const api = new CategoryApi();
 				api.setup();
 				const res = await api.getUserCategories();
-				// console.log("USER CATEGORIES RES", res)
+				console.log("USER CATEGORIES RES", res)
 
 				// only update state if compponent is mounted
 				if(res.categories && mounted) {
@@ -94,9 +35,9 @@ function Categories() {
 			}
 		}
 
-		if(!isLoggedOut) {
+		// if(!isLoggedOut) {
 			fetchCategories()
-		}
+		// }
 
 		return () => {
 			mounted = false
@@ -112,11 +53,6 @@ function Categories() {
 
 		
 		setCategories([...categories, {name}])
-	}
-
-
-	if(isLoading) {
-		return <div>Loading Dashboard...</div>
 	}
 
 	return (
