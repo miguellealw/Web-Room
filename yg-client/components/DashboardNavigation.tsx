@@ -23,8 +23,6 @@ const DashboardNavigation = () => {
 		mutateUser()
 	}
 
-
-
 	useEffect(() => {
 		let mounted = true;
 		async function fetchCategories() {
@@ -52,22 +50,19 @@ const DashboardNavigation = () => {
 		}
 	}, [])
 
-	// setCategories([])
-
 	return (
 		<nav className="h-screen w-1/12 bg-gray-800 text-white flex flex-col items-center fixed left-0">
-			<div className="w-full my-3 flex items-center py-2 px-3">
+			{/* Logo */}
+			<div className="w-full  my-3 flex items-center py-2 px-3">
 				<Logo className="mr-2 w-6 h-6"/>
-				<h1 className="">
-					YouTube +
-				</h1>
+				<h1>YouTube +</h1>
 			</div>
 
+			{/* Subs and Categories */}
 			<ul className="w-full">
 				<li className="hover:bg-gray-700 w-full">
 					<Link href="/categories" passHref>
 						<a data-tip="Your Categories" className="flex items-center w-full h-full p-3">
-							{/* <ViewGridIcon className="h-5 w-5"/> */}
 							<FolderIcon className="h-5 w-5"/>
 							<span className="ml-2">Categories</span>	
 							{/* <ReactTooltip effect="solid"/> */}
@@ -92,15 +87,20 @@ const DashboardNavigation = () => {
 					{ categories?.length === 0 
 						? <span>No categories available</span> :
 						categories?.map((category, index) => (
-							<li key={index} className="pl-3 py-2 hover:bg-gray-700 flex">
-								<FolderOpenIcon className="w-5 h-5 mr-2" />
-								{category.name}
-							</li>
+							<Link href={`/categories/${category.id}`} passHref key={category.id}>
+								<a>
+									<li className="pl-3 py-2 hover:bg-gray-700 flex">
+										<FolderOpenIcon className="w-5 h-5 mr-2" />
+										{category.name}
+									</li>
+								</a>
+							</Link>
 						))
 					}
 				</ul>
 			</div>
 
+			{/* Log Out */}
 			<button data-tip="Log Out" onClick={handleLogout} className="flex items-center relative mb-5 mt-5">
 				<LogoutIcon className="h-5 w-5"/>
 				<span className="ml-2">Log Out</span>	
