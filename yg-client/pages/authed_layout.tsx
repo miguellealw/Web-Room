@@ -10,7 +10,7 @@ import DashboardNavigation from '../components/DashboardNavigation'
 
 
 
-const AuthedLayout : FC = ({ children }) => {
+const AuthedLayout : FC = ({ children, tw_className = "", ...props }) => {
 	const {user, isLoading, isLoggedOut = true} = useUser({
 		redirectTo: '/login',
 	})
@@ -20,7 +20,7 @@ const AuthedLayout : FC = ({ children }) => {
 	}
 
 	return (
-		<div className="w-1/3 m-auto">
+		<div className={`${tw_className === "" ? 'w-1/3 m-auto' : tw_className}`} {...props}>
 			<DashboardNavigation />			
 			{children}
 		</div>
