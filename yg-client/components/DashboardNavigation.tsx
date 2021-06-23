@@ -55,7 +55,7 @@ const DashboardNavigation = () => {
 			{/* Logo */}
 			<div className="w-full  my-3 flex items-center py-2 px-3">
 				<Logo className="mr-2 w-6 h-6"/>
-				<h1>YouTube +</h1>
+				<h1>YouTube Box</h1>
 			</div>
 
 			{/* Subs and Categories */}
