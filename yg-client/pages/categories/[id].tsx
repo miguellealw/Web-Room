@@ -76,21 +76,25 @@ const Category = () => {
 	}
 
 	return (
-		<AuthedLayout tw_className="w-2/3 m-auto">
+		<AuthedLayout tw_className="w-1/2 m-auto">
 			<div className="py-10">
 				<div className="flex justify-between items-center mb-10">
 					<h1 className="text-5xl font-bold">{data.category?.name}</h1>
 					<div className="text-gray-500">{data.category?.channels.length} channels</div>
 				</div>
 
-				<main className="grid grid-cols-2 gap-2">
+				<main className="grid grid-cols-3 gap-10">
+				{/* <main className="flex"> */}
 
 					{/* Videos */}
-					<div>
+					<div style={{
+						gridColumnStart: '1',
+						gridColumnEnd: '3'
+					}}>
 						<h2 className="font-bold mb-3">Videos</h2>
 						<ul className="">
 							{testVideos.map((video, index) => (
-								<li key={index} className="bg-gray-100 rounded-md mb-5 flex h-36 overflow-hidden shadow-sm">
+								<li key={index} className="bg-white rounded-lg mb-5 flex h-36 overflow-hidden shadow-sm">
 									{/* Video Thumbnail */}
 									<div className="bg-gray-300 w-52 h-full rounded-tl-md rounded-bl-md"></div>
 									{/* Video info */}
@@ -107,20 +111,27 @@ const Category = () => {
 					</div>
 
 					{/* Channels */}
-					<div>
+					<div className="">
 						<h2 className="font-bold mb-3">Subscriptions</h2>
-						<ul className="bg-gray-100 rounded-md">
-							{data.category?.channels.map(channel => (
-								<li key={channel.yt_channel_id} className="py-5 border-b-2 flex items-center pl-4">
-									{/* <img src="" alt="" /> */}
-									<div className="rounded-full w-20 h-20 bg-gray-300"></div>
-									<div className="ml-3">
-										<div className="font-bold text-lg">{channel.name}</div>					
-										<div>30,000 Subscribers</div>
-									</div>
-								</li>
-							))}
-						</ul>
+
+						{data.category?.channels.length === 0 ? 
+							(<div>No channels in category</div>) : 
+							(
+							<ul className="bg-white rounded-lg overflow-hidden shadow-lg p-8">
+								{data.category?.channels.map(channel => (
+									<li key={channel.yt_channel_id} className="py-5 bg-gray-100 mb-3 rounded-lg flex items-center pl-4">
+										{/* <img src="" alt="" /> */}
+										<div className="rounded-full w-14 h-14 bg-gray-300"></div>
+										<div className="ml-3">
+											<div className="font-bold text-lg">{channel.name}</div>					
+											<div className="text-sm">30,000 Subscribers</div>
+										</div>
+									</li>
+								))}
+							</ul>
+							)	
+						}
+
 
 					</div>
 
