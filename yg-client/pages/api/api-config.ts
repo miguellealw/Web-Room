@@ -3,8 +3,9 @@ export interface ApiConfig {
 	timeout: number;
 }
 
-export const DEFAULT_API_CONFIG: ApiConfig = {
-	url: process.env.API_URL,
-	// url: 'http://localhost:5000',
+console.log("API CONFIG", process.env.API_URL)
+
+export const DEFAULT_API_CONFIG : ApiConfig = {
+	// url: process.env.API_URL,
 	timeout: 30000
 }

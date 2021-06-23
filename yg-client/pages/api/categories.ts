@@ -28,7 +28,7 @@ export class CategoryApi extends Api {
 		}
 	}
 
-	async getUserCategoryById(id : number) : Promise<CategoryResponse> {
+	async getUserCategoryById(id : string) : Promise<CategoryResponse> {
 		try {
 			const response: AxiosResponse<any> = await this.axios.get(`/api/v1.0/users/current_user/categories/${id}`)
 
