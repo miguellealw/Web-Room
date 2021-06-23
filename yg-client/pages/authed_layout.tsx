@@ -11,6 +11,14 @@ import DashboardNavigation from '../components/DashboardNavigation'
 
 
 const AuthedLayout : FC = ({ children }) => {
+	const {user, isLoading, isLoggedOut = true} = useUser({
+		redirectTo: '/login',
+	})
+
+	if(isLoading) {
+		return <div>Dashboard Loading...</div>
+	}
+
 	return (
 		<div className="w-1/3 m-auto">
 			<DashboardNavigation />			
