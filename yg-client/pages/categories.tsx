@@ -73,7 +73,7 @@ function Categories() {
 								))}
 
 								<li 
-									className="border-2 border-gray-200 text-gray-300 hover:bg-gray-100 cursor-pointer text-lg h-28 rounded-md flex justify-center items-center"
+									className="hover:bg-gray-50 border-2 border-gray-200 text-gray-300 cursor-pointer text-lg h-28 rounded-md flex justify-center items-center"
 									onClick={(e) => {
 										handleCreateCategory("TEST CATEGORY")
 									}}

@@ -20,9 +20,11 @@ const AuthedLayout : FC = ({ children, tw_className = "", ...props }) => {
 	}
 
 	return (
-		<div className={`${tw_className === "" ? 'w-1/3 m-auto' : tw_className}`} {...props}>
-			<DashboardNavigation />			
-			{children}
+		<div className="w-full min-h-screen bg-gray-100">
+			<div className={`${tw_className === "" ? 'w-1/3 m-auto' : tw_className}`} {...props}>
+				<DashboardNavigation />			
+				{children}
+			</div>
 		</div>
 	)
 }

@@ -48,7 +48,7 @@ const SubscriptionListItem : React.FC<SubscriptionListItem> = ({
 	// )
 
 	return (
-		<div className="bg-gray-100 p-4 flex items-center rounded-md hover:bg-gray-200">
+		<div className="bg-white shadow-sm p-4 flex items-center rounded-md hover:bg-gray-50">
 			<div className="w-20 rounded-full overflow-hidden">
 				<Image 
 					src={thumbnail} 

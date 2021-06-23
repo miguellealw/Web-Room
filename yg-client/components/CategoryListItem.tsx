@@ -18,7 +18,7 @@ const CategoryDropdown : React.FC<CategoryDropdownProps> = ({
 		<>
 		{
 			isDropdownOpen && 
-				<ul className="w-32 absolute text-sm font-normal top-8 right-3 bg-white rounded-sm shadow-xl">
+				<ul className="bg-gray-100 w-32 absolute text-sm font-normal top-8 right-3 rounded-sm shadow-xl">
 					<li 
 						className="border-b-2 border-gray-100 py-1 hover:bg-gray-300 px-2 cursor-pointer flex"
 						onClick={(e) => {
@@ -57,7 +57,7 @@ const CategoryListItem : React.FC<CategoryListItemProps> = ({category}) => {
 
 			<a>
 
-				<li className="bg-gray-100 text-lg font-bold h-28 rounded-md flex justify-center items-center relative cursor-pointer">
+				<li className="bg-white shadow-sm hover:shadow-md transition text-lg font-bold h-28 rounded-md flex justify-center items-center relative cursor-pointer">
 					{!isEditing && (
 						<DotsVerticalIcon 
 							className="w-5 h-5 absolute text-gray-400 top-0 right-0 m-2 cursor-pointer" 
