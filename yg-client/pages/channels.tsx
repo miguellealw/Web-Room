@@ -11,10 +11,7 @@ import SubscriptionListItem from "../components/SubscriptionListItem";
 function Channels() {
 	const [channels, setChannels] = useState<Channel[] | [] | null>(null);
 	const router = useRouter()
-	const {user, isLoading, isLoggedOut = true} = useUser({
-		redirectTo: '/login',
-	})
-
+	const {isLoggedOut = true} = useUser()
 
 	useEffect(() => {
 		let mounted = true;
@@ -38,23 +35,14 @@ function Channels() {
 			}
 		}
 
-		if(!isLoggedOut) {
+		// if(!isLoggedOut) {
 			fetchChannels()
-		}
+		// }
 
 		return () => {
 			mounted = false
 		}
-	}, [isLoggedOut])
-
-	// console.log("ISLOADING", isLoading)
-
-	if(isLoading) {
-		return <div>Loading Dashboard...</div>
-	}
-
-	console.log("CHANNELS", channels)
-
+	}, [])
 
 	return (
 		<AuthedLayout>

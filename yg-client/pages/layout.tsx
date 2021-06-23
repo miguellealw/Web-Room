@@ -11,7 +11,7 @@ const Layout : FC = ({children}) => {
 				<Link href="/" passHref>
 					<a className="flex items-center">
 						{/* <Logo className="w-7 h-7 mr-2"></Logo> */}
-						<h1 className="font-bold z-10 relative">YouTube+</h1>
+						<h1 className="font-bold z-10 relative">YouTube Box</h1>
 					</a>
 				</Link>
 			</nav>

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 import Layout from './layout'
 
-const LandingShapeSVG = () => (
+const LandingPageShapeSVG = () => (
   <>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -15,8 +15,8 @@ const LandingShapeSVG = () => (
       viewBox="0 0 634 634"
       className="absolute w-2/3 z-0"
       style={{
-        left: "-36rem",
-        top: "-10rem"
+        left: "-40rem",
+        top: "-5rem"
       }}
     >
       <path fill="none" d="M-16.615-10.019h653.93v661.71h-653.93z"></path>
@@ -56,7 +56,7 @@ export default function Home() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <LandingShapeSVG />
+        <LandingPageShapeSVG />
         <main className="min-h-screen flex-1 flex flex-col justify-center items-center z-10">
           <h1 className="text-7xl font-bold">A Better YouTube Experience</h1>
           <h2 className="text-2xl font-medium my-3">Categorize and Share your Favorite YouTube Channels</h2>
