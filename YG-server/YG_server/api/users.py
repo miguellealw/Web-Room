@@ -148,7 +148,7 @@ def get_user_categories():
     abort(404, description="User categories could not be loaded")
 
   if request.method == 'POST':
-    name = request.get_json()['name']
+    name = request.get_json()['name'].strip()
 
     valid_data = None
     try:

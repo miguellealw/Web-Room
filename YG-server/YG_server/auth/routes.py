@@ -30,10 +30,10 @@ def register():
 
   error = None
   ## FORM
-  username = request.get_json()['username']
+  username = request.get_json()['username'].strip()
+  email = request.get_json()['email'].strip()
   password = request.get_json()['password']
   password2 = request.get_json()['confirm_password']
-  email = request.get_json()['email']
 
 
   valid_data = None
