@@ -212,5 +212,7 @@ def get_user_category(yt_client, category_id):
     return jsonify({'flash': f'Category \'{found_category.name}\' was deleted'})
 
   # GET
-  found_category.add_yt_data(yt_client, get_channel)
+  if len(found_category.channels) != 0:
+    found_category.add_yt_data(yt_client, get_channel)
+
   return jsonify( category_schema.dump(found_category) )
