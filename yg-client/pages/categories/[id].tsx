@@ -4,6 +4,7 @@ import useSWR from "swr"
 import { CategoryApi } from "../api/categories"
 import AuthedLayout from '../authed_layout'
 import Channels from "../channels"
+import Image from "next/image"
 
 
 const testVideos = [
@@ -75,6 +76,10 @@ const Category = () => {
 		return (str.length > maxSize) ? `${str.substr(0, maxSize-1)}...` : str;
 	}
 
+	function numberWithCommas(x : number) {
+    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+}
+
 	return (
 		<AuthedLayout tw_className="w-1/2 m-auto">
 			<div className="py-10">
@@ -120,12 +125,34 @@ const Category = () => {
 							<ul className="bg-white rounded-lg overflow-hidden shadow-lg p-8">
 								{data.category?.channels.map(channel => (
 									<li key={channel.yt_channel_id} className="py-5 bg-gray-100 mb-3 rounded-lg flex items-center pl-4">
-										{/* <img src="" alt="" /> */}
-										<div className="rounded-full w-14 h-14 bg-gray-300"></div>
+
+										<div className="rounded-full w-14 h-14 bg-gray-300 overflow-hidden">
+											{/* <img className="w-full h-full" src={channel.yt_data.snippet.thumbnails.default} alt={`${channel.name}'s thumbnail`} /> */}
+											<Image 
+												src={channel.yt_data.snippet.thumbnails.default.url} 
+												alt={`${channel.name}'s thumbnail`} 
+												className="w-full h-full object-cover object-center"
+												width={200}
+												height={200}
+											/>
+										</div>
 										<div className="ml-3">
 											<div className="font-bold text-lg">{channel.name}</div>					
-											<div className="text-sm">30,000 Subscribers</div>
+
+											{!channel.yt_data.statistics.hiddenSubscriberCount ? (
+												<div className="text-sm">{numberWithCommas(channel.yt_data.statistics.subscriberCount)} Subscribers</div>
+											) : <div>channels subscriber count is not public</div>}
+
+
+											<a 
+												href={`https://www.youtube.com/channel/${channel.yt_channel_id}`} 
+												// target="_blank" 
+												className="text-xs text-gray-400 hover:underline block"
+											>
+												Go to Channel
+											</a>
 										</div>
+
 									</li>
 								))}
 							</ul>
