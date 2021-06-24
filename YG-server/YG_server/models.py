@@ -49,6 +49,23 @@ class Category(db.Model):
   def __repr__(self):
     return '<Category %r>' % self.name
 
+  # Add YouTube data to channels in category
+  def add_yt_data(self, yt_client, get_channel):
+    # Get id's of channels in category and pass to get_channel
+    channel_ids = [channel.yt_channel_id for channel in self.channels]
+    # Get channel data from youtube
+    yt_channels = get_channel(yt_client, part='snippet,statistics', id=channel_ids)
+
+    # Apply YouTube channel data to response
+    res = []
+    # for channel in category_schema.dump(self)["channels"]:
+    for channel in self.channels:
+      # Add YouTube data to each channel
+      channel.yt_data = next(filter(lambda yt_channel: yt_channel["id"] == channel.yt_channel_id, yt_channels["items"]), None)
+      res.append(channel)
+
+    self.channels = res
+
   # TODO: impelement
   def add_channel(self, channel):
     pass
@@ -83,9 +100,10 @@ class Channel(db.Model):
     # if channel is deleted then relation to user in user_channel is also deleted
   )
 
+
   def __repr__(self):
     return '<Channel %r>' % self.name
-
+    
 
 ######## Users ########
 class User(UserMixin, db.Model):

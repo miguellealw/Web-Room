@@ -41,7 +41,7 @@ user_schema = UserSchema(only=("email", "username", "created_at", "id"))
 class ChannelSchema(ma.SQLAlchemyAutoSchema):
   class Meta:
     model = Channel
-    fields = ("name", "yt_channel_id", "_links")
+    fields = ("name", "yt_channel_id", "yt_data", "_links")
     include_relationships = True
 
   _links = ma.Hyperlinks(

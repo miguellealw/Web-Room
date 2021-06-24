@@ -1,3 +1,5 @@
+import copy
+import json
 from YG_server.decorators import yt_auth_required
 from YG_server.auth.oauth import get_channel, get_subscriptions
 from flask import Blueprint, jsonify, request, abort, redirect, url_for, session
@@ -60,7 +62,6 @@ def get_user_yt_channels(yt_client):
 @yt_auth_required
 @login_required
 def get_user_channels(yt_client):
-# def get_user_channels():
   user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
   channels = user_found.channels
   if channels is None:
@@ -75,8 +76,10 @@ def get_user_channels(yt_client):
     id=channel_ids
   )
 
+  # Apply YouTube channel data to response
   res = []
   for channel in channels_schema.dump(user_found.channels):
+    # Add YouTube data to each channel
     channel["yt_data"] = next(filter(lambda yt_channel: yt_channel["id"] == channel["yt_channel_id"], yt_channels["items"]), None)
     res.append(channel)
 
@@ -121,7 +124,7 @@ def add_channel_to_category(category_id):
     db.session.add(channel_to_add)
     db.session.commit()
 
-    return jsonify( channel_schema.dump(channel_to_add))
+    return jsonify( channel_schema.dump(channel_to_add) )
 
 @bp.route('/users/current_user/channels/<int:channel_id>', methods=['GET'])
 @login_required
@@ -173,11 +176,18 @@ def get_user_categories():
   return jsonify(categories_schema.dump(categories))
 
 @bp.route('/users/current_user/categories/<int:category_id>', methods=['GET', 'PUT', 'DELETE'])
+@yt_auth_required
 @login_required
-def get_user_category(category_id):
+def get_user_category(yt_client, category_id):
   user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
+  # TODO consider using user_found.categories
   found_category = Category.query.get_or_404(category_id, description="Category does not exist")
 
+  # check if user owns category
+  if found_category.user_id != int(user_found.id):
+    abort(404, description=f"User does not own provided category")
+
+  # PUT
   if request.method == 'PUT':
     new_name = request.get_json()['name']
     valid_data = None
@@ -195,18 +205,12 @@ def get_user_category(category_id):
     db.session.commit()
     return jsonify(category_schema.dump(found_category))
 
+  # DELETE
   if request.method == 'DELETE':
     db.session.delete(found_category)
     db.session.commit()
     return jsonify({'flash': f'Category \'{found_category.name}\' was deleted'})
 
-  # TODO consider using user_found.categories
-  category = Category.query.get(category_id)
-  if category is None:
-    abort(404, description=f"Category does not exist")
-
-  # check if user owns category
-  if category.user_id != int(user_found.id):
-    abort(404, description=f"User does not own provided category")
-
+  # GET
+  found_category.add_yt_data(yt_client, get_channel)
   return jsonify( category_schema.dump(found_category) )
