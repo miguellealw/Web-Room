@@ -3,7 +3,7 @@ import Image from "next/image"
 export interface SubscriptionListItem {
 	name: string,
 	description?: string,
-	thumbnail: string, 
+	thumbnail: any, 
 	channelId: string
 }
 
@@ -51,11 +51,13 @@ const SubscriptionListItem : React.FC<SubscriptionListItem> = ({
 		<div className="bg-white shadow-sm p-4 flex items-center rounded-md hover:bg-gray-50">
 			<div className="w-20 rounded-full overflow-hidden">
 				<Image 
-					src={thumbnail} 
+					src={thumbnail.url} 
 					alt={`${name}'s thumbnail`} 
 					className="w-full h-full object-cover object-center"
-					width={200}
-					height={200}
+					width={88}
+					height={88}
+					// width={thumbnail.width}
+					// height={thumbnail.height}
 				/>
 			</div>
 			<div className="flex flex-col ml-2">

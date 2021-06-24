@@ -60,7 +60,7 @@ function Channels() {
 										key={index} 
 										name={channel.snippet.title} 
 										description={channel.snippet.description}
-										thumbnail={channel.snippet.thumbnails.default.url}
+										thumbnail={channel.snippet.thumbnails.default}
 										channelId={channel.snippet.resourceId.channelId}
 									/>
 								))}
