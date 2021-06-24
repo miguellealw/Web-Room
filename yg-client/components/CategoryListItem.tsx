@@ -42,7 +42,6 @@ const CategoryDropdown : React.FC<CategoryDropdownProps> = ({
 
 interface CategoryListItemProps {
 	category: Category
-	key: number
 }
 
 const CategoryListItem : React.FC<CategoryListItemProps> = ({category}) => {
@@ -56,7 +55,6 @@ const CategoryListItem : React.FC<CategoryListItemProps> = ({category}) => {
 		<Link as={`/categories/${category.id}`} href="/categories/[id]" passHref>
 
 			<a>
-
 				<li className="bg-white shadow-sm hover:shadow-md transition text-lg font-bold h-28 rounded-md flex justify-center items-center relative cursor-pointer">
 					{!isEditing && (
 						<DotsVerticalIcon 
