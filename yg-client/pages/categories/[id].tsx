@@ -85,7 +85,10 @@ const Category = () => {
 			<div className="py-10">
 				<div className="flex justify-between items-center mb-10">
 					<h1 className="text-5xl font-bold">{data.category?.name}</h1>
-					<div className="text-gray-500">{data.category?.channels.length} channels</div>
+					<div>
+						<span className="text-gray-500">{data.category?.channels.length} channels</span>
+						<button className="rounded-full bg-red-600 hover:bg-red-500 text-white text-xs px-4 py-2 ml-5">Add Channels</button>
+					</div>
 				</div>
 
 				<main className="grid grid-cols-3 gap-10">
@@ -97,22 +100,30 @@ const Category = () => {
 						gridColumnEnd: '3'
 					}}>
 						<h2 className="font-bold mb-3">Videos</h2>
-						<ul className="">
-							{testVideos.map((video, index) => (
-								<li key={index} className="bg-white rounded-lg mb-5 flex h-36 overflow-hidden shadow-sm">
-									{/* Video Thumbnail */}
-									<div className="bg-gray-300 w-52 h-full rounded-tl-md rounded-bl-md"></div>
-									{/* Video info */}
-									<div className="p-4">
-										<div className="font-bold truncate">{video.title}</div>	
-										<div className="text-sm mb-2">{video.channel}</div>
-										<p className="text-sm" style={{width: "35rem"}}>
-											{truncateString(video.description, 230)}
-										</p>
-									</div>
-								</li>
-							))}
-						</ul>
+						{
+							data.category?.channels.length === 0 ? 
+								(<div className="text-sm text-gray-400">No videos to show</div>) : 
+								(
+									<ul className="">
+										{testVideos.map((video, index) => (
+											<li key={index} className="bg-white rounded-lg mb-5 flex h-36 overflow-hidden shadow-sm">
+												{/* Video Thumbnail */}
+												<div className="bg-gray-300 w-52 h-full rounded-tl-md rounded-bl-md"></div>
+												{/* Video info */}
+												<div className="p-4">
+													<div className="font-bold truncate">{video.title}</div>	
+													<div className="text-sm mb-2">{video.channel}</div>
+													<p className="text-sm" style={{width: "35rem"}}>
+														{truncateString(video.description, 230)}
+													</p>
+												</div>
+											</li>
+										))}
+									</ul>
+
+								)
+
+						}
 					</div>
 
 					{/* Channels */}
@@ -120,7 +131,7 @@ const Category = () => {
 						<h2 className="font-bold mb-3">Subscriptions</h2>
 
 						{data.category?.channels.length === 0 ? 
-							(<div>No channels in category</div>) : 
+							(<div className="text-sm text-gray-400">No channels in category</div>) : 
 							(
 							<ul className="bg-white rounded-lg overflow-hidden shadow-lg p-8">
 								{data.category?.channels.map(channel => (
