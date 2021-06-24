@@ -6,7 +6,7 @@ import AuthedLayout from '../authed_layout'
 import Channels from "../channels"
 import Image from "next/image"
 import Link from "next/link";
-import {ArrowNarrowLeftIcon} from "@heroicons/react/outline";
+import {ArrowNarrowLeftIcon, ExternalLinkIcon} from "@heroicons/react/outline";
 
 
 const testVideos = [
@@ -164,9 +164,11 @@ const Category = () => {
 											<a 
 												href={`https://www.youtube.com/channel/${channel.yt_channel_id}`} 
 												// target="_blank" 
-												className="text-xs text-gray-400 hover:underline block"
+												className="text-xs text-gray-400 hover:underline flex"
 											>
 												Go to Channel
+
+												<ExternalLinkIcon className="w-4 h-4 ml-1"/>
 											</a>
 										</div>
 

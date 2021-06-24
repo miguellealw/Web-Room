@@ -1,4 +1,5 @@
 import Image from "next/image"
+import {ExternalLinkIcon} from "@heroicons/react/outline";
 
 export interface SubscriptionListItem {
 	name: string,
@@ -68,9 +69,10 @@ const SubscriptionListItem : React.FC<SubscriptionListItem> = ({
 				<a 
 					href={`https://www.youtube.com/channel/${channelId}`} 
 					// target="_blank" 
-					className="text-xs text-gray-400 hover:underline"
+					className="text-xs text-gray-400 hover:underline flex items-center"
 				>
-					Go to Channel
+					Go to Channel 
+					<ExternalLinkIcon className="w-4 h-4 ml-1"/>
 				</a>
 
 				{/* {
