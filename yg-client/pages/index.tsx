@@ -56,7 +56,7 @@ export default function Home() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <LandingPageShapeSVG />
+        {/* <LandingPageShapeSVG /> */}
         <main className="min-h-screen flex-1 flex flex-col justify-center items-center z-10">
           <h1 className="text-7xl font-bold">A Better YouTube Experience</h1>
           <h2 className="text-2xl font-medium my-3">Categorize and Share your Favorite YouTube Channels</h2>

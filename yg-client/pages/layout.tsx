@@ -10,8 +10,8 @@ const Layout : FC = ({children}) => {
 			<nav className="w-full py-5 absolute flex justify-center z-20">
 				<Link href="/" passHref>
 					<a className="flex items-center">
-						{/* <Logo className="w-7 h-7 mr-2"></Logo> */}
-						<h1 className="font-bold z-10 relative">YouTube Box</h1>
+						<Logo className="w-5 h-5 mr-2"></Logo>
+						<h1 className="font-bold z-10 relative uppercase text-sm tracking-widest">YouTube Box</h1>
 					</a>
 				</Link>
 			</nav>
