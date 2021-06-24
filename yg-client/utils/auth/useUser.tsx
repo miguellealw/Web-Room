@@ -23,7 +23,7 @@ export default function useUser({
     mutate: mutateUser 
   } = useSWR("/api/v1.0/users/current_user", fetcher);
 
-  console.log("USEUSER RAN")
+  // console.log("useUser RAN")
 
   useEffect(() => {
     // if no redirect needed, just return (example: already on /dashboard)

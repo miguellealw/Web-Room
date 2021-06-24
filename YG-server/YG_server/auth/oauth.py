@@ -43,7 +43,6 @@ def get_authenticated_service():
 
 def get_subscriptions(service, **kwargs):
 	list_subscriptions_response = service.subscriptions().list(**kwargs).execute()
-
 	return list_subscriptions_response
 
 # def get_channel(service, channel_id, **kwargs):
