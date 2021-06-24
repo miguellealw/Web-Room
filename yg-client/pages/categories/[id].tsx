@@ -5,6 +5,8 @@ import { CategoryApi } from "../api/categories"
 import AuthedLayout from '../authed_layout'
 import Channels from "../channels"
 import Image from "next/image"
+import Link from "next/link";
+import {ArrowNarrowLeftIcon} from "@heroicons/react/outline";
 
 
 const testVideos = [
@@ -40,12 +42,10 @@ Special thanks to these supporters: https://3b1b.co/quick-eigen-thanks`
 	{
 		title: "How to Dockerize a React + Flask Application",
 		channel: "Miguel Grinberg",
-		description: `Charles Hoskinson is the founder of Cardano, co-founder of Ethereum, a mathematician, and a farmer. Please support this podcast by checking out our sponsors:
-- Gala Games: https://gala.games/lex
-- Allform: https://allform.com/lex to get 20% off
-- Indeed: https://indeed.com/lex to get $75 credit
-- ExpressVPN: https://expressvpn.com/lexpod and use code LexPod to get 3 months free
-- Eight Sleep: https://www.eightsleep.com/lex and use code LEX to get special savings`
+		description: `Learn how to deploy a web application that has a React front end and a Flask back end using Docker and Docker Compose.
+
+Blog post: https://blog.miguelgrinberg.com/post/...
+Code: https://github.com/miguelgrinberg/rea...`
 	},
 ]
 
@@ -83,6 +83,12 @@ const Category = () => {
 	return (
 		<AuthedLayout tw_className="w-1/2 m-auto">
 			<div className="py-10">
+				<Link href="/categories" passHref>
+					<div className="flex mb-10 text-gray-400 hover:text-gray-600 cursor-pointer w-48">
+						<ArrowNarrowLeftIcon className="w-6 h-6 mr-2"/>
+						Back to Categories
+					</div>
+				</Link>
 				<div className="flex justify-between items-center mb-10">
 					<h1 className="text-5xl font-bold">{data.category?.name}</h1>
 					<div>
