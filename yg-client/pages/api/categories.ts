@@ -48,6 +48,8 @@ export class CategoryApi extends Api {
 
 
 	async createCategory(name : string) : Promise<CategoryResponse> {
+		if(name.trim() === "") throw Error
+
 		try {
 			const response: AxiosResponse<any> = await this.axios.post(`/api/v1.0/users/current_user/categories`, {
 				name

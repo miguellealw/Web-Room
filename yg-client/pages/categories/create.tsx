@@ -1,9 +1,31 @@
 import AuthedLayout from "../authed_layout"
 import Link from "next/link";
 import {ArrowNarrowLeftIcon} from "@heroicons/react/outline";
+import React, { ReactDOM, useState } from "react";
+import { CategoryApi } from "../api/categories";
+import {useRouter} from "next/router";
 
 
 const CreateCategory = () => {
+	const [value, setValue] = useState("")
+	const [isError, setIsError] = useState(false)
+	const router = useRouter()
+
+  const handleCreateCategory = async (e: React.FormEvent) => {
+		// TODO: data validtion
+		e.preventDefault()
+		setIsError(false)
+
+		// console.log("FORM SUBMIT", value)
+		try {
+			const api = new CategoryApi();
+			api.setup();
+			const res = await api.createCategory(value)
+			router.replace('/categories')
+		} catch(err) {
+			setIsError(true)
+		}
+	}
 
 	return (
 
@@ -18,18 +40,29 @@ const CreateCategory = () => {
 
 				<h1 className="text-5xl font-bold">Create Category</h1>
 
-				<div className="flex flex-col mt-10">
+				<form className="flex flex-col mt-10" onSubmit={handleCreateCategory}>
 					<div>
 						<label htmlFor="name" className="text-lg font-bold block mb-1">Category Name</label>
-						<input type="text" id="name" placeholder="Cooking Channels" className="w-full rounded-md p-2"/>
+						<input type="text" id="name" placeholder="Cooking Channels" className="w-full rounded-md p-2" 
+							onChange={e => {
+								setValue(e.target.value)
+							}}
+						/>
 					</div>
+
+					{/* TODO: show api errors */}
+					{isError && <div className="mt-2 text-red-500">Error occured creating category. Try Again.</div>}
 
 					<div className="mt-4">
-						<button className="bg-gray-800 hover:bg-gray-700 text-white text-lg px-5 py-1 rounded-md">Create</button>
-						<button className="ml-3" > Cancel</button>
+						<button className="bg-gray-800 hover:bg-gray-700 text-white px-5 py-1 rounded-md">Create</button>
+						<button className="ml-3" onClick={(e) => {
+							e.preventDefault()
+							setValue("")
+							router.push('/categories')
+						}}> Cancel</button>
 					</div>
 
-				</div>
+				</form>
 			</div>
 		</AuthedLayout>
 	)
