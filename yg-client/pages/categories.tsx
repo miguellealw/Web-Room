@@ -8,6 +8,19 @@ import SubscriptionListItem from "../components/SubscriptionListItem";
 import { CategoryApi } from "./api/categories";
 import { DotsVerticalIcon, FolderRemoveIcon, PencilAltIcon, PlusIcon } from "@heroicons/react/outline";
 import CategoryListItem from "../components/CategoryListItem";
+import Link from "next/link";
+
+// const NewCategoryButton = ({handleCreateCategory}) => (
+const NewCategoryButton = () => (
+	<Link href="/categories/create" passHref>
+		<li 
+			className="hover:bg-gray-50 border-2 border-gray-200 text-gray-300 cursor-pointer text-lg h-28 rounded-md flex justify-center items-center"
+		>
+			<PlusIcon className="w-6 h-6 mr-2"/>
+			New Category
+		</li>
+	</Link>
+)
 
 function Categories() {
 	const [categories, setCategories] = useState<Category[] | null>(null);
@@ -72,15 +85,7 @@ function Categories() {
 									<CategoryListItem key={index} category={category} />
 								))}
 
-								<li 
-									className="hover:bg-gray-50 border-2 border-gray-200 text-gray-300 cursor-pointer text-lg h-28 rounded-md flex justify-center items-center"
-									onClick={(e) => {
-										handleCreateCategory("TEST CATEGORY")
-									}}
-								>
-									<PlusIcon className="w-6 h-6 mr-2"/>
-									New Category
-								</li>
+								<NewCategoryButton />
 							</ul>
 						</>
 					)
