@@ -13,7 +13,7 @@ const LogIn : React.FC = () => {
   const [password, setPassword] = useState("");
   const [isError, setIsError] = useState(false);
 
-	const {mutateUser} = useUser({
+	const {  mutateUser } = useUser({
 		redirectTo: "/channels",
 		redirectIfFound: true
 	})
@@ -27,7 +27,7 @@ const LogIn : React.FC = () => {
       const response = await api.login(username, password);
 
       if (response.kind === "ok") {
-				mutateUser(response)
+				mutateUser()
 				router.push('/channels')
       } else {
         setIsError(true);
