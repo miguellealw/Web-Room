@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import AuthedLayout from '../layouts/authed_layout'
-import { CategoryApi } from "../api/categories";
 import { PlusIcon } from "@heroicons/react/outline";
 import CategoryListItem from "../../components/CategoryListItem";
 import Link from "next/link";
-import useSWR from "swr";
 import useCategories from "../../utils/useCategories";
 
 const NewCategoryButton = () => (
@@ -19,19 +17,10 @@ const NewCategoryButton = () => (
 )
 
 function Categories() {
-	// const api = new CategoryApi();
-	// api.setup();
-  // const fetcher = () => api.getUserCategories()
-	// const {data, error} = useSWR(`/api/v1.0/users/current_user/categories`, fetcher)
 	const {data, error, isLoading} = useCategories()
 
-	if(error) return <div>Error loading page...</div>
-
-	if(isLoading) {
-		return (
-			<div>Loading categories...</div>
-		)
-	}
+	if(error) return <div>Error loading categories page...</div>
+	if(isLoading) return <div>Loading categories...</div>
 
 	return (
 		<AuthedLayout>

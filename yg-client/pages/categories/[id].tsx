@@ -54,13 +54,8 @@ const Category = () => {
 	const { id } = router.query
 	const {data, error, isLoading} = useCategory(id)
 
-	if(error) return <div>Error loading category...</div>
-
-	if(!data) {
-		return (
-			<div>Loading category...</div>
-		)
-	}
+	if(error) return <div>Error loading category page...</div>
+	if(isLoading) return <div>Loading category...</div>
 
 	return (
 		<AuthedLayout tw_className="w-1/2 m-auto">
@@ -73,9 +68,9 @@ const Category = () => {
 					</div>
 				</Link>
 				<div className="flex justify-between items-center mb-10">
-					<h1 className="text-5xl font-bold">{data.category?.name}</h1>
+					<h1 className="text-5xl font-bold">{data?.category?.name}</h1>
 					<div>
-						<span className="text-gray-500">{data.category?.channels.length} channels</span>
+						<span className="text-gray-500">{data?.category?.channels.length} channels</span>
 						<button className="rounded-full bg-red-600 hover:bg-red-500 text-white text-xs px-4 py-2 ml-5">Add Channels</button>
 					</div>
 				</div>
