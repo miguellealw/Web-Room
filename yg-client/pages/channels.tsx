@@ -7,67 +7,37 @@ import { useRouter } from 'next/router'
 import AuthedLayout from './layouts/authed_layout'
 import useUser from "../utils/auth/useUser";
 import SubscriptionListItem from "../components/SubscriptionListItem";
+import useChannels from "../utils/useChannels";
 
 function Channels() {
-	const [channels, setChannels] = useState<Channel[] | [] | null>(null);
-	const router = useRouter()
-	const {isLoggedOut = true} = useUser()
+	const {data : channels, error, isLoading} = useChannels()
 
-	useEffect(() => {
-		let mounted = true;
-		async function fetchChannels() {
-			try {
-				const api = new ChannelsApi();
-				api.setup();
-				// const res = await api.get_channels();
-				const res = await api.get_yt_channels();
+	if(error) {
+		return <div>Error loading your subscriptions...</div>
+	}
 
-				console.log("RESE", res)
-
-				if(res.channels && mounted) {
-					// only update state if compponent is mounted
-					// setChannels([...res.channels]);
-					setChannels([...res.channels.channels.items]);
-				}
-			} catch (err) {
-				// TODO: handle this properly
-				console.log("CHANNELS FETCH ERROR", err)
-			}
-		}
-
-		// if(!isLoggedOut) {
-			fetchChannels()
-		// }
-
-		return () => {
-			mounted = false
-		}
-	}, [])
+	if(isLoading) {
+		return <div>Loading your subscriptions...</div>
+	}
 
 	return (
 		<AuthedLayout>
 			<div className="py-10">
 				{
-					!channels ? (
-						<div>Loading your Subscriptions...</div>
-					) : (
-						<>
-							<h1 className="pb-10 text-5xl font-bold">Your Subscriptions</h1>
-							<ul className="grid grid-cols-3 gap-3">
-								{channels.map((channel, index) => (
-
-									<SubscriptionListItem
-										key={index} 
-										name={channel.snippet.title} 
-										description={channel.snippet.description}
-										thumbnail={channel.snippet.thumbnails.default}
-										channelId={channel.snippet.resourceId.channelId}
-									/>
-								))}
-							</ul>
-						</>
-					)
-
+					<>
+						<h1 className="pb-10 text-5xl font-bold">Your Subscriptions</h1>
+						<ul className="grid grid-cols-3 gap-3">
+							{channels.map((channel, index : number) => (
+								<SubscriptionListItem
+									key={index} 
+									name={channel.snippet.title} 
+									description={channel.snippet.description}
+									thumbnail={channel.snippet.thumbnails.default}
+									channelId={channel.snippet.resourceId.channelId}
+								/>
+							))}
+						</ul>
+					</>
 				}
 			</div>
 		</AuthedLayout>
