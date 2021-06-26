@@ -5,7 +5,9 @@ function useChannels() {
 	const api = new ChannelsApi();
 	api.setup();
   const fetcher = () => api.get_yt_channels()
-	const {data, error} = useSWR(`/api/v1.0/users/current_user/yt-channels`, fetcher)
+	const {data, error} = useSWR(`/api/v1.0/users/current_user/yt-channels`, fetcher, {
+		revalidateOnFocus: false
+	})
 
 
 	// only get channels user owns
