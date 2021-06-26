@@ -1,13 +1,12 @@
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
 import useSWR from "swr"
 import { CategoryApi } from "../api/categories"
 import AuthedLayout from '../authed_layout'
 import Channels from "../channels"
-import Image from "next/image"
 import Link from "next/link";
 import {ArrowNarrowLeftIcon, ExternalLinkIcon} from "@heroicons/react/outline";
-
+import Video from '../../components/Video'
+import CategorySubListItem from '../../components/CategorySubListItem'
 
 const testVideos = [
 	{
@@ -51,7 +50,6 @@ Code: https://github.com/miguelgrinberg/rea...`
 
 // const Category = ({ category }) => {
 const Category = () => {
-	const [category, setCategory] = useState()
 	const router = useRouter()
 	const { id } = router.query
 
@@ -61,8 +59,6 @@ const Category = () => {
 	const {data, error} = useSWR(`/api/v1.0/users/current_user/categories/${id}`, fetcher)
 
 	console.log("useSWR data from category", data)
-	// NOTE: seting state causes infinite loop
-	// setCategory(data.category)
 
 	if(!data) {
 		return (
@@ -70,18 +66,10 @@ const Category = () => {
 		)
 	}
 
-	// add ... to long string
-	function truncateString(str : string, maxSize : number) {
-		// return (str.length > maxSize) ? `${str.substr(0, maxSize-1)}&hellip;` : str;
-		return (str.length > maxSize) ? `${str.substr(0, maxSize-1)}...` : str;
-	}
-
-	function numberWithCommas(x : number) {
-    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-}
 
 	return (
 		<AuthedLayout tw_className="w-1/2 m-auto">
+			{/* Header */}
 			<div className="py-10">
 				<Link href="/categories" passHref>
 					<div className="flex mb-10 text-gray-400 hover:text-gray-600 cursor-pointer w-48">
@@ -98,94 +86,59 @@ const Category = () => {
 				</div>
 
 				<main className="grid grid-cols-3 gap-10">
-				{/* <main className="flex"> */}
-
-					{/* Videos */}
-					<div style={{
-						gridColumnStart: '1',
-						gridColumnEnd: '3'
-					}}>
-						<h2 className="font-bold mb-3">Videos</h2>
-						{
-							data.category?.channels.length === 0 ? 
-								(<div className="text-sm text-gray-400">No videos to show</div>) : 
-								(
-									<ul className="">
-										{testVideos.map((video, index) => (
-											<li key={index} className="bg-white rounded-lg mb-5 flex h-36 overflow-hidden shadow-sm">
-												{/* Video Thumbnail */}
-												<div className="bg-gray-300 w-52 h-full rounded-tl-md rounded-bl-md"></div>
-												{/* Video info */}
-												<div className="p-4">
-													<div className="font-bold truncate">{video.title}</div>	
-													<div className="text-sm mb-2">{video.channel}</div>
-													<p className="text-sm" style={{width: "35rem"}}>
-														{truncateString(video.description, 230)}
-													</p>
-												</div>
-											</li>
-										))}
-									</ul>
-
-								)
-
-						}
-					</div>
-
-					{/* Channels */}
-					<div className="">
-						<h2 className="font-bold mb-3">Subscriptions</h2>
-
-						{data.category?.channels.length === 0 ? 
-							(<div className="text-sm text-gray-400">No channels in category</div>) : 
-							(
-							<ul className="bg-white rounded-lg overflow-hidden shadow-lg p-8">
-								{data.category?.channels.map(channel => (
-									<li key={channel.yt_channel_id} className="py-5 bg-gray-100 mb-3 rounded-lg flex items-center pl-4">
-
-										<div className="rounded-full w-14 h-14 bg-gray-300 overflow-hidden">
-											{/* <img className="w-full h-full" src={channel.yt_data.snippet.thumbnails.default} alt={`${channel.name}'s thumbnail`} /> */}
-											<Image 
-												src={channel.yt_data.snippet.thumbnails.default.url} 
-												alt={`${channel.name}'s thumbnail`} 
-												className="w-full h-full object-cover object-center"
-												width={200}
-												height={200}
-											/>
-										</div>
-										<div className="ml-3">
-											<div className="font-bold text-lg">{channel.name}</div>					
-
-											{!channel.yt_data.statistics.hiddenSubscriberCount ? (
-												<div className="text-sm">{numberWithCommas(channel.yt_data.statistics.subscriberCount)} Subscribers</div>
-											) : <div>channels subscriber count is not public</div>}
-
-
-											<a 
-												href={`https://www.youtube.com/channel/${channel.yt_channel_id}`} 
-												// target="_blank" 
-												className="text-xs text-gray-400 hover:underline flex"
-											>
-												Go to Channel
-
-												<ExternalLinkIcon className="w-4 h-4 ml-1"/>
-											</a>
-										</div>
-
-									</li>
-								))}
-							</ul>
-							)	
-						}
-
-
-					</div>
-
+					<VideoSection data={data} />
+					<SubscriptionsSection data={data}/>
 				</main>
 			</div>
 		</AuthedLayout>
 	)
 
+}
+
+function SubscriptionsSection({data}) {
+
+	return (
+		<div>
+			<h2 className="font-bold mb-3">Subscriptions</h2>
+
+			{data.category?.channels.length === 0 ? 
+				(<div className="text-sm text-gray-400">No channels in category</div>) : 
+				(
+				<ul className="bg-white rounded-lg overflow-hidden shadow-lg p-8">
+					{data.category?.channels.map(channel => (
+						<CategorySubListItem key={channel.yt_channel_id} channel={channel}/>
+					))}
+				</ul>
+				)	
+			}
+		</div>
+	)
+}
+
+
+function VideoSection({data}) {
+
+	return (
+		<div style={{
+			gridColumnStart: '1',
+			gridColumnEnd: '3'
+		}}>
+			<h2 className="font-bold mb-3">Videos</h2>
+			{
+				data.category?.channels.length === 0 ? 
+					(<div className="text-sm text-gray-400">No videos to show</div>) : 
+					(
+						<ul className="">
+							{testVideos.map((video, index) => (
+								<Video key={index} title={video.title} description={video.description} channel={video.channel}/>
+							))}
+						</ul>
+
+					)
+
+			}
+		</div>
+	)
 }
 
 // export async function getStaticPaths() {
