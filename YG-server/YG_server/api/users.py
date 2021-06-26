@@ -44,14 +44,14 @@ def current_user():
   })
 
 @bp.route('/users/current_user/yt-channels', methods=['GET'])
-# @login_required # TODO: uncomment this when frontend register and login is implemented
+@login_required
 @yt_auth_required
 def get_user_yt_channels(yt_client):
   channels = get_subscriptions(yt_client, 
     part='snippet', 
     mine=True, 
     # order='alphabetical', 
-    maxResults=25
+    maxResults=27
   )
 
   return jsonify({
