@@ -14,12 +14,12 @@ interface AuthedLayoutProps {
 }
 
 const AuthedLayout : FC<AuthedLayoutProps> = ({ children, tw_className = "", ...props }) => {
-	const {user, isLoading, isLoggedOut = true} = useUser({
+	const {isLoading} = useUser({
 		redirectTo: '/login',
 	})
 
 	if(isLoading) {
-		return <div>Dashboard Loading...</div>
+		return <div className="w-full h-screen flex justify-center items-center font-bold text-red-500">Dashboard Loading...</div>
 	}
 
 	return (
