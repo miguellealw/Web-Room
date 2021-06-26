@@ -4,6 +4,7 @@ import {ArrowNarrowLeftIcon} from "@heroicons/react/outline";
 import React, { ReactDOM, useState } from "react";
 import { CategoryApi } from "../api/categories";
 import {useRouter} from "next/router";
+import { mutate } from 'swr'
 
 
 const CreateCategory = () => {
@@ -18,17 +19,24 @@ const CreateCategory = () => {
 
 		// console.log("FORM SUBMIT", value)
 		try {
+			// Update ui
+			mutate('/api/v1.0/users/current_user/categories', data => {
+				return {...data, categories: [...data.categories, { name: value }]}
+			}, false)
+
 			const api = new CategoryApi();
 			api.setup();
-			const res = await api.createCategory(value)
+			await api.createCategory(value)
 			router.replace('/categories')
+
+			// revalidate with backend to make sure category was created
+			mutate('/api/v1.0/users/current_user/categories')
 		} catch(err) {
 			setIsError(true)
 		}
 	}
 
 	return (
-
 		<AuthedLayout>
 			<div className="py-10">
 				<Link href="/categories" passHref>

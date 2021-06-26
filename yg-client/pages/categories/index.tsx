@@ -4,6 +4,7 @@ import { PlusIcon } from "@heroicons/react/outline";
 import CategoryListItem from "../../components/CategoryListItem";
 import Link from "next/link";
 import useCategories from "../../utils/useCategories";
+import { CategoryApi } from "../api/categories";
 
 const NewCategoryButton = () => (
 	<Link href="/categories/create" passHref>
@@ -17,7 +18,22 @@ const NewCategoryButton = () => (
 )
 
 function Categories() {
-	const {data, error, isLoading} = useCategories()
+	const {data, error, mutateCategories, isLoading} = useCategories()
+
+	const handleDeleteCategory = async (id : number) => {
+		// update local data for optimistic update, but don't revalidate (refetch)
+		mutateCategories(data => {
+			const categoriesToKeep = data.categories.filter(category => category.id !== id)
+			return {...data, categories: [...categoriesToKeep]}
+		}, false)
+
+		const api = new CategoryApi()	
+		api.setup()
+		await api.deleteCategory(id)
+
+		// revalidate to make sure local data is correct
+		mutateCategories()
+	}
 
 	if(error) return <div>Error loading categories page...</div>
 	if(isLoading) return <div>Loading categories...</div>
@@ -36,7 +52,11 @@ function Categories() {
 							</div>
 							<ul className="grid grid-cols-3 gap-4">
 								{data.categories.map((category, index) => (
-									<CategoryListItem key={index} category={category} />
+									<CategoryListItem 
+										key={index} 
+										category={category} 
+										handleDeleteCategory={handleDeleteCategory}
+									/>
 								))}
 
 								<NewCategoryButton />

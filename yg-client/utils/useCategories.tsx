@@ -5,11 +5,12 @@ function useCategories() {
 	const api = new CategoryApi();
 	api.setup();
   const fetcher = () => api.getUserCategories()
-	const {data, error} = useSWR(`/api/v1.0/users/current_user/categories`, fetcher)
+	const {data, error, mutate} = useSWR(`/api/v1.0/users/current_user/categories`, fetcher)
 
 	return {
 		data,
 		error,
+		mutateCategories: mutate,
 		isLoading: !data
 	}
 }

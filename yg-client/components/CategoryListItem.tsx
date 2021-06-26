@@ -40,6 +40,7 @@ const CategoryDropdown : React.FC<CategoryDropdownProps> = ({
 						onClick={(e) => {
 							e.preventDefault()
 							handleDeleteCategory(categoryId)
+							setIsDropdownOpen(false)
 						}}	
 					>
 						<FolderRemoveIcon className="w-5 h-5 mr-2"/>
@@ -52,25 +53,16 @@ const CategoryDropdown : React.FC<CategoryDropdownProps> = ({
 }
 
 interface CategoryListItemProps {
-	category: Category
+	category: Category,
 }
 
-const CategoryListItem : React.FC<CategoryListItemProps> = ({category}) => {
+const CategoryListItem : React.FC<CategoryListItemProps> = ({category, handleDeleteCategory}) => {
 	const [value, setValue] = useState<string>("")
 	const [isEditing, setIsEditing] = useState<boolean>(false)
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
-	const handleDeleteCategory = (id : number) => {
-		const api = new CategoryApi()	
-		api.setup()
-		api.deleteCategory(id)
-	}
-
 	return (
-		// TODO return id from server
-		// <Link href={`/categories/${category.id}`} passHref>
-		<Link as={`/categories/${category.id}`} href="/categories/[id]" passHref>
-
+		<Link href={`/categories/${category.id}`} passHref>
 			<a>
 				<li className="bg-white shadow-sm hover:shadow-md transition text-lg font-bold h-28 rounded-md flex justify-center items-center relative cursor-pointer">
 					{!isEditing && (
