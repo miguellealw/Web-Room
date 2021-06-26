@@ -10,7 +10,7 @@ import DashboardNavigation from '../../components/DashboardNavigation'
 
 
 interface AuthedLayoutProps {
-	tw_className : string
+	tw_className?: string
 }
 
 const AuthedLayout : FC<AuthedLayoutProps> = ({ children, tw_className = "", ...props }) => {
