@@ -1,14 +1,12 @@
 import { useRouter } from "next/router"
-import useSWR from "swr"
-import { CategoryApi } from "../api/categories"
 import AuthedLayout from '../layouts/authed_layout'
-import Channels from "../channels"
 import Link from "next/link";
 import {ArrowNarrowLeftIcon, ExternalLinkIcon} from "@heroicons/react/outline";
 import Video from '../../components/Video'
 import CategorySubListItem from '../../components/CategorySubListItem'
 import { Channel } from "../api/types"
 import { CategoryResponse } from "../api/categories"
+import useCategory from '../../utils/useCategory'
 
 const testVideos = [
 	{
@@ -54,20 +52,15 @@ Code: https://github.com/miguelgrinberg/rea...`
 const Category = () => {
 	const router = useRouter()
 	const { id } = router.query
+	const {data, error, isLoading} = useCategory(id)
 
-	const api = new CategoryApi();
-	api.setup();
-  const fetcher = () => api.getUserCategoryById(id)
-	const {data, error} = useSWR(`/api/v1.0/users/current_user/categories/${id}`, fetcher)
-
-	console.log("useSWR data from category", data)
+	if(error) return <div>Error loading category...</div>
 
 	if(!data) {
 		return (
 			<div>Loading category...</div>
 		)
 	}
-
 
 	return (
 		<AuthedLayout tw_className="w-1/2 m-auto">
@@ -99,17 +92,17 @@ const Category = () => {
 
 
 
-function SubscriptionsSection({data} : {data: CategoryResponse}) {
+function SubscriptionsSection({data} : {data?: CategoryResponse}) {
 
 	return (
 		<div>
 			<h2 className="font-bold mb-3">Subscriptions</h2>
 
-			{data.category?.channels.length === 0 ? 
+			{data?.category?.channels.length === 0 ? 
 				(<div className="text-sm text-gray-400">No channels in category</div>) : 
 				(
 				<ul className="bg-white rounded-lg overflow-hidden shadow-lg p-8">
-					{data.category?.channels.map((channel : Channel) => (
+					{data?.category?.channels.map((channel : Channel) => (
 						<CategorySubListItem key={channel.yt_channel_id} channel={channel}/>
 					))}
 				</ul>
@@ -120,7 +113,7 @@ function SubscriptionsSection({data} : {data: CategoryResponse}) {
 }
 
 
-function VideoSection({data} : {data: CategoryResponse}) {
+function VideoSection({data} : {data?: CategoryResponse}) {
 	return (
 		<div style={{
 			gridColumnStart: '1',
@@ -128,7 +121,7 @@ function VideoSection({data} : {data: CategoryResponse}) {
 		}}>
 			<h2 className="font-bold mb-3">Videos</h2>
 			{
-				data.category?.channels.length === 0 ? 
+				data?.category?.channels.length === 0 ? 
 					(<div className="text-sm text-gray-400">No videos to show</div>) : 
 					(
 						<ul className="">
@@ -148,7 +141,7 @@ function VideoSection({data} : {data: CategoryResponse}) {
 // 	const api = new CategoryApi();
 // 	api.setup();
 // 	const res = await api.getUserCategories();
-// 	// console.log("GET DSTATIC PATH", res)
+// 	console.log("GET DSTATIC PATH", res)
 
 // 	const paths = res.categories?.map((category) => ({
 // 		params: { id: category.id }

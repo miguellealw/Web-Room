@@ -5,6 +5,7 @@ import { PlusIcon } from "@heroicons/react/outline";
 import CategoryListItem from "../../components/CategoryListItem";
 import Link from "next/link";
 import useSWR from "swr";
+import useCategories from "../../utils/useCategories";
 
 const NewCategoryButton = () => (
 	<Link href="/categories/create" passHref>
@@ -18,14 +19,15 @@ const NewCategoryButton = () => (
 )
 
 function Categories() {
-	const api = new CategoryApi();
-	api.setup();
-  const fetcher = () => api.getUserCategories()
-	const {data, error} = useSWR(`/api/v1.0/users/current_user/categories`, fetcher)
+	// const api = new CategoryApi();
+	// api.setup();
+  // const fetcher = () => api.getUserCategories()
+	// const {data, error} = useSWR(`/api/v1.0/users/current_user/categories`, fetcher)
+	const {data, error, isLoading} = useCategories()
 
 	if(error) return <div>Error loading page...</div>
 
-	if(!data) {
+	if(isLoading) {
 		return (
 			<div>Loading categories...</div>
 		)
@@ -35,7 +37,7 @@ function Categories() {
 		<AuthedLayout>
 			<div className="py-10">
 				{
-					!data.categories ? (
+					!data?.categories ? (
 						<div>Loading your Categories...</div>
 					) : (
 						<>

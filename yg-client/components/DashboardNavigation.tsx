@@ -8,23 +8,18 @@ import { AuthApi } from '../pages/api/auth'
 import { CategoryApi } from "../pages/api/categories"
 import { Category } from "../pages/api/types"
 import useUser from "../utils/auth/useUser"
+import useCategories from "../utils/useCategories"
 import Logo from "./Logo"
 
 
 const DashboardNavigation = () => {
 	const {mutateUser} = useUser()
 	const router = useRouter()
-
-	const api = new CategoryApi();
-	api.setup();
-  const fetcher = () => api.getUserCategories()
-	const {data, error} = useSWR(`/api/v1.0/users/current_user/categories`, fetcher)
-
-	console.log("NAVIGATION RERENDERED")
+	const {data, error, isLoading} = useCategories()
 
 	if(error) return <div>Error loading page...</div>
 
-	if(!data) {
+	if(isLoading) {
 		return (
 			<div>Loading categories...</div>
 		)
