@@ -1,18 +1,24 @@
 import { DotsVerticalIcon, FolderRemoveIcon, PencilAltIcon } from "@heroicons/react/outline"
 import Link from "next/link"
 import React, { useState } from "react"
+import { CategoryApi } from "../pages/api/categories"
 import { Category } from "../pages/api/types"
 
 interface CategoryDropdownProps {
-	isDropdownOpen: boolean,
+	isDropdownOpen: boolean
+	categoryId: number
+	// TODO: add types for functions
 	setIsEditing: any
 	setIsDropdownOpen: any
+	handleDeleteCategory: any
 }
 
 const CategoryDropdown : React.FC<CategoryDropdownProps> = ({
 	isDropdownOpen, 
 	setIsEditing,
-	setIsDropdownOpen
+	setIsDropdownOpen,
+	handleDeleteCategory,
+	categoryId
 }) => {
 	return (
 		<>
@@ -30,7 +36,12 @@ const CategoryDropdown : React.FC<CategoryDropdownProps> = ({
 						<PencilAltIcon className="w-5 h-5 mr-2"/>
 						Rename
 					</li>
-					<li className="border-gray-100 py-1 hover:bg-gray-300 px-2 cursor-pointer flex">
+					<li className="border-gray-100 py-1 hover:bg-gray-300 px-2 cursor-pointer flex"
+						onClick={(e) => {
+							e.preventDefault()
+							handleDeleteCategory(categoryId)
+						}}	
+					>
 						<FolderRemoveIcon className="w-5 h-5 mr-2"/>
 						Delete
 					</li>
@@ -48,6 +59,12 @@ const CategoryListItem : React.FC<CategoryListItemProps> = ({category}) => {
 	const [value, setValue] = useState<string>("")
 	const [isEditing, setIsEditing] = useState<boolean>(false)
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+	const handleDeleteCategory = (id : number) => {
+		const api = new CategoryApi()	
+		api.setup()
+		api.deleteCategory(id)
+	}
 
 	return (
 		// TODO return id from server
@@ -71,6 +88,8 @@ const CategoryListItem : React.FC<CategoryListItemProps> = ({category}) => {
 							isDropdownOpen={isDropdownOpen} 
 							setIsEditing={setIsEditing}
 							setIsDropdownOpen={setIsDropdownOpen}
+							handleDeleteCategory={handleDeleteCategory}
+							categoryId={category.id}
 						/>
 					}
 

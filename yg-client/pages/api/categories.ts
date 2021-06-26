@@ -67,6 +67,24 @@ export class CategoryApi extends Api {
 				errorMessage: err
 			}
 		}
+	}
+
+	async deleteCategory(id : number) : Promise<CategoryResponse> {
+		try {
+			const response: AxiosResponse<any> = await this.axios.delete(`/api/v1.0/users/current_user/categories/${id}`)
+
+			return {
+				kind: "ok",
+				category: response.data,
+				errorMessage: null
+			}
+		} catch(err) {
+			return { 
+				kind: "bad-data", 
+				category: null, 
+				errorMessage: err
+			}
+		}
 
 	}
 }
