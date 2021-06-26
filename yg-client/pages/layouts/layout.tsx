@@ -1,6 +1,6 @@
 import Link from "next/link"
 import React, { FC } from "react"
-import Logo from "../components/Logo"
+import Logo from "../../components/Logo"
 
 
 const Layout : FC = ({children}) => {

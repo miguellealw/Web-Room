@@ -4,9 +4,9 @@ import { FC } from "react"
 import ReactTooltip from 'react-tooltip'
 import { ViewGridIcon, CollectionIcon, LogoutIcon } from '@heroicons/react/outline'
 
-import useUser from '../utils/auth/useUser'
-import { AuthApi } from './api/auth'
-import DashboardNavigation from '../components/DashboardNavigation'
+import useUser from '../../utils/auth/useUser'
+import { AuthApi } from '../api/auth'
+import DashboardNavigation from '../../components/DashboardNavigation'
 
 
 

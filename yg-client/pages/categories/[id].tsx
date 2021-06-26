@@ -1,7 +1,7 @@
 import { useRouter } from "next/router"
 import useSWR from "swr"
 import { CategoryApi } from "../api/categories"
-import AuthedLayout from '../authed_layout'
+import AuthedLayout from '../layouts/authed_layout'
 import Channels from "../channels"
 import Link from "next/link";
 import {ArrowNarrowLeftIcon, ExternalLinkIcon} from "@heroicons/react/outline";

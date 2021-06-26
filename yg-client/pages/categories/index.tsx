@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ChannelsApi } from "../api/channels";
 import { Category, Channel } from "../api/types";
 import { useRouter } from 'next/router'
-import AuthedLayout from '../authed_layout'
+import AuthedLayout from '../layouts/authed_layout'
 import useUser from "../../utils/auth/useUser";
 import SubscriptionListItem from "../../components/SubscriptionListItem";
 import { CategoryApi } from "../api/categories";

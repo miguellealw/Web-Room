@@ -3,7 +3,7 @@ import { AuthApi } from './api/auth'
 
 import {useRouter} from 'next/router'
 import useUser from "../utils/auth/useUser"
-import Layout from './layout'
+import Layout from './layouts/layout'
 import Link from "next/link"
 import InputField from "../components/InputField"
 

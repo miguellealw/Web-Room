@@ -3,7 +3,7 @@ import { AuthApi } from './api/auth'
 import InputField from "../components/InputField"
 
 import {useRouter} from 'next/router'
-import Layout from "./layout"
+import Layout from "./layouts/layout"
 import Link from "next/link"
 
 const Register : React.FC = () => {
