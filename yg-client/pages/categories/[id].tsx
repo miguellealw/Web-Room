@@ -7,6 +7,7 @@ import CategorySubListItem from '../../components/CategorySubListItem'
 import { Channel } from "../api/types"
 import { CategoryResponse } from "../api/categories"
 import useCategory from '../../utils/useCategory'
+import LoadingText from "../../components/LoadingText";
 
 const testVideos = [
 	{
@@ -55,7 +56,6 @@ const Category = () => {
 	const {data, error, isLoading} = useCategory(id)
 
 	if(error) return <div>Error loading category page...</div>
-	if(isLoading) return <div>Loading category...</div>
 
 	return (
 		<AuthedLayout tw_className="w-1/2 m-auto">
@@ -67,18 +67,25 @@ const Category = () => {
 						Back to Categories
 					</div>
 				</Link>
-				<div className="flex justify-between items-center mb-10">
-					<h1 className="text-5xl font-bold">{data?.category?.name}</h1>
-					<div>
-						<span className="text-gray-500">{data?.category?.channels.length} channels</span>
-						<button className="rounded-full bg-red-600 hover:bg-red-500 text-white text-xs px-4 py-2 ml-5">Add Channels</button>
-					</div>
-				</div>
 
-				<main className="grid grid-cols-3 gap-10">
-					<VideoSection data={data} />
-					<SubscriptionsSection data={data}/>
-				</main>
+				{isLoading ? (
+					<LoadingText>Loading Category...</LoadingText>
+				) : (
+					<>
+						<div className="flex justify-between items-center mb-10">
+							<h1 className="text-5xl font-bold">{data?.category?.name}</h1>
+							<div>
+								<span className="text-gray-500">{data?.category?.channels.length} channels</span>
+								<button className="rounded-full bg-red-600 hover:bg-red-500 text-white text-xs px-4 py-2 ml-5">Add Channels</button>
+							</div>
+						</div>
+		
+						<main className="grid grid-cols-3 gap-10">
+							<VideoSection data={data} />
+							<SubscriptionsSection data={data}/>
+						</main>
+					</>
+				)}
 			</div>
 		</AuthedLayout>
 	)

@@ -36,13 +36,12 @@ function Categories() {
 	}
 
 	if(error) return <div>Error loading categories page...</div>
-	if(isLoading) return <div>Loading categories...</div>
 
 	return (
 		<AuthedLayout>
 			<div className="py-10">
 				{
-					!data?.categories ? (
+					isLoading ? (
 						<div>Loading your Categories...</div>
 					) : (
 						<>
