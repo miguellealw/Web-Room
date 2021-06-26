@@ -3,6 +3,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
 import ReactTooltip from "react-tooltip"
+import useSWR from "swr"
 import { AuthApi } from '../pages/api/auth'
 import { CategoryApi } from "../pages/api/categories"
 import { Category } from "../pages/api/types"
@@ -13,7 +14,21 @@ import Logo from "./Logo"
 const DashboardNavigation = () => {
 	const {mutateUser} = useUser()
 	const router = useRouter()
-	const [categories, setCategories] = useState<Category[] | [] | null>(null);
+
+	const api = new CategoryApi();
+	api.setup();
+  const fetcher = () => api.getUserCategories()
+	const {data, error} = useSWR(`/api/v1.0/users/current_user/categories`, fetcher)
+
+	console.log("NAVIGATION RERENDERED")
+
+	if(error) return <div>Error loading page...</div>
+
+	if(!data) {
+		return (
+			<div>Loading categories...</div>
+		)
+	}
 
 	const handleLogout = async () => {
 		const api = new AuthApi();
@@ -22,33 +37,6 @@ const DashboardNavigation = () => {
 		router.replace('/')
 		mutateUser()
 	}
-
-	useEffect(() => {
-		let mounted = true;
-		async function fetchCategories() {
-			try {
-				const api = new CategoryApi();
-				api.setup();
-				const res = await api.getUserCategories();
-
-				if(res.categories && mounted) {
-					// only update state if compponent is mounted
-					setCategories([...res.categories]);
-				}
-			} catch (err) {
-				// TODO: handle this properly
-				console.log("CATEGORIES FETCH ERROR", err)
-			}
-		}
-
-		// if(!isLoggedOut) {
-			fetchCategories()
-		// }
-
-		return () => {
-			mounted = false
-		}
-	}, [])
 
 	return (
 		<nav className="h-screen w-1/12 bg-gray-800 text-white flex flex-col items-center fixed left-0">
@@ -84,9 +72,9 @@ const DashboardNavigation = () => {
 			<div className="border-t-2 border-b-2 h-full border-gray-700 w-full flex flex-col">
 				<span className="mt-3 ml-6 font-medium text-gray-400">Your Categories</span>
 				<ul className="mt-3">
-					{ categories?.length === 0 
+					{ data.categories?.length === 0 
 						? <span>No categories available</span> :
-						categories?.map((category, index) => (
+						data.categories?.map((category, index) => (
 							<Link href={`/categories/${category.id}`} passHref key={category.id}>
 								<a>
 									<li className="pl-3 py-2 hover:bg-gray-700 flex">
