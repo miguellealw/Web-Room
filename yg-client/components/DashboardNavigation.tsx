@@ -1,12 +1,8 @@
-import { CollectionIcon, FolderIcon, FolderOpenIcon, LogoutIcon, ViewGridIcon, ViewListIcon } from "@heroicons/react/outline"
+import { CollectionIcon, FolderIcon, FolderOpenIcon, LogoutIcon } from "@heroicons/react/outline"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
 import ReactTooltip from "react-tooltip"
-import useSWR from "swr"
 import { AuthApi } from '../pages/api/auth'
-import { CategoryApi } from "../pages/api/categories"
-import { Category } from "../pages/api/types"
 import useUser from "../utils/auth/useUser"
 import useCategories from "../utils/useCategories"
 import Logo from "./Logo"
@@ -67,9 +63,9 @@ const DashboardNavigation = () => {
 			<div className="border-t-2 border-b-2 h-full border-gray-700 w-full flex flex-col">
 				<span className="mt-3 ml-6 font-medium text-gray-400">Your Categories</span>
 				<ul className="mt-3">
-					{ data.categories?.length === 0 
+					{ data?.categories?.length === 0 
 						? <span>No categories available</span> :
-						data.categories?.map((category, index) => (
+						data?.categories?.map((category, index) => (
 							<Link href={`/categories/${category.id}`} passHref key={category.id}>
 								<a>
 									<li className="pl-3 py-2 hover:bg-gray-700 flex">
