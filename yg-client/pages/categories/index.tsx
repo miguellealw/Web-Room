@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ChannelsApi } from "../api/channels";
-import { Category, Channel } from "../api/types";
-import { useRouter } from 'next/router'
 import AuthedLayout from '../layouts/authed_layout'
-import useUser from "../../utils/auth/useUser";
-import SubscriptionListItem from "../../components/SubscriptionListItem";
 import { CategoryApi } from "../api/categories";
-import { DotsVerticalIcon, FolderRemoveIcon, PencilAltIcon, PlusIcon } from "@heroicons/react/outline";
+import { PlusIcon } from "@heroicons/react/outline";
 import CategoryListItem from "../../components/CategoryListItem";
 import Link from "next/link";
+import useSWR from "swr";
 
-// const NewCategoryButton = ({handleCreateCategory}) => (
 const NewCategoryButton = () => (
 	<Link href="/categories/create" passHref>
 		<li 
@@ -23,65 +18,33 @@ const NewCategoryButton = () => (
 )
 
 function Categories() {
-	const [categories, setCategories] = useState<Category[] | null>(null);
+	const api = new CategoryApi();
+	api.setup();
+  const fetcher = () => api.getUserCategories()
+	const {data, error} = useSWR(`/api/v1.0/users/current_user/categories`, fetcher)
 
-	const router = useRouter()
-	const {isLoggedOut = true} = useUser()
+	if(error) return <div>Error loading page...</div>
 
-
-	useEffect(() => {
-		let mounted = true;
-		async function fetchCategories() {
-			try {
-				const api = new CategoryApi();
-				api.setup();
-				const res = await api.getUserCategories();
-				console.log("USER CATEGORIES RES", res)
-
-				// only update state if compponent is mounted
-				if(res.categories && mounted) {
-					setCategories([...res.categories]);
-				}
-			} catch (err) {
-				// TODO: handle this properly
-				console.log("CATEGORIES FETCH ERROR", err)
-			}
-		}
-
-		// if(!isLoggedOut) {
-			fetchCategories()
-		// }
-
-		return () => {
-			mounted = false
-		}
-	}, [isLoggedOut])
-
-
-	function handleCreateCategory(name : string) {
-		if(!categories) {
-			setCategories([{name}])
-			return
-		}
-
-		
-		setCategories([...categories, {name}])
+	if(!data) {
+		return (
+			<div>Loading categories...</div>
+		)
 	}
 
 	return (
 		<AuthedLayout>
 			<div className="py-10">
 				{
-					!categories ? (
+					!data.categories ? (
 						<div>Loading your Categories...</div>
 					) : (
 						<>
 							<div className="flex justify-between items-center mb-10">
 								<h1 className="text-5xl font-bold">Your Categories</h1>
-								<div className="text-gray-500">{categories.length} Categories</div>
+								<div className="text-gray-500">{data.categories.length} Categories</div>
 							</div>
 							<ul className="grid grid-cols-3 gap-4">
-								{categories.map((category, index) => (
+								{data.categories.map((category, index) => (
 									<CategoryListItem key={index} category={category} />
 								))}
 
