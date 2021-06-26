@@ -41,7 +41,7 @@ const DashboardNavigation = () => {
 			<ul className="w-full">
 				<li className="hover:bg-gray-700 w-full">
 					<Link href="/categories" passHref>
-						<a data-tip="Your Categories" className="flex items-center w-full h-full p-3">
+						<a data-tip="Your Categories" className="flex items-center w-full h-full p-3 pl-5">
 							<FolderIcon className="h-5 w-5"/>
 							<span className="ml-2">Categories</span>	
 							{/* <ReactTooltip effect="solid"/> */}
@@ -50,7 +50,7 @@ const DashboardNavigation = () => {
 				</li>
 				<li className="hover:bg-gray-700 w-full">
 					<Link href="/channels">
-						<a data-tip="Your Subscriptions" className="flex items-center w-full h-full py-3 px-3">
+						<a data-tip="Your Subscriptions" className="flex items-center w-full h-full p-3 pl-5">
 							<CollectionIcon className="h-5 w-5"/>
 							<span className="ml-2">Subscriptions</span>	
 							{/* <ReactTooltip effect="solid"/> */}
@@ -61,14 +61,14 @@ const DashboardNavigation = () => {
 
 			{/* Categories Section */}
 			<div className="border-t-2 border-b-2 h-full border-gray-700 w-full flex flex-col">
-				<span className="mt-3 ml-6 font-medium text-gray-400">Your Categories</span>
+				<span className="mt-3 ml-5 font-medium text-gray-400">Your Categories</span>
 				<ul className="mt-3">
 					{ data?.categories?.length === 0 
 						? <span>No categories available</span> :
 						data?.categories?.map((category, index) => (
 							<Link href={`/categories/${category.id}`} passHref key={category.id}>
 								<a>
-									<li className="pl-3 py-2 hover:bg-gray-700 flex">
+									<li className="pl-5 py-2 hover:bg-gray-700 flex">
 										<FolderOpenIcon className="w-5 h-5 mr-2" />
 										{category.name}
 									</li>
@@ -80,9 +80,9 @@ const DashboardNavigation = () => {
 			</div>
 
 			{/* Log Out */}
-			<button data-tip="Log Out" onClick={handleLogout} className="flex items-center relative mb-5 mt-5">
+			<button data-tip="Log Out" onClick={handleLogout} className="flex items-center my-3">
 				<LogoutIcon className="h-5 w-5"/>
-				<span className="ml-2">Log Out</span>	
+				<span className="ml-2 hover:text-gray-300">Log Out</span>	
 				{/* <ReactTooltip effect="solid"/> */}
 			</button>
 		</nav>
