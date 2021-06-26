@@ -7,6 +7,8 @@ import Link from "next/link";
 import {ArrowNarrowLeftIcon, ExternalLinkIcon} from "@heroicons/react/outline";
 import Video from '../../components/Video'
 import CategorySubListItem from '../../components/CategorySubListItem'
+import { Channel } from "../api/types"
+import { CategoryResponse } from "../api/categories"
 
 const testVideos = [
 	{
@@ -95,7 +97,9 @@ const Category = () => {
 
 }
 
-function SubscriptionsSection({data}) {
+
+
+function SubscriptionsSection({data} : {data: CategoryResponse}) {
 
 	return (
 		<div>
@@ -105,7 +109,7 @@ function SubscriptionsSection({data}) {
 				(<div className="text-sm text-gray-400">No channels in category</div>) : 
 				(
 				<ul className="bg-white rounded-lg overflow-hidden shadow-lg p-8">
-					{data.category?.channels.map(channel => (
+					{data.category?.channels.map((channel : Channel) => (
 						<CategorySubListItem key={channel.yt_channel_id} channel={channel}/>
 					))}
 				</ul>
@@ -116,8 +120,7 @@ function SubscriptionsSection({data}) {
 }
 
 
-function VideoSection({data}) {
-
+function VideoSection({data} : {data: CategoryResponse}) {
 	return (
 		<div style={{
 			gridColumnStart: '1',

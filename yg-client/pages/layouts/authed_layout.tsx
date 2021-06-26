@@ -9,8 +9,11 @@ import { AuthApi } from '../api/auth'
 import DashboardNavigation from '../../components/DashboardNavigation'
 
 
+interface AuthedLayoutProps {
+	tw_className : string
+}
 
-const AuthedLayout : FC = ({ children, tw_className = "", ...props }) => {
+const AuthedLayout : FC<AuthedLayoutProps> = ({ children, tw_className = "", ...props }) => {
 	const {user, isLoading, isLoggedOut = true} = useUser({
 		redirectTo: '/login',
 	})

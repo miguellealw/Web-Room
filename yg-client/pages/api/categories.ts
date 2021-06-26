@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { Api } from "./api";
 import { Category } from "./types";
 
-type CategoryResponse = {
+export interface CategoryResponse {
 	kind: string,
 	categories?: Category[] | [] | null
 	category?: Category | null
@@ -28,7 +28,7 @@ export class CategoryApi extends Api {
 		}
 	}
 
-	async getUserCategoryById(id : string) : Promise<CategoryResponse> {
+	async getUserCategoryById(id : string | string[] | undefined) : Promise<CategoryResponse> {
 		try {
 			const response: AxiosResponse<any> = await this.axios.get(`/api/v1.0/users/current_user/categories/${id}`)
 
