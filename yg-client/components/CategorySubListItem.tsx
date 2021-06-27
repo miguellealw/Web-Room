@@ -1,8 +1,15 @@
 import Image from "next/image";
 import { numberWithCommas } from "../utils/helpers";
 import { ExternalLinkIcon } from "@heroicons/react/outline";
+import { Channel } from "../pages/api/types";
 
-const CategorySubListItem = ({ channel }) => (
+type CategorySubListItemProps = {
+  channel: Channel;
+};
+
+const CategorySubListItem: React.FC<CategorySubListItemProps> = ({
+  channel,
+}) => (
   <li className="py-5 bg-gray-100 mb-3 rounded-lg flex items-center pl-4">
     <div className="rounded-full w-14 h-14 bg-gray-300 overflow-hidden">
       <Image

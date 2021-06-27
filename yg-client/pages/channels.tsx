@@ -18,7 +18,7 @@ function Channels() {
         <h1 className="pb-10 text-5xl font-bold">Your Subscriptions</h1>
         <ChannelsSkeleton ready={!isLoading}>
           <ul className="grid grid-cols-3 gap-3">
-            {channels?.map((channel, index: number) => (
+            {channels?.map((channel: any, index: number) => (
               <SubscriptionListItem
                 key={index}
                 name={channel.snippet.title}

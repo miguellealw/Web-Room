@@ -1,10 +1,10 @@
 import { truncateString } from "../utils/helpers";
 
-interface VideoProps {
+type VideoProps = {
   title: string;
   channel: string;
   description: string;
-}
+};
 
 const Video: React.FC<VideoProps> = ({ title, channel, description }) => (
   <li className="bg-white rounded-lg mb-5 flex h-36 overflow-hidden shadow-sm">

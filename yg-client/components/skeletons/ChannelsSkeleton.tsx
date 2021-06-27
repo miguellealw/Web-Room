@@ -1,11 +1,5 @@
 import ReactPlaceholder from "react-placeholder";
-import {
-  TextBlock,
-  MediaBlock,
-  TextRow,
-  RectShape,
-  RoundShape,
-} from "react-placeholder/lib/placeholders";
+import { RectShape } from "react-placeholder/lib/placeholders";
 import "react-placeholder/lib/reactPlaceholder.css";
 
 const customPlaceholder = (
@@ -23,7 +17,15 @@ const customPlaceholder = (
   </div>
 );
 
-const ChannelsSkelteton = ({ children, ready }) => (
+type ChannelsSkeltetonProps = {
+  children: React.ReactNode;
+  ready: boolean;
+};
+
+const ChannelsSkelteton: React.FC<ChannelsSkeltetonProps> = ({
+  children,
+  ready,
+}) => (
   <ReactPlaceholder
     customPlaceholder={customPlaceholder}
     showLoadingAnimation={true}

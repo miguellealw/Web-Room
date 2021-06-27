@@ -1,10 +1,9 @@
-export interface InputFieldProps {
+export type InputFieldProps = {
   label: string;
-  // TODO: figure out how to type functions
-  setValue: any;
+  setValue: (value: string) => void;
   // TODO: USE ENUM
   type: string;
-}
+};
 
 const InputField: React.FC<InputFieldProps> = ({ label, type, setValue }) => {
   return (

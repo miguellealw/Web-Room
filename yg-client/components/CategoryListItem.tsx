@@ -5,17 +5,15 @@ import {
 } from "@heroicons/react/outline";
 import Link from "next/link";
 import React, { useState } from "react";
-import { CategoryApi } from "../pages/api/categories";
 import { Category } from "../pages/api/types";
 
-interface CategoryDropdownProps {
+type CategoryDropdownProps = {
   isDropdownOpen: boolean;
   categoryId: number;
-  // TODO: add types for functions
-  setIsEditing: any;
-  setIsDropdownOpen: any;
-  handleDeleteCategory: any;
-}
+  setIsEditing: (value: boolean) => void;
+  setIsDropdownOpen: (value: boolean) => void;
+  handleDeleteCategory: (id: number) => void;
+};
 
 const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   isDropdownOpen,
@@ -56,9 +54,11 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   );
 };
 
-interface CategoryListItemProps {
+type CategoryListItemProps = {
   category: Category;
-}
+  handleDeleteCategory: (id: number) => void;
+  handleUpdateCategory: (id: number, value: string) => void;
+};
 
 const CategoryListItem: React.FC<CategoryListItemProps> = ({
   category,
