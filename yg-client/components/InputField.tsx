@@ -10,6 +10,7 @@ const InputField: React.FC<InputFieldProps> = ({ label, type, setValue }) => {
     <div className="pb-3 flex flex-col">
       <label htmlFor={label}>{label}</label>
       <input
+        className="rounded-sm"
         type={type}
         id={label}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

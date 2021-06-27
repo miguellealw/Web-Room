@@ -46,7 +46,7 @@ const LogIn: React.FC = () => {
           <InputField label="Password" type="password" setValue={setPassword} />
           <button
             type="submit"
-            className="bg-red-600 hover:bg-red-500 text-white py-2  text-center font-bold w-full"
+            className="bg-red-600 hover:bg-red-500 text-white py-2 rounded-full text-center font-bold w-full"
           >
             Log In
           </button>
@@ -59,6 +59,10 @@ const LogIn: React.FC = () => {
           <Link href="/register" passHref>
             <a className="underline text-gray-400 pl-1">Register</a>
           </Link>
+        </div>
+
+        <div className="pt-2">
+          I forgot my password.
         </div>
       </div>
     </Layout>

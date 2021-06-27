@@ -55,7 +55,7 @@ const Register: React.FC = () => {
           />
           <button
             type="submit"
-            className="bg-red-600 hover:bg-red-500 text-white py-2  text-center font-bold w-full"
+            className="bg-red-600 hover:bg-red-500 rounded-full text-white py-2  text-center font-bold w-full"
           >
             Register
           </button>
