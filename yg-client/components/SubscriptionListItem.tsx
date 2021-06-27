@@ -1,7 +1,9 @@
+import {useEffect} from 'react'
 import Image from "next/image";
 import { ExternalLinkIcon } from "@heroicons/react/outline";
 import { useDrag } from "react-dnd";
 import { CategoryApi } from "../pages/api/categories";
+import { getEmptyImage } from 'react-dnd-html5-backend'
 
 export interface SubscriptionListItem {
   name: string;
@@ -16,20 +18,19 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
   thumbnail,
   channelId,
 }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
+  const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: "SUB_ITEM",
     item: { name, id: channelId },
     end: (channel, monitor) => {
-      // item - the channel
-      // dropResult - the category
-      const category = monitor.getDropResult<{ name: string, id: string }>();
+      const category = monitor.getDropResult<{ name: string; id: string }>();
       if (channel && category) {
-        console.log(`You dropped ${channel.name}_${channel.id} into ${category.name}_${category.id}!`);
+        console.log(
+          `You dropped ${channel.name}_${channel.id} into ${category.name}_${category.id}!`
+        );
 
-        // TODO: Make API call here
-        const api = new CategoryApi()
-        api.setup()
-        api.addChannelToCategory(category.id, channel.name, channel.id)
+        const api = new CategoryApi();
+        api.setup();
+        api.addChannelToCategory(category.id, channel.name, channel.id);
       }
     },
     collect: (monitor) => ({
@@ -37,6 +38,10 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
       handlerId: monitor.getHandlerId(),
     }),
   }));
+
+  useEffect(() => {
+    preview(getEmptyImage(), { captureDraggingState: true });
+  }, []);
 
   return (
     <div

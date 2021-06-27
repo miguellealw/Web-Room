@@ -2,6 +2,7 @@ import useUser from "../../utils/auth/useUser";
 import DashboardNavigation from "../../components/DashboardNavigation";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import CustomDragLayer from "../../components/CustomDragLayer";
 
 interface AuthedLayoutProps {
   tw_className?: string;
@@ -27,6 +28,7 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
 
   return (
     <DndProvider backend={HTML5Backend}>
+      <CustomDragLayer />
       <div className="w-full min-h-screen bg-gray-100">
         <div
           className={`${tw_className === "" ? "w-1/3 m-auto" : tw_className}`}
