@@ -109,8 +109,8 @@ def add_channel_to_category(category_id):
     # if channel is not in db, create it 
     if channel_to_add is None:
       channel_to_add = Channel(
-        name= valid_data["name"],
-        yt_channel_id= valid_data["yt_channel_id"],
+        name = valid_data["name"],
+        yt_channel_id = valid_data["yt_channel_id"],
       )
       if channel_to_add is None:
         abort(409, description="Channel could not be created")
@@ -126,6 +126,41 @@ def add_channel_to_category(category_id):
     db.session.commit()
 
     return jsonify( channel_schema.dump(channel_to_add) )
+
+
+@bp.route('/users/current_user/categories/<int:category_id>/remove_channel', methods=['DELETE'])
+@login_required
+def remove_channel_from_category(category_id):
+  valid_data = None
+  try:
+    valid_data = ChannelSchema().load({
+      "name": request.get_json()["name"],
+      "yt_channel_id": request.get_json()["yt_channel_id"]
+    })
+  except ValidationError as err:
+    return jsonify(err.messages), 403
+
+  # Find category
+  category_found = Category.query.get_or_404(category_id, description="Channel could not be created because category does not exist")
+  channel_to_remove = Channel.query.filter_by(yt_channel_id = valid_data["yt_channel_id"]).first()
+
+  if channel_to_remove is None:
+    abort(409, description="Channels was not deleted because it does not exist.")
+
+  # TODO: check if channel exists in category first
+
+  # Remove channel relationship with cateogry
+  category_found.channels.remove(channel_to_remove)
+
+  # relate channel to user
+  # user_found = User.query.get_or_404(fl_current_user.id, description="Channel could not be created because user does not Exist")
+  # user_found.channels.append(channel_to_add)
+
+  db.session.delete(channel_to_remove)
+  db.session.commit()
+
+  return jsonify( channel_schema.dump(channel_to_remove) )
+
 
 @bp.route('/users/current_user/channels/<int:channel_id>', methods=['GET'])
 @login_required
