@@ -1,27 +1,25 @@
-import {useEffect} from 'react'
-import Router from 'next/router'
-import useSWR from 'swr'
-import { UsersApi } from '../../pages/api/users';
+import { useEffect } from "react";
+import Router from "next/router";
+import useSWR from "swr";
+import { UsersApi } from "../../pages/api/users";
 
 interface ResponseData {
-  isLoading: boolean
-  username?: string
+  isLoading: boolean;
+  username?: string;
 }
 
-
 export default function useUser({
-	redirectTo = "",
-	redirectIfFound = false
+  redirectTo = "",
+  redirectIfFound = false,
 } = {}) {
-	const api = new UsersApi();
-	api.setup();
-  const fetcher = () => api.currentUser()
+  const api = new UsersApi();
+  api.setup();
+  const fetcher = () => api.currentUser();
 
-  // const response = await api.currentUser();
-	const { 
-    data,  
-    mutate: mutateUser 
-  } = useSWR("/api/v1.0/users/current_user", fetcher);
+  const { data, mutate: mutateUser } = useSWR(
+    "/api/v1.0/users/current_user",
+    fetcher
+  );
 
   // console.log("useUser RAN")
 
@@ -40,10 +38,10 @@ export default function useUser({
     }
   }, [data, redirectIfFound, redirectTo]);
 
-  return { 
+  return {
     user: data,
     isLoading: !data,
     isLoggedOut: data && !data.user.isLoggedIn,
-    mutateUser 
+    mutateUser,
   };
 }
