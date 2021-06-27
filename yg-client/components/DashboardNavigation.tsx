@@ -1,4 +1,3 @@
-import { memo } from "react";
 import {
   CollectionIcon,
   FolderIcon,
@@ -9,11 +8,46 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import ReactTooltip from "react-tooltip";
 import { AuthApi } from "../pages/api/auth";
-import { CategoryApi } from "../pages/api/categories";
 import useUser from "../utils/auth/useUser";
 import useCategories from "../utils/useCategories";
 import LoadingText from "./LoadingText";
 import Logo from "./Logo";
+import { useDrop } from "react-dnd";
+import { Category } from "../pages/api/types";
+
+type NavCategoryListItemProps = {
+  category: Category;
+};
+
+const NavCategoryListItem: React.FC<NavCategoryListItemProps> = ({
+  category,
+}) => {
+  const [{ canDrop, isOver }, drop] = useDrop(() => ({
+    accept: "SUB_ITEM",
+    // what is returned from here will be accessible from end in useDrag
+    drop: () => ({ name: `${category.name}`, id: category.id }),
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+  }));
+
+  const isActive = canDrop && isOver;
+  return (
+    <Link href={`/categories/${category.id}`} passHref key={category.id}>
+      <a ref={drop} role={`Category`}>
+        <li
+          className={`pl-5 py-2 hover:bg-gray-700 flex ${
+            isActive && "bg-gray-700"
+          }`}
+        >
+          <FolderOpenIcon className="w-5 h-5 mr-2" />
+          {category.name}
+        </li>
+      </a>
+    </Link>
+  );
+};
 
 const DashboardNavigation = () => {
   const { mutateUser } = useUser();
@@ -33,7 +67,7 @@ const DashboardNavigation = () => {
   };
 
   return (
-    <nav className="h-screen w-1/12 bg-gray-800 text-white flex flex-col items-center fixed left-0">
+    <nav className="h-screen w-56 bg-gray-800 text-white flex flex-col items-center fixed left-0">
       {/* Logo */}
       <div className="w-full  my-3 flex items-center py-2 px-3">
         <Logo className="mr-2 w-6 h-6" />
@@ -80,19 +114,8 @@ const DashboardNavigation = () => {
             {data?.categories?.length === 0 ? (
               <span>No categories available</span>
             ) : (
-              data?.categories?.map((category, index) => (
-                <Link
-                  href={`/categories/${category.id}`}
-                  passHref
-                  key={category.id}
-                >
-                  <a>
-                    <li className="pl-5 py-2 hover:bg-gray-700 flex">
-                      <FolderOpenIcon className="w-5 h-5 mr-2" />
-                      {category.name}
-                    </li>
-                  </a>
-                </Link>
+              data?.categories?.map((category) => (
+                <NavCategoryListItem key={category.id} category={category} />
               ))
             )}
           </ul>

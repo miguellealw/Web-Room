@@ -1,23 +1,13 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { FC } from "react";
-import ReactTooltip from "react-tooltip";
-import {
-  ViewGridIcon,
-  CollectionIcon,
-  LogoutIcon,
-} from "@heroicons/react/outline";
-
 import useUser from "../../utils/auth/useUser";
-import { AuthApi } from "../api/auth";
 import DashboardNavigation from "../../components/DashboardNavigation";
-import useCategories from "../../utils/useCategories";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 interface AuthedLayoutProps {
   tw_className?: string;
 }
 
-const AuthedLayout: FC<AuthedLayoutProps> = ({
+const AuthedLayout: React.FC<AuthedLayoutProps> = ({
   children,
   tw_className = "",
   ...props
@@ -36,16 +26,18 @@ const AuthedLayout: FC<AuthedLayoutProps> = ({
   }
 
   return (
-    <div className="w-full min-h-screen bg-gray-100">
-      <div
-        className={`${tw_className === "" ? "w-1/3 m-auto" : tw_className}`}
-        {...props}
-      >
-        {/* <DashboardNavigation categoriesData={categoriesData}/>			 */}
-        <DashboardNavigation />
-        {children}
+    <DndProvider backend={HTML5Backend}>
+      <div className="w-full min-h-screen bg-gray-100">
+        <div
+          className={`${tw_className === "" ? "w-1/3 m-auto" : tw_className}`}
+          {...props}
+        >
+          {/* <DashboardNavigation categoriesData={categoriesData}/>			 */}
+          <DashboardNavigation />
+          {children}
+        </div>
       </div>
-    </div>
+    </DndProvider>
   );
 };
 

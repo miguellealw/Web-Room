@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ExternalLinkIcon } from "@heroicons/react/outline";
+import { useDrag } from "react-dnd";
 
 export interface SubscriptionListItem {
   name: string;
@@ -47,8 +48,33 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
   // 	</div>
   // )
 
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: "SUB_ITEM",
+    item: { name, id: channelId },
+    end: (item, monitor) => {
+      // item - the channel
+      // dropResult - the category
+      const dropResult = monitor.getDropResult<{ name: string, id: string }>();
+      if (item && dropResult) {
+        console.log(`You dropped ${item.name}_${item.id} into ${dropResult.name}_${dropResult.id}!`);
+
+        // TODO: Make API call here
+      }
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+      handlerId: monitor.getHandlerId(),
+    }),
+  }));
+
   return (
-    <div className="bg-white shadow-sm p-4 flex items-center rounded-md hover:bg-gray-50">
+    <div
+      className={`bg-white shadow-sm p-4 flex items-center rounded-md ${
+        isDragging && "opacity-50"
+      } hover:shadow-md`}
+      ref={drag}
+      role="Subscription"
+    >
       <div className="w-20 rounded-full overflow-hidden">
         <Image
           src={thumbnail.url}
