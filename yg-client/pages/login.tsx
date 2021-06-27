@@ -52,7 +52,7 @@ const LogIn: React.FC = () => {
           </button>
         </form>
 
-        {isError && <div>There's an error while login, try again!</div>}
+        {isError && <div>There&apos;s an error while login, try again!</div>}
 
         <div className="pt-2">
           Don&apos;t have an account?
