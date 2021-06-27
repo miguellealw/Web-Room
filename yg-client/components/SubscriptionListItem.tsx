@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ExternalLinkIcon } from "@heroicons/react/outline";
 import { useDrag } from "react-dnd";
+import { CategoryApi } from "../pages/api/categories";
 
 export interface SubscriptionListItem {
   name: string;
@@ -15,50 +16,20 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
   thumbnail,
   channelId,
 }) => {
-  // return (
-  // 	<div className="bg-gray-100 p-4 my-4 flex items-center">
-  // 		<div className="w-20 rounded-full overflow-hidden">
-  // 			<Image
-  // 				src={thumbnail}
-  // 				alt={`${name}'s thumbnail`}
-  // 				className="w-full h-full object-cover object-center"
-  // 				width={200}
-  // 				height={200}
-  // 			/>
-  // 		</div>
-  // 		<div className="flex flex-col ml-2">
-  // 			<span className="font-bold">
-  // 				{name}
-  // 			</span>
-
-  // 			<a
-  // 				href={`https://www.youtube.com/channel/${channelId}`}
-  // 				// target="_blank"
-  // 				className="text-xs text-gray-400 hover:underline"
-  // 			>
-  // 				Go to Channel
-  // 			</a>
-
-  // 			{/* {
-  // 				description !== "" ?
-  // 					description :
-  // 					(<span className="italic text-gray-400">No description available</span>)
-  // 			} */}
-  // 		</div>
-  // 	</div>
-  // )
-
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "SUB_ITEM",
     item: { name, id: channelId },
-    end: (item, monitor) => {
+    end: (channel, monitor) => {
       // item - the channel
       // dropResult - the category
-      const dropResult = monitor.getDropResult<{ name: string, id: string }>();
-      if (item && dropResult) {
-        console.log(`You dropped ${item.name}_${item.id} into ${dropResult.name}_${dropResult.id}!`);
+      const category = monitor.getDropResult<{ name: string, id: string }>();
+      if (channel && category) {
+        console.log(`You dropped ${channel.name}_${channel.id} into ${category.name}_${category.id}!`);
 
         // TODO: Make API call here
+        const api = new CategoryApi()
+        api.setup()
+        api.addChannelToCategory(category.id, channel.name, channel.id)
       }
     },
     collect: (monitor) => ({
@@ -69,8 +40,8 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
 
   return (
     <div
-      className={`bg-white shadow-sm p-4 flex flex-col lg:flex-row items-center rounded-md ${
-        isDragging && "opacity-50"
+      className={`bg-white translate shadow-sm p-4 flex flex-col lg:flex-row items-center rounded-md ${
+        isDragging && "translate opacity-50 transform scale-90"
       } hover:shadow-md`}
       ref={drag}
       role="Subscription"

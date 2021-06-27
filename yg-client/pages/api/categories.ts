@@ -119,4 +119,29 @@ export class CategoryApi extends Api {
       };
     }
   }
+
+  async addChannelToCategory(categoryId: string, channelName: string, channelId: string) {
+    try {
+      const response: AxiosResponse<any> = await this.axios.post(
+        `/api/v1.0/users/current_user/categories/${categoryId}/add_channel`,
+        {
+          name: channelName,
+          yt_channel_id: channelId
+        }
+      );
+
+      return {
+        kind: "ok",
+        category: response.data,
+        errorMessage: null,
+      };
+    } catch (err) {
+      return {
+        kind: "bad-data",
+        category: null,
+        errorMessage: err,
+      };
+    }
+
+  }
 }
