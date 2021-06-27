@@ -86,6 +86,7 @@ def get_user_channels(yt_client):
   return jsonify( res )
   # return jsonify( channels_schema.dump(user_found.channels) )
 
+# TODO: allow passing array of yt_channel_id's to add mutliple channels to category
 @bp.route('/users/current_user/categories/<int:category_id>/add_channel', methods=['POST'])
 @login_required
 def add_channel_to_category(category_id):
@@ -96,7 +97,7 @@ def add_channel_to_category(category_id):
       "yt_channel_id": request.get_json()["yt_channel_id"]
     })
   except ValidationError as err:
-    return jsonify(err.messages)
+    return jsonify(err.messages), 403
 
   if request.method == 'POST':
     # Find category

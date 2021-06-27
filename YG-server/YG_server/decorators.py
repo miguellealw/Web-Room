@@ -7,6 +7,7 @@ def yt_auth_required(f):
 	def route_handler(*args, **kwargs):
 		# Check if user is authed by youtube
 		if 'credentials' not in session:
+			# TODO: handle this properly. send json message to frontend and have frontend handle redirection
 			return redirect('auth.authorize')
 
 		yt_client = get_authenticated_service()
