@@ -15,9 +15,9 @@ function Channels() {
   return (
     <AuthedLayout>
       <div className="py-10">
-        <h1 className="pb-10 text-5xl font-bold">Your Subscriptions</h1>
+        <h1 className="pb-10 text-2xl lg:text-5xl font-bold">Your Subscriptions</h1>
         <ChannelsSkeleton ready={!isLoading}>
-          <ul className="grid grid-cols-3 gap-3">
+          <ul className="grid grid-cols-2 lg:grid-cols-3 gap-3">
             {channels?.map((channel: any, index: number) => (
               <SubscriptionListItem
                 key={index}

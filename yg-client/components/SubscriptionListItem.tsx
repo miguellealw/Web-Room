@@ -69,7 +69,7 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
 
   return (
     <div
-      className={`bg-white shadow-sm p-4 flex items-center rounded-md ${
+      className={`bg-white shadow-sm p-4 flex flex-col lg:flex-row items-center rounded-md ${
         isDragging && "opacity-50"
       } hover:shadow-md`}
       ref={drag}
