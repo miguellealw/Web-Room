@@ -23,13 +23,35 @@ function Categories() {
 	const handleDeleteCategory = async (id : number) => {
 		// update local data for optimistic update, but don't revalidate (refetch)
 		mutateCategories(data => {
-			const categoriesToKeep = data.categories.filter(category => category.id !== id)
+			const categoriesToKeep = data?.categories?.filter(category => category.id !== id)
 			return {...data, categories: [...categoriesToKeep]}
 		}, false)
 
 		const api = new CategoryApi()	
 		api.setup()
 		await api.deleteCategory(id)
+
+		// revalidate to make sure local data is correct
+		mutateCategories()
+	}
+
+	const handleUpdateCategory = async (id : number, newName : string) => {
+		// update local data for optimistic update, but don't revalidate (refetch)
+		mutateCategories(data => {
+			// TODO: find better way of doing this
+			const categoriesToKeep = data?.categories?.filter(category => category.id !== id)
+			return {
+				...data, 
+				categories: [
+					...categoriesToKeep,
+					{id, name: newName}
+				]
+			}
+		}, false)
+
+		const api = new CategoryApi()	
+		api.setup()
+		await api.updateCategory(id, newName)
 
 		// revalidate to make sure local data is correct
 		mutateCategories()
@@ -47,14 +69,15 @@ function Categories() {
 						<>
 							<div className="flex justify-between items-center mb-10">
 								<h1 className="text-5xl font-bold">Your Categories</h1>
-								<div className="text-gray-500">{data.categories.length} Categories</div>
+								<div className="text-gray-500">{data?.categories?.length} Categories</div>
 							</div>
 							<ul className="grid grid-cols-3 gap-4">
-								{data.categories.map((category, index) => (
+								{data?.categories?.map((category, index) => (
 									<CategoryListItem 
 										key={index} 
 										category={category} 
 										handleDeleteCategory={handleDeleteCategory}
+										handleUpdateCategory={handleUpdateCategory}
 									/>
 								))}
 

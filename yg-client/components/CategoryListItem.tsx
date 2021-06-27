@@ -56,7 +56,7 @@ interface CategoryListItemProps {
 	category: Category,
 }
 
-const CategoryListItem : React.FC<CategoryListItemProps> = ({category, handleDeleteCategory}) => {
+const CategoryListItem : React.FC<CategoryListItemProps> = ({category, handleDeleteCategory, handleUpdateCategory}) => {
 	const [value, setValue] = useState<string>("")
 	const [isEditing, setIsEditing] = useState<boolean>(false)
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -70,7 +70,6 @@ const CategoryListItem : React.FC<CategoryListItemProps> = ({category, handleDel
 							className="w-5 h-5 absolute text-gray-400 top-0 right-0 m-2 cursor-pointer" 
 							onClick={(e) => {
 								e.preventDefault()
-								e.stopPropagation()
 								setIsDropdownOpen(!isDropdownOpen)
 							}}
 						/>
@@ -86,18 +85,27 @@ const CategoryListItem : React.FC<CategoryListItemProps> = ({category, handleDel
 					}
 
 					{!isEditing ? category.name : (
+						// TODO: make editing page like create
 						<div>
 							<input 
 								type="text" 
-								value={value === "" ? category.name : value} onChange={(e) => setValue(e.target.value)}
+								value={value === "" ? category.name : value} 
+								onChange={(e) => setValue(e.target.value)}
+								onClick={(e) => { e.preventDefault() }}
 							/>
 
 							{/* Buttons */}
 							<div>
 								<button 
+									type="submit"
 									className="text-sm bg-gray-900 hover:bg-gray-600 text-white px-2 rounded"
 									// disabled={value === ""}
-									disabled={true}
+									// disabled={true}
+									onClick={(e) => {
+										e.preventDefault()	
+										setIsEditing(false)
+										handleUpdateCategory(category.id, value)
+									}}
 								>
 									Save
 								</button>

@@ -85,6 +85,27 @@ export class CategoryApi extends Api {
 				errorMessage: err
 			}
 		}
+	}
+	
+	async updateCategory(id : number, newName : string) : Promise<CategoryResponse> {
+		try {
+			const response: AxiosResponse<any> = await this.axios.put(
+				`/api/v1.0/users/current_user/categories/${id}`, {
+				name: newName
+			})
+
+			return {
+				kind: "ok",
+				category: response.data,
+				errorMessage: null
+			}
+		} catch(err) {
+			return { 
+				kind: "bad-data", 
+				category: null, 
+				errorMessage: err
+			}
+		}
 
 	}
 }
