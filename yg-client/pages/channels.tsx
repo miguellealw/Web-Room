@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { ChannelsApi } from "./api/channels";
-import { Channel } from "./api/types";
-import Link from 'next/link'
-import { AuthApi } from "./api/auth";
-import { useRouter } from 'next/router'
 import AuthedLayout from './layouts/authed_layout'
-import useUser from "../utils/auth/useUser";
 import SubscriptionListItem from "../components/SubscriptionListItem";
 import useChannels from "../utils/useChannels";
 import LoadingText from "../components/LoadingText";
+import ChannelsSkeleton from '../components/skeletons/ChannelsSkeleton'
 
 function Channels() {
 	const {data : channels, error, isLoading} = useChannels()
@@ -20,28 +15,20 @@ function Channels() {
 	return (
 		<AuthedLayout>
 			<div className="py-10">
-				{
-					<>
-						<h1 className="pb-10 text-5xl font-bold">Your Subscriptions</h1>
-						{
-							isLoading ? (
-								<LoadingText>Loading your Subscriptions...</LoadingText>
-							) : (
-								<ul className="grid grid-cols-3 gap-3">
-									{channels?.map((channel, index : number) => (
-										<SubscriptionListItem
-											key={index} 
-											name={channel.snippet.title} 
-											description={channel.snippet.description}
-											thumbnail={channel.snippet.thumbnails.default}
-											channelId={channel.snippet.resourceId.channelId}
-										/>
-									))}
-								</ul>
-							)
-						}
-					</>
-				}
+				<h1 className="pb-10 text-5xl font-bold">Your Subscriptions</h1>
+				<ChannelsSkeleton ready={!isLoading}>
+					<ul className="grid grid-cols-3 gap-3">
+						{channels?.map((channel, index : number) => (
+							<SubscriptionListItem
+								key={index} 
+								name={channel.snippet.title} 
+								description={channel.snippet.description}
+								thumbnail={channel.snippet.thumbnails.default}
+								channelId={channel.snippet.resourceId.channelId}
+							/>
+						))}
+					</ul>
+				</ChannelsSkeleton>
 			</div>
 		</AuthedLayout>
 	)
