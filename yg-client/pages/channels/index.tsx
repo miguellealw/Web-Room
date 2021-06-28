@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AuthedLayout from "../layouts/authed_layout";
 import SubscriptionListItem from "./SubscriptionListItem";
-import useChannels from "../../utils/useChannels";
+import useChannels from "../../shared-hooks/useChannels";
 import LoadingText from "../../components/LoadingText";
 import ChannelsSkeleton from "../../components/skeletons/ChannelsSkeleton";
 

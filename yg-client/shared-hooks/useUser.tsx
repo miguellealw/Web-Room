@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Router from "next/router";
 import useSWR from "swr";
-import { UsersApi } from "../../pages/api/users";
+import { UsersApi } from "../pages/api/users";
 
 interface ResponseData {
   isLoading: boolean;

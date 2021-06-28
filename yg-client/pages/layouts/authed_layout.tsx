@@ -1,8 +1,8 @@
-import useUser from "../../utils/auth/useUser";
-import DashboardNavigation from "../../components/DashboardNavigation";
+import useUser from "../../shared-hooks/useUser";
+import DashboardNavigation from "./DashboardNavigation";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import CustomDragLayer from "../../components/CustomDragLayer";
+import CustomDragLayer from "../channels/CustomDragLayer";
 
 interface AuthedLayoutProps {
   tw_className?: string;

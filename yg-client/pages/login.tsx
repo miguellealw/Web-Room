@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AuthApi } from "./api/auth";
 
 import { useRouter } from "next/router";
-import useUser from "../utils/auth/useUser";
+import useUser from "../shared-hooks/useUser";
 import Layout from "./layouts/layout";
 import Link from "next/link";
 import InputField from "../components/InputField";

@@ -5,7 +5,7 @@ import React, { ReactDOM, useState } from "react";
 import { CategoryApi } from "../api/categories";
 import { useRouter } from "next/router";
 import { mutate } from "swr";
-import useCategories from "../../utils/useCategories";
+import useCategories from "../../shared-hooks/useCategories";
 
 const CreateCategory = () => {
   const [value, setValue] = useState("");

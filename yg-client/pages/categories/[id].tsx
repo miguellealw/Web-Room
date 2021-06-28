@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import AuthedLayout from "../layouts/authed_layout";
 import Link from "next/link";
 import { ArrowNarrowLeftIcon } from "@heroicons/react/outline";
-import useCategory from "../../utils/useCategory";
+import useCategory from "../../shared-hooks/useCategory";
 import LoadingText from "../../components/LoadingText";
 import VideoSection from "./VideoSection";
 import SubscriptionsSection from "./SubscriptionsSection";
