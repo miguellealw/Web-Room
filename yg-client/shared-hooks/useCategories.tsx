@@ -1,23 +1,15 @@
 import { useCallback, useMemo } from "react";
-import useSWR from "swr";
-import { CategoryApi } from "../pages/api/categories";
+import useSWR, { mutate } from "swr";
+import { CategoryApi, CategoryResponse } from "../pages/api/categories";
 
 function useCategories() {
   // useMemo will return the same instance of CategoryApi instead of creating a new one
   let api = useMemo(() => new CategoryApi(), [])
   api.setup();
-  const fetcher = () => api.getUserCategories();
-  const {
-    data,
-    error,
-    mutate: mutateCategories,
-  } = useSWR(`/api/v1.0/users/current_user/categories`, fetcher, {
-    revalidateOnFocus: false,
-  });
 
   const memoDeleteCategory = useCallback(
     async function deleteCategory(id: number) {
-      mutateCategories((data) => {
+      mutate(`/api/v1.0/users/current_user/categories` ,(data: CategoryResponse) => {
         const categoriesToKeep = data?.categories?.filter(
           (category) => category.id !== id
         );
@@ -27,30 +19,30 @@ function useCategories() {
       await api.deleteCategory(id);
 
       // revalidate to make sure local data is correct
-      mutateCategories();
+      mutate(`/api/v1.0/users/current_user/categories`);
     },
-    [mutateCategories, api]
+    [api]
   );
 
   const memoCreateCategory = useCallback(
     async function createCategory(name: string) {
       // Update ui
-      mutateCategories((data) => {
+      mutate(`/api/v1.0/users/current_user/categories`, (data: CategoryResponse) => {
         return { ...data, categories: [...data.categories, { name }] };
       }, false);
 
       await api.createCategory(name);
 
       // revalidate to make sure local data is correct
-      mutateCategories();
+      mutate(`/api/v1.0/users/current_user/categories`);
     },
-    [mutateCategories, api]
+    [api]
   );
 
   const memoUpdateCategory = useCallback(
     async function updateCategory(id: number, newName: string) {
       // update local data for optimistic update, but don't revalidate (refetch)
-      mutateCategories((data) => {
+      mutate(`/api/v1.0/users/current_user/categories`, (data: CategoryResponse) => {
         // TODO: find better way of doing this
         const categoriesToKeep = data?.categories?.filter(
           (category) => category.id !== id
@@ -64,16 +56,12 @@ function useCategories() {
       await api.updateCategory(id, newName);
 
       // revalidate to make sure local data is correct
-      mutateCategories();
+      mutate(`/api/v1.0/users/current_user/categories`);
     },
-    [mutateCategories, api]
+    [api]
   );
 
   return {
-    data,
-    error,
-    mutateCategories,
-    isLoading: !data,
     updateCategory: memoUpdateCategory,
     deleteCategory: memoDeleteCategory,
     createCategory: memoCreateCategory,

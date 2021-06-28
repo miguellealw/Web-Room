@@ -9,12 +9,12 @@ import { useRouter } from "next/router";
 import ReactTooltip from "react-tooltip";
 import { AuthApi } from "../api/auth";
 import useUser from "../../shared-hooks/useUser";
-import useCategories from "../../shared-hooks/useCategories";
 import LoadingText from "../../components/LoadingText";
 import Logo from "../../components/Logo";
 import { useDrop } from "react-dnd";
 import { Category } from "../api/types";
 import useCategory from "../../shared-hooks/useCategory";
+import useFetchCategories from "../../shared-hooks/useFetchCategories";
 
 type NavCategoryListItemProps = {
   category: Category;
@@ -60,7 +60,7 @@ const NavCategoryListItem: React.FC<NavCategoryListItemProps> = ({
 const DashboardNavigation = () => {
   const { mutateUser } = useUser();
   const router = useRouter();
-  const { data, error, isLoading } = useCategories();
+  const { data, error, isLoading } = useFetchCategories();
   // console.log("NAV RERENDERDX")
 
   if (error) return <div>Error loading page...</div>;

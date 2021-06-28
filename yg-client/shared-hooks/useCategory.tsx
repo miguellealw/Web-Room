@@ -1,36 +1,36 @@
 import { useCallback, useMemo } from "react";
-import useSWR from "swr";
-import { CategoryApi } from "../pages/api/categories";
+import { mutate } from "swr";
+import { CategoryApi, CategoryResponse } from "../pages/api/categories";
 
 function useCategory(id: string | string[] | undefined) {
   const api = useMemo(() => new CategoryApi(), []);
   api.setup();
-  const fetcher = () => api.getUserCategoryById(id);
-  const {
-    data,
-    error,
-    mutate: mutateCategory,
-  } = useSWR(`/api/v1.0/users/current_user/categories/${id}`, fetcher);
 
   const memoRemoveChannelFromCategory = useCallback(
     async function removeChannelFromCategory(
       channelName: string,
       channelId: string
     ) {
-      const channelsToKeep = data?.category?.channels?.filter(
-        (channel) => channel.id !== channelId
-      );
+      // update ui / local cache w/out revalidation
+      mutate(
+        `/api/v1.0/users/current_user/categories/${id}`,
+        (data: CategoryResponse) => {
+          const channelsToKeep = data?.category?.channels?.filter(
+            (channel) => channel.yt_channel_id !== channelId
+          );
 
-      // update ui / local cache
-      mutateCategory({
-        ...data,
-        category: { ...data.category, channels: [...channelsToKeep] },
-      });
+          return {
+            ...data,
+            category: { ...data.category, channels: [...channelsToKeep] },
+          };
+        },
+        false
+      );
 
       await api.removeChannelFromCategory(id, channelName, channelId);
 
       // revalidate cache
-      mutateCategory();
+      mutate(`/api/v1.0/users/current_user/categories/${id}`);
     },
     [api, id]
   );
@@ -42,25 +42,28 @@ function useCategory(id: string | string[] | undefined) {
     ) {
       // Update ui
       // TODO: figure out how to add channel to array. maybe pass channel thumbnail into callback
-      // mutateCategory({
-      //   ...data,
-      //   category: { ...data.category, channels: [...channels, {
-
-      //   }] },
-      // });
+      // mutate(
+      //   `/api/v1.0/users/current_user/categories/${id}`,
+      //   (data: CategoryResponse) => {
+      //     return {
+      //       ...data,
+      //       category: {
+      //         ...data.category,
+      //         channels: [...data.category.channels],
+      //       },
+      //     };
+      //   }
+      // );
 
       await api.addChannelToCategory(id, channelName, channelId);
 
       // Revalidate cache
-      mutateCategory();
+      mutate(`/api/v1.0/users/current_user/categories/${id}`);
     },
     [api, id]
   );
 
   return {
-    data,
-    error,
-    isLoading: !data,
     addChannelToCategory: memoAddChannelToCategory,
     removeChannelFromCategory: memoRemoveChannelFromCategory,
   };

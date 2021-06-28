@@ -6,12 +6,14 @@ import useCategory from "../../shared-hooks/useCategory";
 import LoadingText from "../../components/LoadingText";
 import VideoSection from "./VideoSection";
 import SubscriptionsSection from "./SubscriptionsSection";
+import useFetchCategory from "../../shared-hooks/useFetchCategory";
 
 // const Category = ({ category }) => {
 const Category = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data, error, isLoading, removeChannelFromCategory } = useCategory(id);
+  const { data, error, isLoading } = useFetchCategory(id);
+  const { removeChannelFromCategory } = useCategory(id);
 
   if (error) return <div>Error loading category page...</div>;
 

@@ -3,11 +3,11 @@ import AuthedLayout from "../layouts/authed_layout";
 import CategoryListItem from "./CategoryListItem";
 import useCategories from "../../shared-hooks/useCategories";
 import NewCategoryButton from "./NewCategoryButton";
-
+import useFetchCategories from "../../shared-hooks/useFetchCategories";
 
 function Categories() {
-  const { data, error, isLoading, deleteCategory, updateCategory } =
-    useCategories();
+  const { data, error, isLoading } = useFetchCategories();
+  const { deleteCategory, updateCategory } = useCategories();
 
   if (error) return <div>Error loading categories page...</div>;
 
