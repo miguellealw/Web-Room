@@ -121,7 +121,7 @@ export class CategoryApi extends Api {
   }
 
   async addChannelToCategory(
-    categoryId: string,
+    categoryId: number | string,
     channelName: string,
     channelId: string
   ) {
@@ -149,7 +149,7 @@ export class CategoryApi extends Api {
   }
 
   async removeChannelFromCategory(
-    categoryId: number,
+    categoryId: number | string,
     channelName: string,
     channelId: string
   ) {
