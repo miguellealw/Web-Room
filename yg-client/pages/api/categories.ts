@@ -120,13 +120,17 @@ export class CategoryApi extends Api {
     }
   }
 
-  async addChannelToCategory(categoryId: string, channelName: string, channelId: string) {
+  async addChannelToCategory(
+    categoryId: string,
+    channelName: string,
+    channelId: string
+  ) {
     try {
       const response: AxiosResponse<any> = await this.axios.post(
         `/api/v1.0/users/current_user/categories/${categoryId}/add_channel`,
         {
           name: channelName,
-          yt_channel_id: channelId
+          yt_channel_id: channelId,
         }
       );
 
@@ -142,6 +146,32 @@ export class CategoryApi extends Api {
         errorMessage: err,
       };
     }
+  }
 
+  async removeChannelFromCategory(
+    categoryId: number,
+    channelName: string,
+    channelId: string
+  ) {
+    const response: AxiosResponse<any> = await this.axios.post(
+      `/api/v1.0/users/current_user/categories/${categoryId}/remove_channel`,
+      {
+        name: channelName,
+        yt_channel_id: channelId,
+      }
+    );
+
+    return {
+      kind: "ok",
+      category: response.data,
+      errorMessage: null,
+    };
+  }
+  catch(err) {
+    return {
+      kind: "bad-data",
+      category: null,
+      errorMessage: err,
+    };
   }
 }

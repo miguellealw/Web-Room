@@ -5,35 +5,23 @@ import React, { ReactDOM, useState } from "react";
 import { CategoryApi } from "../api/categories";
 import { useRouter } from "next/router";
 import { mutate } from "swr";
+import useCategories from "../../utils/useCategories";
 
 const CreateCategory = () => {
   const [value, setValue] = useState("");
   const [isError, setIsError] = useState(false);
   const router = useRouter();
 
+  const { createCategory } = useCategories();
+
   const handleCreateCategory = async (e: React.FormEvent) => {
     // TODO: data validtion
     e.preventDefault();
     setIsError(false);
 
-    // console.log("FORM SUBMIT", value)
     try {
-      // Update ui
-      mutate(
-        "/api/v1.0/users/current_user/categories",
-        (data) => {
-          return { ...data, categories: [...data.categories, { name: value }] };
-        },
-        false
-      );
-
-      const api = new CategoryApi();
-      api.setup();
-      await api.createCategory(value);
+      createCategory(value)
       router.replace("/categories");
-
-      // revalidate with backend to make sure category was created
-      mutate("/api/v1.0/users/current_user/categories");
     } catch (err) {
       setIsError(true);
     }

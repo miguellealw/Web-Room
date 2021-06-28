@@ -1,15 +1,16 @@
-import {useEffect} from 'react'
+import { useEffect } from "react";
 import Image from "next/image";
 import { ExternalLinkIcon } from "@heroicons/react/outline";
 import { useDrag } from "react-dnd";
 import { CategoryApi } from "../pages/api/categories";
-import { getEmptyImage } from 'react-dnd-html5-backend'
+import { getEmptyImage } from "react-dnd-html5-backend";
 
 export interface SubscriptionListItem {
   name: string;
   description?: string;
   thumbnail: any;
   channelId: string;
+  // addChannelToCategory: (categoryId: string, channelName: string, channelId: string) => void;
 }
 
 const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
@@ -21,18 +22,6 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: "SUB_ITEM",
     item: { name, id: channelId },
-    end: (channel, monitor) => {
-      const category = monitor.getDropResult<{ name: string; id: string }>();
-      if (channel && category) {
-        console.log(
-          `You dropped ${channel.name}_${channel.id} into ${category.name}_${category.id}!`
-        );
-
-        const api = new CategoryApi();
-        api.setup();
-        api.addChannelToCategory(category.id, channel.name, channel.id);
-      }
-    },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
       handlerId: monitor.getHandlerId(),
@@ -41,7 +30,7 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
 
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: true });
-  }, []);
+  });
 
   return (
     <div

@@ -58,7 +58,7 @@ Code: https://github.com/miguelgrinberg/rea...`,
 const Category = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data, error, isLoading } = useCategory(id);
+  const { data, error, isLoading, removeChannelFromCategory } = useCategory(id);
 
   if (error) return <div>Error loading category page...</div>;
 
@@ -91,7 +91,10 @@ const Category = () => {
 
             <main className="grid grid-cols-3 gap-10">
               <VideoSection data={data} />
-              <SubscriptionsSection data={data} />
+              <SubscriptionsSection
+                data={data}
+                removeChannelFromCategory={removeChannelFromCategory}
+              />
             </main>
           </>
         )}
@@ -100,7 +103,13 @@ const Category = () => {
   );
 };
 
-function SubscriptionsSection({ data }: { data?: CategoryResponse }) {
+function SubscriptionsSection({
+  data,
+  removeChannelFromCategory,
+}: {
+  data?: CategoryResponse;
+  removeChannelFromCategory: any;
+}) {
   return (
     <div>
       <h2 className="font-bold mb-3">Subscriptions</h2>
@@ -134,6 +143,8 @@ function SubscriptionsSection({ data }: { data?: CategoryResponse }) {
               <CategorySubListItem
                 key={channel.yt_channel_id}
                 channel={channel}
+                categoryId={data?.category?.id}
+                removeChannelFromCategory={removeChannelFromCategory}
               />
             ))}
           </ul>

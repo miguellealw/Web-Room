@@ -3,18 +3,19 @@ import { numberWithCommas } from "../utils/helpers";
 import { ExternalLinkIcon } from "@heroicons/react/outline";
 import { Channel } from "../pages/api/types";
 import { DotsVerticalIcon, XIcon } from "@heroicons/react/outline";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { CategoryApi } from "../pages/api/categories";
 
 type CategoryDropdownProps = {
   isDropdownOpen: boolean;
-  // categoryId: number;
   setIsDropdownOpen: (value: boolean) => void;
+  handleRemoveChannelFromCategory: () => void;
 };
 
 const Dropdown: React.FC<CategoryDropdownProps> = ({
   isDropdownOpen,
   setIsDropdownOpen,
-  // categoryId,
+  handleRemoveChannelFromCategory,
 }) => {
   return (
     <>
@@ -24,7 +25,7 @@ const Dropdown: React.FC<CategoryDropdownProps> = ({
             className="border-gray-100 py-1 hover:bg-gray-300 px-2 cursor-pointer flex"
             onClick={(e) => {
               e.preventDefault();
-              // handleRemoveChannelFromCategory(categoryId);
+              handleRemoveChannelFromCategory();
               setIsDropdownOpen(false);
             }}
           >
@@ -39,18 +40,27 @@ const Dropdown: React.FC<CategoryDropdownProps> = ({
 
 type CategorySubListItemProps = {
   channel: Channel;
+  categoryId: number | undefined;
+  removeChannelFromCategory: any
 };
 
 const CategorySubListItem: React.FC<CategorySubListItemProps> = ({
   channel,
+  categoryId,
+  removeChannelFromCategory
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const handleRemoveChannelFromCategory = useCallback(async () => {
+    removeChannelFromCategory(channel.name, channel.yt_channel_id)
+  }, [channel, removeChannelFromCategory]);
+
   return (
     <li className="py-5 bg-gray-100 mb-3 rounded-lg flex items-center pl-4 relative">
-      <Dropdown 
-        isDropdownOpen={isDropdownOpen} 
+      <Dropdown
+        isDropdownOpen={isDropdownOpen}
         setIsDropdownOpen={setIsDropdownOpen}
+        handleRemoveChannelFromCategory={handleRemoveChannelFromCategory}
       />
       <div className="rounded-full w-14 h-14 bg-gray-300 overflow-hidden">
         <Image

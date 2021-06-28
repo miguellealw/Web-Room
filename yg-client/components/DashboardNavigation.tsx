@@ -14,6 +14,7 @@ import LoadingText from "./LoadingText";
 import Logo from "./Logo";
 import { useDrop } from "react-dnd";
 import { Category } from "../pages/api/types";
+import useCategory from "../utils/useCategory";
 
 type NavCategoryListItemProps = {
   category: Category;
@@ -22,10 +23,16 @@ type NavCategoryListItemProps = {
 const NavCategoryListItem: React.FC<NavCategoryListItemProps> = ({
   category,
 }) => {
+  const { addChannelToCategory } = useCategory(category.id);
+
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: "SUB_ITEM",
     // what is returned from here will be accessible from end in useDrag
-    drop: () => ({ name: `${category.name}`, id: category.id }),
+    drop: (channel) => {
+      console.log("USE DROP", channel);
+      addChannelToCategory(channel.name, channel.id);
+      return { name: `${category.name}`, id: category.id };
+    },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
