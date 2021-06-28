@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 import { mutate } from "swr";
 import { CategoryApi, CategoryResponse } from "../pages/api/categories";
 
-function useCategory(id: string | string[] | undefined) {
+function useCategory(id: string) {
   const api = useMemo(() => new CategoryApi(), []);
   api.setup();
 
@@ -15,7 +15,9 @@ function useCategory(id: string | string[] | undefined) {
       mutate(
         `/api/v1.0/users/current_user/categories/${id}`,
         (data: CategoryResponse) => {
-          const channelsToKeep = data?.category?.channels?.filter(
+          if (!data || !data.category) return;
+
+          const channelsToKeep = data.category.channels.filter(
             (channel) => channel.yt_channel_id !== channelId
           );
 
@@ -37,28 +39,37 @@ function useCategory(id: string | string[] | undefined) {
 
   const memoAddChannelToCategory = useCallback(
     async function addChannelToCategory(
+      categoryId: number,
       channelName: string,
       channelId: string
     ) {
       // Update ui
-      // TODO: figure out how to add channel to array. maybe pass channel thumbnail into callback
-      // mutate(
-      //   `/api/v1.0/users/current_user/categories/${id}`,
-      //   (data: CategoryResponse) => {
-      //     return {
-      //       ...data,
-      //       category: {
-      //         ...data.category,
-      //         channels: [...data.category.channels],
-      //       },
-      //     };
-      //   }
-      // );
+      mutate(
+        `/api/v1.0/users/current_user/categories/${id}`,
+        (data: CategoryResponse) => {
+          if (!data || !data.category) return;
 
-      await api.addChannelToCategory(id, channelName, channelId);
+          return {
+            ...data,
+            category: {
+              ...data.category,
+              channels: [
+                ...data.category.channels,
+                {
+                  name: channelName,
+                  yt_channel_id: channelId,
+                },
+              ],
+            },
+          };
+        },
+        false
+      );
+
+      await api.addChannelToCategory(categoryId, channelName, channelId);
 
       // Revalidate cache
-      mutate(`/api/v1.0/users/current_user/categories/${id}`);
+      mutate(`/api/v1.0/users/current_user/categories/${categoryId}`);
     },
     [api, id]
   );

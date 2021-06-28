@@ -35,10 +35,10 @@ function Channels() {
             {channels?.map((channel: any, index: number) => (
               <SubscriptionListItem
                 key={index}
-                name={channel.snippet.title}
-                description={channel.snippet.description}
-                thumbnail={channel.snippet.thumbnails.default}
-                channelId={channel.snippet.resourceId.channelId}
+                name={channel?.snippet.title}
+                description={channel?.snippet.description}
+                thumbnail={channel?.snippet.thumbnails.default}
+                channelId={channel?.snippet.resourceId.channelId}
               />
             ))}
           </ul>

@@ -30,8 +30,8 @@ const NavCategoryListItem: React.FC<NavCategoryListItemProps> = ({
     accept: "SUB_ITEM",
     // what is returned from here will be accessible from end in useDrag
     drop: (channel) => {
-      console.log("USE DROP", channel);
-      addChannelToCategory(channel.name, channel.id);
+      // console.log("USE DROP", channel);
+      addChannelToCategory(category.id, channel.name, channel.id);
       return { name: `${category.name}`, id: category.id };
     },
     collect: (monitor) => ({

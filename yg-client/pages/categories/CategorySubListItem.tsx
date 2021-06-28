@@ -61,15 +61,20 @@ const CategorySubListItem: React.FC<CategorySubListItemProps> = ({
         setIsDropdownOpen={setIsDropdownOpen}
         handleRemoveChannelFromCategory={handleRemoveChannelFromCategory}
       />
-      <div className="rounded-full w-14 h-14 bg-gray-300 overflow-hidden">
-        <Image
-          src={channel.yt_data.snippet.thumbnails.default.url}
-          alt={`${channel.name}'s thumbnail`}
-          className="w-full h-full object-cover object-center"
-          width={200}
-          height={200}
-        />
-      </div>
+
+      {!channel.yt_data ? (
+        <div className="rounded-full w-14 h-14 bg-gray-500 overflow-hidden"></div>
+      ) : (
+        <div className="rounded-full w-14 h-14 bg-gray-300 overflow-hidden">
+          <Image
+            src={channel.yt_data.snippet.thumbnails.default.url}
+            alt={`${channel.name}'s thumbnail`}
+            className="w-full h-full object-cover object-center"
+            width={200}
+            height={200}
+          />
+        </div>
+      )}
       <div className="ml-3">
         <DotsVerticalIcon
           className="w-5 h-5 absolute text-gray-400 top-0 right-0 m-2 cursor-pointer"
@@ -80,19 +85,22 @@ const CategorySubListItem: React.FC<CategorySubListItemProps> = ({
         />
         <div className="font-bold text-lg">{channel.name}</div>
 
-        {!channel.yt_data.statistics.hiddenSubscriberCount ? (
+        {channel.yt_data &&
+        !channel.yt_data.statistics.hiddenSubscriberCount ? (
           <div className="text-sm">
             {numberWithCommas(channel.yt_data.statistics.subscriberCount)}{" "}
             Subscribers
           </div>
         ) : (
-          <div>channels subscriber count is not public</div>
+          <div className="text-xs text-gray-400">
+            Subscriber Count is not Public
+          </div>
         )}
 
         <a
           href={`https://www.youtube.com/channel/${channel.yt_channel_id}`}
           // target="_blank"
-          className="text-xs text-gray-400 hover:underline flex"
+          className="text-xs text-gray-400 hover:underline flex mt-1"
         >
           Go to Channel
           <ExternalLinkIcon className="w-4 h-4 ml-1" />
