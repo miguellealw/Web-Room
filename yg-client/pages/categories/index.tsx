@@ -4,7 +4,6 @@ import { PlusIcon } from "@heroicons/react/outline";
 import CategoryListItem from "../../components/CategoryListItem";
 import Link from "next/link";
 import useCategories from "../../utils/useCategories";
-import { CategoryApi } from "../api/categories";
 
 const NewCategoryButton = () => (
   <Link href="/categories/create" passHref>
@@ -16,45 +15,13 @@ const NewCategoryButton = () => (
 );
 
 function Categories() {
-  const { data, error, mutateCategories, isLoading } = useCategories();
-
-  const handleDeleteCategory = async (id: number) => {
-    // update local data for optimistic update, but don't revalidate (refetch)
-    mutateCategories((data) => {
-      const categoriesToKeep = data?.categories?.filter(
-        (category) => category.id !== id
-      );
-      return { ...data, categories: [...categoriesToKeep] };
-    }, false);
-
-    const api = new CategoryApi();
-    api.setup();
-    await api.deleteCategory(id);
-
-    // revalidate to make sure local data is correct
-    mutateCategories();
-  };
-
-  const handleUpdateCategory = async (id: number, newName: string) => {
-    // update local data for optimistic update, but don't revalidate (refetch)
-    mutateCategories((data) => {
-      // TODO: find better way of doing this
-      const categoriesToKeep = data?.categories?.filter(
-        (category) => category.id !== id
-      );
-      return {
-        ...data,
-        categories: [...categoriesToKeep, { id, name: newName }],
-      };
-    }, false);
-
-    const api = new CategoryApi();
-    api.setup();
-    await api.updateCategory(id, newName);
-
-    // revalidate to make sure local data is correct
-    mutateCategories();
-  };
+  const {
+    data,
+    error,
+    isLoading,
+    deleteCategory,
+    updateCategory,
+  } = useCategories();
 
   if (error) return <div>Error loading categories page...</div>;
 
@@ -76,8 +43,8 @@ function Categories() {
                 <CategoryListItem
                   key={index}
                   category={category}
-                  handleDeleteCategory={handleDeleteCategory}
-                  handleUpdateCategory={handleUpdateCategory}
+                  handleDeleteCategory={deleteCategory}
+                  handleUpdateCategory={updateCategory}
                 />
               ))}
 
