@@ -1,7 +1,7 @@
 import React from "react";
 import AuthedLayout from "../layouts/authed_layout";
 import { PlusIcon } from "@heroicons/react/outline";
-import CategoryListItem from "../../components/CategoryListItem";
+import CategoryListItem from "./CategoryListItem";
 import Link from "next/link";
 import useCategories from "../../utils/useCategories";
 
@@ -15,13 +15,8 @@ const NewCategoryButton = () => (
 );
 
 function Categories() {
-  const {
-    data,
-    error,
-    isLoading,
-    deleteCategory,
-    updateCategory,
-  } = useCategories();
+  const { data, error, isLoading, deleteCategory, updateCategory } =
+    useCategories();
 
   if (error) return <div>Error loading categories page...</div>;
 

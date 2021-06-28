@@ -1,10 +1,9 @@
 import Image from "next/image";
-import { numberWithCommas } from "../utils/helpers";
+import { numberWithCommas } from "../../utils/helpers";
 import { ExternalLinkIcon } from "@heroicons/react/outline";
-import { Channel } from "../pages/api/types";
+import { Channel } from "../api/types";
 import { DotsVerticalIcon, XIcon } from "@heroicons/react/outline";
 import { useCallback, useState } from "react";
-import { CategoryApi } from "../pages/api/categories";
 
 type CategoryDropdownProps = {
   isDropdownOpen: boolean;
@@ -41,18 +40,18 @@ const Dropdown: React.FC<CategoryDropdownProps> = ({
 type CategorySubListItemProps = {
   channel: Channel;
   categoryId: number | undefined;
-  removeChannelFromCategory: any
+  removeChannelFromCategory: any;
 };
 
 const CategorySubListItem: React.FC<CategorySubListItemProps> = ({
   channel,
   categoryId,
-  removeChannelFromCategory
+  removeChannelFromCategory,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleRemoveChannelFromCategory = useCallback(async () => {
-    removeChannelFromCategory(channel.name, channel.yt_channel_id)
+    removeChannelFromCategory(channel.name, channel.yt_channel_id);
   }, [channel, removeChannelFromCategory]);
 
   return (

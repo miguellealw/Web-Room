@@ -5,7 +5,7 @@ import {
 } from "@heroicons/react/outline";
 import Link from "next/link";
 import React, { useState } from "react";
-import { Category } from "../pages/api/types";
+import { Category } from "../api/types";
 
 type CategoryDropdownProps = {
   isDropdownOpen: boolean;

@@ -23,6 +23,7 @@ type NavCategoryListItemProps = {
 const NavCategoryListItem: React.FC<NavCategoryListItemProps> = ({
   category,
 }) => {
+  // TODO: consider not exposing fucntions from hook since fetch occurs and just add to js module
   const { addChannelToCategory } = useCategory(category.id);
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({

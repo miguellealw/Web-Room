@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { ExternalLinkIcon } from "@heroicons/react/outline";
 import { useDrag } from "react-dnd";
-import { CategoryApi } from "../pages/api/categories";
+import { CategoryApi } from "../api/categories";
 import { getEmptyImage } from "react-dnd-html5-backend";
 
 export interface SubscriptionListItem {
