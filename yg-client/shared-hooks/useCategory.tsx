@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 import { mutate } from "swr";
 import { CategoryApi, CategoryResponse } from "../pages/api/categories";
 
-function useCategory(id: string) {
+function useCategory(id: string | number) {
   const api = useMemo(() => new CategoryApi(), []);
   api.setup();
 
