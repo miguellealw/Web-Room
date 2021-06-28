@@ -47,16 +47,19 @@ def current_user():
 @login_required
 @yt_auth_required
 def get_user_yt_channels(yt_client):
+  nextPageToken = request.args.get('nextPageToken')
   channels = get_subscriptions(yt_client, 
     part='snippet', 
     mine=True, 
+    pageToken=nextPageToken,
     # order='alphabetical', 
     maxResults=27
   )
 
-  return jsonify({
-    "channels": channels
-  })
+
+
+  # return jsonify({ "channels": channels })
+  return jsonify( channels )
 
 @bp.route('/users/current_user/channels', methods=['GET'])
 @yt_auth_required
@@ -76,6 +79,10 @@ def get_user_channels(yt_client):
     id=channel_ids
   )
 
+  # USE THIS INSTEAD OF CODE BELOW
+  # if len(found_category.channels) != 0:
+  #   found_category.add_yt_data(yt_client, get_channel)
+
   # Apply YouTube channel data to response
   res = []
   for channel in channels_schema.dump(user_found.channels):
@@ -83,6 +90,7 @@ def get_user_channels(yt_client):
     channel["yt_data"] = next(filter(lambda yt_channel: yt_channel["id"] == channel["yt_channel_id"], yt_channels["items"]), None)
     res.append(channel)
 
+  # TODO: return object w/ data from yt_channels like nextPage toke and pageInfo
   return jsonify( res )
   # return jsonify( channels_schema.dump(user_found.channels) )
 

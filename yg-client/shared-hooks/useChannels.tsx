@@ -6,21 +6,24 @@ function useChannels() {
   api.setup();
   const fetcher = () => api.get_yt_channels();
 
-  const { data, error } = useSWR(
+  const { data, error, mutate } = useSWR(
     `/api/v1.0/users/current_user/yt-channels`,
     fetcher,
     {
       revalidateOnFocus: false,
     }
   );
-
   // only get channels user owns
   // const fetcher = () => api.get_channels()
   // const {data, error} = useSWR(`/api/v1.0/users/current_user/channels`, fetcher)
 
   return {
-    data: data?.channels?.channels.items,
+    data: data?.channels?.items,
+    nextPageToken: data?.channels?.nextPageToken,
+    prevPageToken: data?.channels?.prevPageToken,
+    pageInfo: data?.channels?.pageInfo,
     error,
+    mutateChannels: mutate,
     isLoading: !data,
   };
 }

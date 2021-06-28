@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { Api } from "./api";
 import { Channel } from "./types";
 
-type ChannelResponse = {
+export type ChannelResponse = {
   kind: string;
   channels: Channel[] | [] | null;
   errorMessage: any;
@@ -29,10 +29,10 @@ export class ChannelsApi extends Api {
     }
   }
 
-  async get_yt_channels(): Promise<any> {
+  async get_yt_channels(nextPageToken?: string): Promise<any> {
     try {
       const response: AxiosResponse<any> = await this.axios.get(
-        "/api/v1.0/users/current_user/yt-channels"
+        `/api/v1.0/users/current_user/yt-channels${nextPageToken ? `?nextPageToken=${nextPageToken}` : ''}`
       );
 
       return {

@@ -4,13 +4,23 @@ import SubscriptionListItem from "./SubscriptionListItem";
 import useChannels from "../../shared-hooks/useChannels";
 import LoadingText from "../../components/LoadingText";
 import ChannelsSkeleton from "../../components/skeletons/ChannelsSkeleton";
+import { ChannelResponse, ChannelsApi } from "../api/channels";
 
 function Channels() {
-  const { data: channels, error, isLoading } = useChannels();
+  const {
+    data: channels,
+    nextPageToken,
+    prevPageToken,
+    error,
+    isLoading,
+    mutateChannels,
+  } = useChannels();
 
   if (error) {
     return <div>Error loading your subscriptions...</div>;
   }
+
+  console.log("CHANNELS RENDER", channels)
 
   return (
     <AuthedLayout>
@@ -42,6 +52,32 @@ function Channels() {
               />
             ))}
           </ul>
+          <button
+            className="rounded-md bg-gray-800 text-white px-5 py-3 text-xs uppercase mx-auto block my-5 hover:bg-gray-600"
+            onClick={async () => {
+              // make api call w/ next page token
+              const api = new ChannelsApi();
+              api.setup();
+              const res = await api.get_yt_channels(nextPageToken);
+
+              // update local data / cache with mutation
+              mutateChannels((data: ChannelResponse) => {
+                if (!data || !data.channels) return;
+
+                return {
+                  ...data,
+                  channels: {
+                    ...data.channels,
+                    items: [...data.channels.items, ...res.channels.items],
+                    nextPageToken: res.channels.nextPageToken,
+                    prevPageToken: res.channels.prevPageToken
+                  }
+                };
+              }, false);
+            }}
+          >
+            Load more channels
+          </button>
         </ChannelsSkeleton>
       </div>
     </AuthedLayout>
