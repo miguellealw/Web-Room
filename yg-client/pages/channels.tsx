@@ -15,7 +15,21 @@ function Channels() {
   return (
     <AuthedLayout>
       <div className="py-10">
-        <h1 className="pb-10 text-2xl lg:text-5xl font-bold">Your Subscriptions</h1>
+        <h1 className="pb-7 text-2xl lg:text-5xl font-bold">
+          Your Subscriptions
+        </h1>
+        <label
+          htmlFor="searchChannel"
+          className="font-bold text-gray-400 block mb-1 text-sm"
+        >
+          Search
+        </label>
+        <input
+          type="text"
+          id="searchChannel"
+          className="w-full p-1 rounded-md mb-10"
+          placeholder="Search channel"
+        />
         <ChannelsSkeleton ready={!isLoading}>
           <ul className="grid grid-cols-2 lg:grid-cols-3 gap-3">
             {channels?.map((channel: any, index: number) => (
