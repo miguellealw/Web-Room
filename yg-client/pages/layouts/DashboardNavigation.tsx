@@ -7,14 +7,14 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import ReactTooltip from "react-tooltip";
-import { AuthApi } from "../pages/api/auth";
-import useUser from "../utils/auth/useUser";
-import useCategories from "../utils/useCategories";
-import LoadingText from "./LoadingText";
-import Logo from "./Logo";
+import { AuthApi } from "../api/auth";
+import useUser from "../../shared-hooks/useUser";
+import useCategories from "../../shared-hooks/useCategories";
+import LoadingText from "../../components/LoadingText";
+import Logo from "../../components/Logo";
 import { useDrop } from "react-dnd";
-import { Category } from "../pages/api/types";
-import useCategory from "../utils/useCategory";
+import { Category } from "../api/types";
+import useCategory from "../../shared-hooks/useCategory";
 
 type NavCategoryListItemProps = {
   category: Category;
