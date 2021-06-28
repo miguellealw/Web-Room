@@ -153,25 +153,26 @@ export class CategoryApi extends Api {
     channelName: string,
     channelId: string
   ) {
-    const response: AxiosResponse<any> = await this.axios.post(
-      `/api/v1.0/users/current_user/categories/${categoryId}/remove_channel`,
-      {
-        name: channelName,
-        yt_channel_id: channelId,
-      }
-    );
+    try {
+      const response: AxiosResponse<any> = await this.axios.post(
+        `/api/v1.0/users/current_user/categories/${categoryId}/remove_channel`,
+        {
+          name: channelName,
+          yt_channel_id: channelId,
+        }
+      );
 
-    return {
-      kind: "ok",
-      category: response.data,
-      errorMessage: null,
-    };
-  }
-  catch(err) {
-    return {
-      kind: "bad-data",
-      category: null,
-      errorMessage: err,
-    };
+      return {
+        kind: "ok",
+        category: response.data,
+        errorMessage: null,
+      };
+    } catch (err) {
+      return {
+        kind: "bad-data",
+        category: null,
+        errorMessage: err,
+      };
+    }
   }
 }
