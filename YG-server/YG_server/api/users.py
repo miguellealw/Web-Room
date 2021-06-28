@@ -128,7 +128,9 @@ def add_channel_to_category(category_id):
     return jsonify( channel_schema.dump(channel_to_add) )
 
 
-@bp.route('/users/current_user/categories/<int:category_id>/remove_channel', methods=['DELETE'])
+# TODO: make endpiont a delete method
+# TODO: .../remove_channel/<yt_channel_id>
+@bp.route('/users/current_user/categories/<int:category_id>/remove_channel', methods=['POST'])
 @login_required
 def remove_channel_from_category(category_id):
   valid_data = None
@@ -156,7 +158,8 @@ def remove_channel_from_category(category_id):
   # user_found = User.query.get_or_404(fl_current_user.id, description="Channel could not be created because user does not Exist")
   # user_found.channels.append(channel_to_add)
 
-  db.session.delete(channel_to_remove)
+  # TODO: only delete channel if no other category references it
+  # db.session.delete(channel_to_remove)
   db.session.commit()
 
   return jsonify( channel_schema.dump(channel_to_remove) )
