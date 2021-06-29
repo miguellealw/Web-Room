@@ -13,7 +13,14 @@ const Video: React.FC<VideoProps> = ({ title, channel, description }) => (
 
     {/* Video info */}
     <div className="p-4">
-      <div className="font-bold truncate text-sm lg:text-base">{title}</div>
+      <div
+        className="font-bold truncate text-sm lg:text-base"
+        style={{
+          width: "34rem",
+        }}
+      >
+        {title}
+      </div>
       <div className="text-xs lg:text-sm mb-2">{channel}</div>
       {/* TODO: remove description from mobile view */}
       <p className="text-sm hidden lg:block" style={{ width: "35rem" }}>
