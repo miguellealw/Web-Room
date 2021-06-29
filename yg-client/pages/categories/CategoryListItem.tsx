@@ -65,7 +65,7 @@ const CategoryListItem: React.FC<CategoryListItemProps> = ({
   handleDeleteCategory,
   handleUpdateCategory,
 }) => {
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState<string>(category.name);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -100,8 +100,12 @@ const CategoryListItem: React.FC<CategoryListItemProps> = ({
             <div>
               <input
                 type="text"
-                value={value === "" ? category.name : value}
+                value={value}
                 onChange={(e) => setValue(e.target.value)}
+                className="rounded-md"
+                style={{
+								textIndent: ".5rem",
+                }}
                 onClick={(e) => {
                   e.preventDefault();
                 }}
