@@ -17,8 +17,6 @@ function Channels() {
     mutateChannels,
   } = useChannels();
 
-  console.log("PAGE INFO", pageInfo);
-
   if (error) {
     return <div>Error loading your subscriptions...</div>;
   }
@@ -72,7 +70,7 @@ function Channels() {
                 }, false);
               }}
               loader={<div>Loading more subs...</div>}
-              hasMore={channels?.length < pageInfo.totalResults}
+              hasMore={channels?.length < pageInfo?.totalResults}
               className="grid grid-cols-2 lg:grid-cols-3 gap-3"
             >
               {channels?.map((channel: any, index: number) => (
