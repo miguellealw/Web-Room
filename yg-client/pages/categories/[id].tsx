@@ -21,9 +21,8 @@ const Category = () => {
     <AuthedLayout tw_className="w-11/12 lg:w-1/2 m-auto pb-10">
       {/* Header */}
       <div className="py-5 lg:py-10">
-        {/* TODO: hide in mobile */}
         <Link href="/categories" passHref>
-          <div className="text-sm lg:text-lg mb-5 hidden lg:flex lg:mb-10 text-gray-400 hover:text-gray-600 cursor-pointer w-48">
+          <div className="text-sm lg:text-lg mb-5 hidden lg:flex items-center lg:mb-10 text-gray-400 hover:text-gray-600 cursor-pointer w-48">
             <ArrowNarrowLeftIcon className="w-6 h-6 mr-2" />
             Back to Categories
           </div>
@@ -46,7 +45,6 @@ const Category = () => {
             </div>
 
             <main className="lg:grid lg:grid-cols-3 lg:gap-10">
-              {/* TODO: show component in mobile */}
               <MobileSubscriptionsSection
                 data={data}
                 removeChannelFromCategory={removeChannelFromCategory}
