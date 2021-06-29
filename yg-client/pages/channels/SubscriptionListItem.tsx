@@ -40,19 +40,22 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
       ref={drag}
       role="Subscription"
     >
-      <div className="w-20 rounded-full overflow-hidden">
+      <div className="w-20 h-20 rounded-full overflow-hidden">
         <Image
           src={thumbnail.url}
           alt={`${name}'s thumbnail`}
           className="w-full h-full object-cover object-center"
-          width={88}
-          height={88}
+          width={200}
+          height={200}
           // width={thumbnail.width}
           // height={thumbnail.height}
         />
       </div>
-      <div className="flex flex-col ml-2">
-        <span className="font-bold">{name}</span>
+
+      <div className="flex flex-col lg:ml-2">
+        <span className="font-bold w-24 truncate text-sm lg:font-base">
+          {name}
+        </span>
 
         <a
           href={`https://www.youtube.com/channel/${channelId}`}
