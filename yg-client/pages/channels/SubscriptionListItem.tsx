@@ -53,7 +53,7 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
       </div>
 
       <div className="flex flex-col lg:ml-2">
-        <span className="font-bold w-24 truncate text-sm lg:font-base">
+        <span className="font-bold my-3 w-24 truncate text-sm lg:font-base">
           {name}
         </span>
 
