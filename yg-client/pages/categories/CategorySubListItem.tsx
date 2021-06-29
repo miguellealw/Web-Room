@@ -43,6 +43,28 @@ type CategorySubListItemProps = {
   removeChannelFromCategory: any;
 };
 
+export const MobileCategorySubListItem: React.FC<CategorySubListItemProps> = ({
+  channel,
+}) => {
+  return (
+    <li className="mr-3 mb-3 bg-gray-100 rounded-lg relative">
+      {!channel.yt_data ? (
+        <div className="rounded-full w-14 h-14 bg-gray-500 overflow-hidden"></div>
+      ) : (
+        <div className="rounded-full w-14 h-14 bg-gray-300 overflow-hidden">
+          <Image
+            src={channel.yt_data.snippet.thumbnails.default.url}
+            alt={`${channel.name}'s thumbnail`}
+            className="w-full h-full object-cover object-center"
+            width={200}
+            height={200}
+          />
+        </div>
+      )}
+    </li>
+  );
+};
+
 const CategorySubListItem: React.FC<CategorySubListItemProps> = ({
   channel,
   categoryId,

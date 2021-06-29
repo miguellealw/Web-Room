@@ -5,7 +5,7 @@ import { ArrowNarrowLeftIcon } from "@heroicons/react/outline";
 import useCategory from "../../shared-hooks/useCategory";
 import LoadingText from "../../components/LoadingText";
 import VideoSection from "./VideoSection";
-import SubscriptionsSection from "./SubscriptionsSection";
+import SubscriptionsSection, {MobileSubscriptionsSection} from "./SubscriptionsSection";
 import useFetchCategory from "../../shared-hooks/useFetchCategory";
 
 // const Category = ({ category }) => {
@@ -18,11 +18,12 @@ const Category = () => {
   if (error) return <div>Error loading category page...</div>;
 
   return (
-    <AuthedLayout tw_className="w-11/12 lg:w-1/2 m-auto">
+    <AuthedLayout tw_className="w-11/12 lg:w-1/2 m-auto pb-10">
       {/* Header */}
       <div className="py-5 lg:py-10">
+        {/* TODO: hide in mobile */}
         <Link href="/categories" passHref>
-          <div className="flex text-sm lg:text-lg mb-5 lg:mb-10 text-gray-400 hover:text-gray-600 cursor-pointer w-48">
+          <div className="text-sm lg:text-lg mb-5 hidden lg:flex lg:mb-10 text-gray-400 hover:text-gray-600 cursor-pointer w-48">
             <ArrowNarrowLeftIcon className="w-6 h-6 mr-2" />
             Back to Categories
           </div>
@@ -32,9 +33,9 @@ const Category = () => {
           <LoadingText>Loading Category...</LoadingText>
         ) : (
           <>
-            <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-10">
+            <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-5">
               <h1 className="lg:pb-7 text-2xl lg:text-5xl font-bold">{data?.category?.name}</h1>
-              <div>
+              <div className="flex justify-between items-center">
                 <span className="text-gray-500">
                   {data?.category?.channels.length} channels
                 </span>
@@ -45,7 +46,12 @@ const Category = () => {
             </div>
 
             <main className="lg:grid lg:grid-cols-3 lg:gap-10">
-              {/* TODO: in mobile add tabs for video and subscription section */}
+              {/* TODO: show component in mobile */}
+              <MobileSubscriptionsSection
+                data={data}
+                removeChannelFromCategory={removeChannelFromCategory}
+              />
+
               <VideoSection data={data} />
 
               {/* <SubscriptionsSection

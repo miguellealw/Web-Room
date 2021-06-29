@@ -1,10 +1,30 @@
 import { CategoryResponse } from "../api/categories";
-import CategorySubListItem from "./CategorySubListItem";
+import CategorySubListItem, {
+  MobileCategorySubListItem,
+} from "./CategorySubListItem";
 import { Channel } from "../api/types";
 
 type SubscriptionSectionProps = {
   data?: CategoryResponse;
   removeChannelFromCategory: any;
+};
+
+export const MobileSubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
+  data,
+  removeChannelFromCategory,
+}) => {
+  return (
+    <ul className="w-full overflow-x-scroll flex">
+      {data?.category?.channels.map((channel: Channel) => (
+        <MobileCategorySubListItem
+          key={channel.yt_channel_id}
+          channel={channel}
+          categoryId={data?.category?.id}
+          removeChannelFromCategory={removeChannelFromCategory}
+        />
+      ))}
+    </ul>
+  );
 };
 
 const SubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
