@@ -4,6 +4,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import CustomDragLayer from "../channels/CustomDragLayer";
 import useFetchCategories from "../../shared-hooks/useFetchCategories";
+import MobileNavigation from "./MobileNavigation";
 
 interface AuthedLayoutProps {
   tw_className?: string;
@@ -17,7 +18,7 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
   const { isLoading } = useUser({
     redirectTo: "/login",
   });
-  const { data, isLoading: isCategoriesLoading } = useFetchCategories()
+  const { data, isLoading: isCategoriesLoading } = useFetchCategories();
 
   if (isLoading) {
     return (
@@ -32,10 +33,13 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
       <CustomDragLayer />
       <div className="w-full min-h-screen bg-gray-100">
         <div
-          className={`${tw_className === "" ? "w-1/3 m-auto" : tw_className}`}
+          className={`${
+            tw_className === "" ? "w-4/5 lg:w-1/3 m-auto" : tw_className
+          }`}
           {...props}
         >
-          <DashboardNavigation data={data} isLoading={isCategoriesLoading}/>			
+          <MobileNavigation />
+          {/* <DashboardNavigation data={data} isLoading={isCategoriesLoading}/>			 */}
           {/* <DashboardNavigation /> */}
           {children}
         </div>

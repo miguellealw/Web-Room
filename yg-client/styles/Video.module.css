@@ -1,0 +1,9 @@
+.videoSection {
+}
+
+@media (min-width: 1024px) {
+  .videoSection {
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+}

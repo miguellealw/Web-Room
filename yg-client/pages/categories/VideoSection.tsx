@@ -1,5 +1,6 @@
 import { CategoryResponse } from "../api/categories";
 import Video from "../../components/Video";
+import styles from '../../styles/Video.module.css'
 
 const testVideos = [
   {
@@ -50,10 +51,7 @@ type VideoSectionProps = {
 const VideoSection: React.FC<VideoSectionProps> = ({ data }) => {
   return (
     <div
-      style={{
-        gridColumnStart: "1",
-        gridColumnEnd: "3",
-      }}
+      className={`w-full ${styles.videoSection}`}
     >
       <h2 className="font-bold mb-3">Videos</h2>
       {data?.category?.channels.length === 0 ? (
