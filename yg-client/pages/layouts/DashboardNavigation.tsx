@@ -15,6 +15,8 @@ import { useDrop } from "react-dnd";
 import { Category } from "../api/types";
 import useCategory from "../../shared-hooks/useCategory";
 import useFetchCategories from "../../shared-hooks/useFetchCategories";
+import React from "react";
+import { CategoryResponse } from "../api/categories";
 
 type NavCategoryListItemProps = {
   category: Category;
@@ -39,6 +41,7 @@ const NavCategoryListItem: React.FC<NavCategoryListItemProps> = ({
   }));
 
   const isActive = canDrop && isOver;
+
   return (
     <Link href={`/categories/${category.id}`} passHref key={category.id}>
       <a ref={drop} role={`Category`}>
@@ -55,19 +58,20 @@ const NavCategoryListItem: React.FC<NavCategoryListItemProps> = ({
   );
 };
 
-const DashboardNavigation = () => {
+const DashboardNavigation: React.FC<{
+  data: CategoryResponse | undefined;
+  isLoading: boolean;
+}> = ({ data, isLoading }) => {
+  // FIXME: these hooks may have to do with memo not working (keeps rerendering nav)
   const { mutateUser } = useUser();
   const router = useRouter();
-  const { data, error, isLoading } = useFetchCategories();
-  // console.log("NAV RERENDERDX")
-
-  if (error) return <div>Error loading page...</div>;
+  // console.log("NAV RENDERS");
 
   const handleLogout = async () => {
     mutateUser();
     const api = new AuthApi();
     api.setup();
-    const response = await api.logout();
+    await api.logout();
     router.replace("/");
     mutateUser();
   };
@@ -153,10 +157,18 @@ const DashboardNavigation = () => {
 // 	return { props: {categories: res.categories} }
 // }
 
+function areEqual(prevProps, nextProps) {
+  // console.log(
+  //   "ARE EQUAL",
+  //   prevProps.data?.categories?.length === nextProps.data?.categories?.length &&
+  //     prevProps.isLoading === nextProps.isLoading
+  // );
+  return (
+    prevProps.data?.categories?.length === nextProps.data?.categories?.length &&
+    prevProps.isLoading === nextProps.isLoading
+  );
+}
+
 // TODO: figure out how to avoid rerenders
-export default DashboardNavigation;
-// export default memo(
-// 	DashboardNavigation,
-// 	(prevProps, nextProps) =>
-// 		prevProps.categoriesData.data.categories.length === nextProps.categoriesData.data.categories.length
-// )
+// export default DashboardNavigation;
+export default React.memo(DashboardNavigation, areEqual);
