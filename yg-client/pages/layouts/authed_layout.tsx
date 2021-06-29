@@ -39,8 +39,7 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
           {...props}
         >
           <MobileNavigation />
-          {/* <DashboardNavigation data={data} isLoading={isCategoriesLoading}/>			 */}
-          {/* <DashboardNavigation /> */}
+          <DashboardNavigation data={data} isLoading={isCategoriesLoading}/>			
           {children}
         </div>
       </div>

@@ -54,10 +54,10 @@ const Category = () => {
 
               <VideoSection data={data} />
 
-              {/* <SubscriptionsSection
+              <SubscriptionsSection
                 data={data}
                 removeChannelFromCategory={removeChannelFromCategory}
-              /> */}
+              />
             </main>
           </>
         )}

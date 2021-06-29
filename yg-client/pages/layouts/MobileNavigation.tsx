@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const MobileNavigation = () => {
   return (
-    <nav className="w-full h-14 fixed left-0 bottom-0 bg-gray-800 z-10">
+    <nav className="w-full h-14 fixed left-0 bottom-0 bg-gray-800 z-10 block lg:hidden">
       <ul className="flex h-full">
         <li className="w-1/2 h-full text-white">
           <Link href="/categories" passHref>

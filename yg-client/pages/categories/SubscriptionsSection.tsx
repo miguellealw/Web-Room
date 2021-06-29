@@ -14,7 +14,7 @@ export const MobileSubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
   removeChannelFromCategory,
 }) => {
   return (
-    <ul className="w-full overflow-x-scroll flex">
+    <ul className="w-full overflow-x-scroll flex lg:hidden">
       {data?.category?.channels.map((channel: Channel) => (
         <MobileCategorySubListItem
           key={channel.yt_channel_id}
@@ -32,7 +32,7 @@ const SubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
   removeChannelFromCategory,
 }) => {
   return (
-    <div>
+    <div className="hidden lg:block">
       <h2 className="font-bold mb-3">Subscriptions</h2>
 
       {data?.category?.channels.length === 0 ? (

@@ -7,7 +7,7 @@ type VideoProps = {
 };
 
 const Video: React.FC<VideoProps> = ({ title, channel, description }) => (
-  <li className="bg-white rounded-lg mb-5 flex flex-col lg:flex-row h-56 overflow-hidden shadow-sm">
+  <li className="bg-white rounded-lg mb-5 flex flex-col lg:flex-row h-56 lg:h-36 overflow-hidden shadow-sm">
     {/* Video Thumbnail */}
     <div className="bg-gray-300 w-full lg:w-52 h-2/3 lg:h-full rounded-tl-md lg:rounded-bl-md"></div>
 
@@ -16,9 +16,9 @@ const Video: React.FC<VideoProps> = ({ title, channel, description }) => (
       <div className="font-bold truncate text-sm lg:text-base">{title}</div>
       <div className="text-xs lg:text-sm mb-2">{channel}</div>
       {/* TODO: remove description from mobile view */}
-      {/* <p className="text-sm" style={{ width: "35rem" }}>
+      <p className="text-sm hidden lg:block" style={{ width: "35rem" }}>
         {truncateString(description, 230)}
-      </p> */}
+      </p>
     </div>
   </li>
 );

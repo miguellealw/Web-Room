@@ -77,7 +77,7 @@ const DashboardNavigation: React.FC<{
   };
 
   return (
-    <nav className="h-screen w-56 bg-gray-800 text-white flex flex-col items-center fixed left-0">
+    <nav className="h-screen w-56 bg-gray-800 text-white hidden lg:flex flex-col items-center fixed left-0">
       {/* Logo */}
       <div className="w-full  my-3 flex items-center py-2 px-3">
         <Logo className="mr-2 w-6 h-6" />
