@@ -21,7 +21,7 @@ const Dropdown: React.FC<CategoryDropdownProps> = ({
       {isDropdownOpen && (
         <ul className="bg-white w-max absolute text-sm font-normal top-8 right-3 rounded-sm shadow-xl">
           <li
-            className="border-gray-100 py-1 hover:bg-gray-300 px-2 cursor-pointer flex"
+            className="py-2 px-4 hover:bg-gray-100 border border-gray-300 rounded-md cursor-pointer flex"
             onClick={(e) => {
               e.preventDefault();
               handleRemoveChannelFromCategory();
@@ -102,6 +102,7 @@ const CategorySubListItem: React.FC<CategorySubListItemProps> = ({
           className="w-5 h-5 absolute text-gray-400 top-0 right-0 m-2 cursor-pointer"
           onClick={(e) => {
             e.preventDefault();
+            e.stopPropagation()
             setIsDropdownOpen(!isDropdownOpen);
           }}
         />

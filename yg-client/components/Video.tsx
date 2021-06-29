@@ -9,7 +9,7 @@ type VideoProps = {
 const Video: React.FC<VideoProps> = ({ title, channel, description }) => (
   <li className="bg-white rounded-lg mb-5 flex flex-col lg:flex-row h-56 lg:h-36 overflow-hidden shadow-sm">
     {/* Video Thumbnail */}
-    <div className="bg-gray-300 w-full lg:w-52 h-2/3 lg:h-full rounded-tl-md lg:rounded-bl-md"></div>
+    <div className="bg-gray-300 w-full flex-shrink-0 lg:w-60 h-2/3 lg:h-full rounded-tl-md lg:rounded-bl-md"></div>
 
     {/* Video info */}
     <div className="p-4">
