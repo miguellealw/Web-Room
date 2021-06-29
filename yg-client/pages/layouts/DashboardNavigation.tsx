@@ -4,6 +4,10 @@ import {
   FolderOpenIcon,
   LogoutIcon,
 } from "@heroicons/react/outline";
+import {
+  CollectionIcon as CollectionIconSolid,
+  FolderIcon as FolderIconSolid,
+} from "@heroicons/react/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import ReactTooltip from "react-tooltip";
@@ -51,7 +55,7 @@ const NavCategoryListItem: React.FC<NavCategoryListItemProps> = ({
           }`}
         >
           <FolderOpenIcon className="w-5 h-5 mr-2" />
-          {category.name}
+          <span className="w-40 truncate">{category.name}</span>
         </li>
       </a>
     </Link>
@@ -65,6 +69,8 @@ const DashboardNavigation: React.FC<{
   // FIXME: these hooks may have to do with memo not working (keeps rerendering nav)
   const { mutateUser } = useUser();
   const router = useRouter();
+  const isCategories = router.pathname === "/categories";
+  const isSubscriptions = router.pathname === "/channels";
   // console.log("NAV RENDERS");
 
   const handleLogout = async () => {
@@ -92,7 +98,11 @@ const DashboardNavigation: React.FC<{
               data-tip="Your Categories"
               className="flex items-center w-full h-full p-3 pl-5"
             >
-              <FolderIcon className="h-5 w-5" />
+              {isCategories ? (
+                <FolderIconSolid className="h-5 w-5" />
+              ) : (
+                <FolderIcon className="h-5 w-5" />
+              )}
               <span className="ml-2">Categories</span>
               {/* <ReactTooltip effect="solid"/> */}
             </a>
@@ -104,7 +114,12 @@ const DashboardNavigation: React.FC<{
               data-tip="Your Subscriptions"
               className="flex items-center w-full h-full p-3 pl-5"
             >
-              <CollectionIcon className="h-5 w-5" />
+              {isSubscriptions ? (
+                <CollectionIconSolid className="h-5 w-5" />
+              ) : (
+                <CollectionIcon className="h-5 w-5" />
+              )}
+
               <span className="ml-2">Subscriptions</span>
               {/* <ReactTooltip effect="solid"/> */}
             </a>

@@ -94,7 +94,7 @@ const CategoryListItem: React.FC<CategoryListItemProps> = ({
           )}
 
           {!isEditing ? (
-            category.name
+            <span className="w-40 truncate text-center">{category.name}</span>
           ) : (
             // TODO: make editing page like create
             <div>
@@ -104,7 +104,7 @@ const CategoryListItem: React.FC<CategoryListItemProps> = ({
                 onChange={(e) => setValue(e.target.value)}
                 className="rounded-md"
                 style={{
-								textIndent: ".5rem",
+                  textIndent: ".5rem",
                 }}
                 onClick={(e) => {
                   e.preventDefault();
