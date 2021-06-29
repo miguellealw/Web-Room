@@ -47,18 +47,21 @@ export const MobileCategorySubListItem: React.FC<CategorySubListItemProps> = ({
   channel,
 }) => {
   return (
-    <li className="mr-3 mb-3 bg-gray-100 rounded-lg relative">
+    <li className="mr-4 mb-3 bg-gray-100 rounded-lg relative">
       {!channel.yt_data ? (
         <div className="rounded-full w-14 h-14 bg-gray-500 overflow-hidden"></div>
       ) : (
-        <div className="rounded-full w-14 h-14 bg-gray-300 overflow-hidden">
-          <Image
-            src={channel.yt_data.snippet.thumbnails.default.url}
-            alt={`${channel.name}'s thumbnail`}
-            className="w-full h-full object-cover object-center"
-            width={200}
-            height={200}
-          />
+        <div>
+          <div className="rounded-full w-14 h-14 bg-gray-300 overflow-hidden">
+            <Image
+              src={channel.yt_data.snippet.thumbnails.default.url}
+              alt={`${channel.name}'s thumbnail`}
+              className="w-full h-full object-cover object-center"
+              width={200}
+              height={200}
+            />
+          </div>
+          <span className="text-sm w-16 block truncate text-gray-500">{channel.name}</span>
         </div>
       )}
     </li>
@@ -102,7 +105,7 @@ const CategorySubListItem: React.FC<CategorySubListItemProps> = ({
           className="w-5 h-5 absolute text-gray-400 top-0 right-0 m-2 cursor-pointer"
           onClick={(e) => {
             e.preventDefault();
-            e.stopPropagation()
+            e.stopPropagation();
             setIsDropdownOpen(!isDropdownOpen);
           }}
         />
