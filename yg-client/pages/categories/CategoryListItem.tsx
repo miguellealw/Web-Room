@@ -25,27 +25,27 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   return (
     <>
       {isDropdownOpen && (
-        <ul className="bg-gray-100 w-32 absolute text-sm font-normal top-8 right-3 rounded-sm shadow-xl">
+        <ul className="bg-gray-50 border border-gray-300 w-32 absolute text-sm font-normal top-8 right-3 rounded-md shadow-xl">
           <li
-            className="border-b-2 border-gray-100 py-1 hover:bg-gray-300 px-2 cursor-pointer flex"
+            className="px-3 py-2 hover:bg-gray-300  cursor-pointer flex border-b border-gray-200"
             onClick={(e) => {
               e.preventDefault();
               setIsEditing(true);
               setIsDropdownOpen(false);
             }}
           >
-            <PencilAltIcon className="w-5 h-5 mr-2" />
+            <PencilAltIcon className="w-5 h-5 mr-3" />
             Rename
           </li>
           <li
-            className="border-gray-100 py-1 hover:bg-gray-300 px-2 cursor-pointer flex"
+            className="px-3 py-2 hover:bg-gray-300  cursor-pointer flex"
             onClick={(e) => {
               e.preventDefault();
               handleDeleteCategory(categoryId);
               setIsDropdownOpen(false);
             }}
           >
-            <FolderRemoveIcon className="w-5 h-5 mr-2" />
+            <FolderRemoveIcon className="w-5 h-5 mr-3" />
             Delete
           </li>
         </ul>
