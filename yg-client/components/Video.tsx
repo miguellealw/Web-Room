@@ -57,7 +57,10 @@ const Video: React.FC<VideoProps> = ({
             {datePublished.toDateString()}
           </div>
 
-          <p className="text-sm hidden lg:block" style={{ width: "30rem" }}>
+          <p
+            className="text-sm hidden lg:block h-20 overflow-hidden"
+            style={{ width: "30rem" }}
+          >
             {description !== "" ? (
               truncateString(description, 280)
             ) : (
