@@ -16,7 +16,7 @@ export const MobileSubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
   categoryId,
 }) => {
   return (
-    <ul className="w-full bg-red-200 overflow-x-scroll flex 2xl:hidden">
+    <ul className="w-full overflow-x-scroll flex 2xl:hidden">
       {channels?.map((channel: Channel) => (
         <MobileCategorySubListItem
           key={channel.yt_channel_id}
