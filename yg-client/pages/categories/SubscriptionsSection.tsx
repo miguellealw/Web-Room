@@ -5,21 +5,23 @@ import CategorySubListItem, {
 import { Channel } from "../api/types";
 
 type SubscriptionSectionProps = {
-  data?: CategoryResponse;
+  channels?: Channel[] | undefined;
   removeChannelFromCategory: any;
+  categoryId: number | undefined
 };
 
 export const MobileSubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
-  data,
+  channels,
   removeChannelFromCategory,
+  categoryId
 }) => {
   return (
     <ul className="w-full overflow-x-scroll flex lg:hidden">
-      {data?.category?.channels.map((channel: Channel) => (
+      {channels?.map((channel: Channel) => (
         <MobileCategorySubListItem
           key={channel.yt_channel_id}
           channel={channel}
-          categoryId={data?.category?.id}
+          categoryId={categoryId}
           removeChannelFromCategory={removeChannelFromCategory}
         />
       ))}
@@ -28,14 +30,15 @@ export const MobileSubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
 };
 
 const SubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
-  data,
+  channels,
   removeChannelFromCategory,
+  categoryId
 }) => {
   return (
     <div className="hidden lg:block">
       <h2 className="font-bold mb-3">Subscriptions</h2>
 
-      {data?.category?.channels.length === 0 ? (
+      {channels?.length === 0 ? (
         <div className="text-sm text-gray-400">No channels in category</div>
       ) : (
         <div
@@ -60,11 +63,11 @@ const SubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
             />
           </div>
           <ul>
-            {data?.category?.channels.map((channel: Channel) => (
+            {channels?.map((channel: Channel) => (
               <CategorySubListItem
                 key={channel.yt_channel_id}
                 channel={channel}
-                categoryId={data?.category?.id}
+                categoryId={categoryId}
                 removeChannelFromCategory={removeChannelFromCategory}
               />
             ))}
