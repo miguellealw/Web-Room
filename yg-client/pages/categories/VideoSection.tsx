@@ -71,6 +71,7 @@ const VideoSection: React.FC<VideoSectionProps> = ({ uploads }) => {
                   title={upload.snippet.title}
                   description={upload.snippet.description}
                   channel={upload.snippet.channelTitle}
+                  channelId={upload.snippet.channelId}
                   thumbnail={upload.snippet.thumbnails.high}
                   videoId={upload.snippet.resourceId.videoId}
                   publishDate={upload.snippet.publishedAt}
