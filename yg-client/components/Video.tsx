@@ -28,7 +28,7 @@ const Video: React.FC<VideoProps> = ({
       <li className="bg-white rounded-lg mb-5 flex flex-col lg:flex-row h-56 lg:h-40 overflow-hidden shadow-sm hover:shadow-lg">
         {/* Video Thumbnail */}
         <div
-          className={`bg-gray-300 h-2/3 overflow-hidden lg:h-full rounded-tl-md lg:rounded-bl-md ${styles.videoThumbnail}`}
+          className={`bg-gray-300 flex-shrink-0 h-2/3 overflow-hidden lg:h-full rounded-tl-md lg:rounded-bl-md ${styles.videoThumbnail}`}
         >
           <Image
             src={thumbnail.url}
