@@ -54,17 +54,28 @@ class Category(db.Model):
     # Get id's of channels in category and pass to get_channel
     channel_ids = [channel.yt_channel_id for channel in self.channels]
     # Get channel data from youtube
-    yt_channels = get_channel(yt_client, part='snippet,statistics', id=channel_ids)
+    yt_channels = get_channel(yt_client, part='snippet,statistics,contentDetails', id=channel_ids)
 
     # Apply YouTube channel data to response
     res = []
     # for channel in category_schema.dump(self)["channels"]:
     for channel in self.channels:
-      # Add YouTube data to each channel
+      # Add yt_data to each channel
       channel.yt_data = next(filter(lambda yt_channel: yt_channel["id"] == channel.yt_channel_id, yt_channels["items"]), None)
       res.append(channel)
 
     self.channels = res
+
+  def add_channel_videos(self, yt_client, get_channel_videos):
+    upload_playlist_ids = [channel.yt_data["contentDetails"]["relatedPlaylists"]["uploads"] for channel in self.channels]
+
+    # Will return the latest 5 videos of each channel
+    channel_uploads = []
+    for playlist_id in upload_playlist_ids:
+      channel_uploads.append(get_channel_videos(yt_client, part='snippet', playlistId=playlist_id))
+
+
+    self.uploads = channel_uploads
 
   # TODO: impelement
   def add_channel(self, channel):

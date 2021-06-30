@@ -45,9 +45,9 @@ def get_subscriptions(service, **kwargs):
 	list_subscriptions_response = service.subscriptions().list(**kwargs).execute()
 	return list_subscriptions_response
 
-# def get_channel(service, channel_id, **kwargs):
-# 	list_channel_response = service.channels().list(**kwargs).execute()
-
 def get_channel(service, **kwargs):
 	list_channel_response = service.channels().list(**kwargs).execute()
 	return list_channel_response
+
+def get_channel_videos(service, **kwargs):
+	return service.playlistItems().list(**kwargs).execute()
