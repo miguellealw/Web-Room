@@ -5,7 +5,9 @@ import { ArrowNarrowLeftIcon } from "@heroicons/react/outline";
 import useCategory from "../../shared-hooks/useCategory";
 import LoadingText from "../../components/LoadingText";
 import VideoSection from "./VideoSection";
-import SubscriptionsSection, {MobileSubscriptionsSection} from "./SubscriptionsSection";
+import SubscriptionsSection, {
+  MobileSubscriptionsSection,
+} from "./SubscriptionsSection";
 import useFetchCategory from "../../shared-hooks/useFetchCategory";
 
 // const Category = ({ category }) => {
@@ -33,7 +35,9 @@ const Category = () => {
         ) : (
           <>
             <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-5">
-              <h1 className="lg:pb-7 text-2xl lg:text-5xl font-bold">{data?.category?.name}</h1>
+              <h1 className="lg:pb-7 text-2xl lg:text-5xl font-bold">
+                {data?.category?.name}
+              </h1>
               <div className="flex justify-between items-center">
                 <span className="text-gray-500">
                   {data?.category?.channels.length} channels
@@ -46,7 +50,8 @@ const Category = () => {
 
             <main className="lg:grid lg:grid-cols-3 lg:gap-10">
               <MobileSubscriptionsSection
-                data={data}
+                channels={data?.category?.channels}
+                categoryId={data?.category?.id}
                 removeChannelFromCategory={removeChannelFromCategory}
               />
 
