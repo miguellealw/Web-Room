@@ -5,6 +5,9 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from YG_server.database import db
 
+from datetime import datetime
+from dateutil.parser import parse
+
 # Create db here and register in __init__ to avoid circular imports
 # db = SQLAlchemy()
 
@@ -69,13 +72,21 @@ class Category(db.Model):
   def add_channel_videos(self, yt_client, get_channel_videos):
     upload_playlist_ids = [channel.yt_data["contentDetails"]["relatedPlaylists"]["uploads"] for channel in self.channels]
 
+    # TODO: figure out better way of doing this
     # Will return the latest 5 videos of each channel
-    channel_uploads = []
+    uploads = []
     for playlist_id in upload_playlist_ids:
-      channel_uploads.append(get_channel_videos(yt_client, part='snippet', playlistId=playlist_id))
+      uploads.append(get_channel_videos(yt_client, part='snippet', playlistId=playlist_id)["items"])
 
+    # Flatten list of uploads per channel to single list
+    flatten_uploads = []
+    for upload_list in uploads:
+      for upload in upload_list:
+        flatten_uploads.append(upload)
 
-    self.uploads = channel_uploads
+    sorted_list = sorted(flatten_uploads, key=lambda upload: parse(upload["snippet"]["publishedAt"]).timestamp(), reverse=True)
+
+    self.uploads=sorted_list
 
   # TODO: impelement
   def add_channel(self, channel):
