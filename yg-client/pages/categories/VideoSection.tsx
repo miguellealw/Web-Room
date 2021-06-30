@@ -55,25 +55,30 @@ const VideoSection: React.FC<VideoSectionProps> = ({ uploads }) => {
 
   return (
     <div className={`w-full ${styles.videoSection}`}>
-      <h2 className="font-bold mb-3">Videos</h2>
-      {uploads?.length === 0 ? (
-        <div className="text-sm text-gray-400">No videos to show</div>
+      {!uploads ? (
+        <div>Loading</div>
       ) : (
-        <ul className="">
-          {/* {testVideos.map((video, index) => ( */}
-          {uploads?.map((channelsUploads) =>
-            channelsUploads?.items.map((upload) => (
-              <Video
-                key={upload.id}
-                title={upload.snippet.title}
-                description={upload.snippet.description}
-                channel={upload.snippet.channelTitle}
-                thumbnail={upload.snippet.thumbnails.high}
-                videoId={upload.snippet.resourceId.videoId}
-              />
-            ))
+        <>
+          <h2 className="font-bold mb-3">Videos</h2>
+          {uploads?.length === 0 ? (
+            <div className="text-sm text-gray-400">No videos to show</div>
+          ) : (
+            <ul className="">
+              {/* {testVideos.map((video, index) => ( */}
+              {uploads?.map((upload) => (
+                <Video
+                  key={upload.id}
+                  title={upload.snippet.title}
+                  description={upload.snippet.description}
+                  channel={upload.snippet.channelTitle}
+                  thumbnail={upload.snippet.thumbnails.high}
+                  videoId={upload.snippet.resourceId.videoId}
+                  publishDate={upload.snippet.publishedAt}
+                />
+              ))}
+            </ul>
           )}
-        </ul>
+        </>
       )}
     </div>
   );

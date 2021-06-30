@@ -8,6 +8,7 @@ type VideoProps = {
   description: string;
   thumbnail: any;
   videoId: string;
+  publishDate: string;
 };
 
 const Video: React.FC<VideoProps> = ({
@@ -15,8 +16,11 @@ const Video: React.FC<VideoProps> = ({
   channel,
   description,
   thumbnail,
-  videoId
+  videoId,
+  publishDate,
 }) => {
+  const datePublished = new Date(publishDate)
+
   return (
     <a href={`https://www.youtube.com/watch?v=${videoId}`}>
       <li className="bg-white rounded-lg mb-5 flex flex-col lg:flex-row h-56 lg:h-40 overflow-hidden shadow-sm hover:shadow-lg">
@@ -42,7 +46,9 @@ const Video: React.FC<VideoProps> = ({
           >
             {title}
           </div>
-          <div className="text-xs lg:text-sm mb-2">{channel}</div>
+
+          <div className="text-xs text-gray-400 lg:text-sm mb-2">{channel} &#xB7; {datePublished.toDateString()}</div>
+
           <p className="text-sm hidden lg:block" style={{ width: "30rem" }}>
             {truncateString(description, 280)}
           </p>
