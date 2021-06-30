@@ -44,7 +44,7 @@ const SubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
         <div className="text-sm text-gray-400">No channels in category</div>
       ) : (
         <div
-          className="bg-white rounded-lg shadow-lg p-8 overflow-y-scroll"
+          className="bg-white rounded-lg shadow-lg p-8 overflow-y-scroll sticky top-5"
           style={{
             maxHeight: "42rem",
           }}
