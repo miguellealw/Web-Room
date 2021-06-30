@@ -1,8 +1,6 @@
-import copy
-import json
 from YG_server.decorators import yt_auth_required
-from YG_server.auth.oauth import get_channel, get_subscriptions
-from flask import Blueprint, jsonify, request, abort, redirect, url_for, session
+from YG_server.auth.oauth import get_channel, get_channel_videos, get_subscriptions
+from flask import jsonify, request, abort
 from datetime import datetime as dt
 from marshmallow.exceptions import ValidationError
 
@@ -17,12 +15,6 @@ from YG_server.schemas import (
 )
 
 from YG_server.api import bp
-from YG_server.auth.routes import load_user
-
-import google.oauth2.credentials
-import google_auth_oauthlib.flow
-import googleapiclient.discovery
-
 from flask_login import login_required, current_user as fl_current_user
 
 @bp.route('/users/<int:user_id>', methods=['GET'])
@@ -75,7 +67,7 @@ def get_user_channels(yt_client):
 
   # Get channel data from youtube
   yt_channels = get_channel(yt_client, 
-    part='snippet', 
+    part='snippet,contentDetails', 
     id=channel_ids
   )
 
@@ -259,7 +251,11 @@ def get_user_category(yt_client, category_id):
     return jsonify({'flash': f'Category \'{found_category.name}\' was deleted'})
 
   # GET
+
+  # Add YouTube data of channels and videos
   if len(found_category.channels) != 0:
     found_category.add_yt_data(yt_client, get_channel)
+    found_category.add_channel_videos(yt_client, get_channel_videos)
+
 
   return jsonify( category_schema.dump(found_category) )
