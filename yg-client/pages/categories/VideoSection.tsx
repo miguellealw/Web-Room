@@ -1,6 +1,6 @@
 import { CategoryResponse } from "../api/categories";
 import Video from "../../components/Video";
-import styles from '../../styles/Video.module.css'
+import styles from "../../styles/Video.module.css";
 
 const testVideos = [
   {
@@ -46,26 +46,33 @@ Code: https://github.com/miguelgrinberg/rea...`,
 
 type VideoSectionProps = {
   data?: CategoryResponse;
+  uploads: any;
 };
 
-const VideoSection: React.FC<VideoSectionProps> = ({ data }) => {
+// Uploads - contains last 5 uploads of the channels in the category
+const VideoSection: React.FC<VideoSectionProps> = ({ uploads }) => {
+  console.log("DATA FROM BACKEND", uploads);
+
   return (
-    <div
-      className={`w-full ${styles.videoSection}`}
-    >
+    <div className={`w-full ${styles.videoSection}`}>
       <h2 className="font-bold mb-3">Videos</h2>
-      {data?.category?.channels.length === 0 ? (
+      {uploads?.length === 0 ? (
         <div className="text-sm text-gray-400">No videos to show</div>
       ) : (
         <ul className="">
-          {testVideos.map((video, index) => (
-            <Video
-              key={index}
-              title={video.title}
-              description={video.description}
-              channel={video.channel}
-            />
-          ))}
+          {/* {testVideos.map((video, index) => ( */}
+          {uploads?.map((channelsUploads) =>
+            channelsUploads?.items.map((upload) => (
+              <Video
+                key={upload.id}
+                title={upload.snippet.title}
+                description={upload.snippet.description}
+                channel={upload.snippet.channelTitle}
+                thumbnail={upload.snippet.thumbnails.high}
+                videoId={upload.snippet.resourceId.videoId}
+              />
+            ))
+          )}
         </ul>
       )}
     </div>

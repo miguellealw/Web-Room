@@ -55,7 +55,7 @@ const Category = () => {
                 removeChannelFromCategory={removeChannelFromCategory}
               />
 
-              <VideoSection data={data} />
+              <VideoSection uploads={data?.category?.uploads}/>
 
               <SubscriptionsSection
                 channels={data?.category?.channels}

@@ -25,4 +25,6 @@ export type Category = {
   _owner: string;
   _links: ResourceLinks;
   channels: Channel[];
+  // TODO: make uploads type
+  uploads: any;
 };
