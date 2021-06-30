@@ -10,6 +10,8 @@ import SubscriptionsSection, {
 } from "./SubscriptionsSection";
 import useFetchCategory from "../../shared-hooks/useFetchCategory";
 
+import CategorySkeleton from "../../components/skeletons/CategorySkeleton";
+
 // const Category = ({ category }) => {
 const Category = () => {
   const router = useRouter();
@@ -30,41 +32,37 @@ const Category = () => {
           </div>
         </Link>
 
-        {isLoading ? (
-          <LoadingText>Loading Category...</LoadingText>
-        ) : (
-          <>
-            <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-5">
-              <h1 className="lg:pb-7 text-2xl lg:text-5xl font-bold">
-                {data?.category?.name}
-              </h1>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-500">
-                  {data?.category?.channels.length} channels
-                </span>
-                <button className="rounded-full bg-red-600 hover:bg-red-500 text-white text-xs px-4 py-2 ml-5">
-                  Add Channels
-                </button>
-              </div>
+        <CategorySkeleton ready={!isLoading}>
+          <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-5">
+            <h1 className="lg:pb-7 text-2xl lg:text-5xl font-bold">
+              {data?.category?.name}
+            </h1>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-500">
+                {data?.category?.channels.length} channels
+              </span>
+              <button className="rounded-full bg-red-600 hover:bg-red-500 text-white text-xs px-4 py-2 ml-5">
+                Add Channels
+              </button>
             </div>
+          </div>
 
-            <main className="lg:grid lg:grid-cols-3 lg:gap-10">
-              <MobileSubscriptionsSection
-                channels={data?.category?.channels}
-                categoryId={data?.category?.id}
-                removeChannelFromCategory={removeChannelFromCategory}
-              />
+          <main className="lg:grid lg:grid-cols-3 lg:gap-10">
+            <MobileSubscriptionsSection
+              channels={data?.category?.channels}
+              categoryId={data?.category?.id}
+              removeChannelFromCategory={removeChannelFromCategory}
+            />
 
-              <VideoSection uploads={data?.category?.uploads}/>
+            <VideoSection uploads={data?.category?.uploads} />
 
-              <SubscriptionsSection
-                channels={data?.category?.channels}
-                categoryId={data?.category?.id}
-                removeChannelFromCategory={removeChannelFromCategory}
-              />
-            </main>
-          </>
-        )}
+            <SubscriptionsSection
+              channels={data?.category?.channels}
+              categoryId={data?.category?.id}
+              removeChannelFromCategory={removeChannelFromCategory}
+            />
+          </main>
+        </CategorySkeleton>
       </div>
     </AuthedLayout>
   );

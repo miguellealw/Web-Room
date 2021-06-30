@@ -3,7 +3,7 @@ import { RectShape } from "react-placeholder/lib/placeholders";
 import "react-placeholder/lib/reactPlaceholder.css";
 
 const customPlaceholder = (
-  <div className="grid grid-cols-3 gap-3">
+  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
     {Array.from({ length: 27 }).map((_, index) => (
       <RectShape
         key={index}
