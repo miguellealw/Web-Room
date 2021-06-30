@@ -80,17 +80,18 @@ const CategorySubListItem: React.FC<CategorySubListItemProps> = ({
   }, [channel, removeChannelFromCategory]);
 
   return (
-    <li className="py-5 bg-gray-100 mb-3 rounded-lg flex items-center pl-4 relative">
+    <li className="py-5 bg-gray-100 mb-3 rounded-lg flex items-center pl-4 relative overflow-hidden">
       <Dropdown
         isDropdownOpen={isDropdownOpen}
         setIsDropdownOpen={setIsDropdownOpen}
         handleRemoveChannelFromCategory={handleRemoveChannelFromCategory}
       />
 
+      {/* Thumbnail */}
       {!channel.yt_data ? (
         <div className="rounded-full w-14 h-14 bg-gray-500 overflow-hidden"></div>
       ) : (
-        <div className="rounded-full w-14 h-14 bg-gray-300 overflow-hidden">
+        <div className="flex-shrink-0 rounded-full w-14 h-14 bg-gray-300 overflow-hidden">
           <Image
             src={channel.yt_data.snippet.thumbnails.default.url}
             alt={`${channel.name}'s thumbnail`}
@@ -100,6 +101,8 @@ const CategorySubListItem: React.FC<CategorySubListItemProps> = ({
           />
         </div>
       )}
+
+      {/* Data */}
       <div className="ml-3">
         <DotsVerticalIcon
           className="w-5 h-5 absolute text-gray-400 top-0 right-0 m-2 cursor-pointer"
@@ -109,7 +112,7 @@ const CategorySubListItem: React.FC<CategorySubListItemProps> = ({
             setIsDropdownOpen(!isDropdownOpen);
           }}
         />
-        <div className="font-bold text-lg">{channel.name}</div>
+        <div className="font-bold text-lg max-w-48 truncate">{channel.name}</div>
 
         {channel.yt_data &&
         !channel.yt_data.statistics.hiddenSubscriberCount ? (

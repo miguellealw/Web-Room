@@ -7,16 +7,16 @@ import { Channel } from "../api/types";
 type SubscriptionSectionProps = {
   channels?: Channel[] | undefined;
   removeChannelFromCategory: any;
-  categoryId: number | undefined
+  categoryId: number | undefined;
 };
 
 export const MobileSubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
   channels,
   removeChannelFromCategory,
-  categoryId
+  categoryId,
 }) => {
   return (
-    <ul className="w-full overflow-x-scroll flex lg:hidden">
+    <ul className="w-full bg-red-200 overflow-x-scroll flex 2xl:hidden">
       {channels?.map((channel: Channel) => (
         <MobileCategorySubListItem
           key={channel.yt_channel_id}
@@ -32,11 +32,13 @@ export const MobileSubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
 const SubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
   channels,
   removeChannelFromCategory,
-  categoryId
+  categoryId,
 }) => {
   return (
-    <div className="hidden lg:block">
-      <h2 className="font-bold mb-3">Subscriptions</h2>
+    <div className="hidden 2xl:block">
+      <h2 className="text-gray-500 text-sm uppercase font-bold inline-block mb-5 tracking-wider">
+        Subscriptions
+      </h2>
 
       {channels?.length === 0 ? (
         <div className="text-sm text-gray-400">No channels in category</div>

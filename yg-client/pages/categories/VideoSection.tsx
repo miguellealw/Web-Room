@@ -51,7 +51,7 @@ type VideoSectionProps = {
 
 // Uploads - contains last 5 uploads of the channels in the category
 const VideoSection: React.FC<VideoSectionProps> = ({ uploads }) => {
-  console.log("DATA FROM BACKEND", uploads);
+  // console.log("DATA FROM BACKEND", uploads);
 
   return (
     <div className={`w-full ${styles.videoSection}`}>
@@ -59,7 +59,12 @@ const VideoSection: React.FC<VideoSectionProps> = ({ uploads }) => {
         <div>Loading</div>
       ) : (
         <>
-          <h2 className="font-bold mb-3">Videos</h2>
+          <h2 className="text-gray-500 text-sm uppercase font-bold inline-block tracking-wider">Videos</h2>
+          <span className="mx-2 text-gray-500">&#xB7;</span>
+          <span className="mb-5 inline-block text-sm text-gray-500">
+            The 5 Most Recent Videos of Each Channel
+          </span>
+
           {uploads?.length === 0 ? (
             <div className="text-sm text-gray-400">No videos to show</div>
           ) : (
