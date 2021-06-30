@@ -23,4 +23,8 @@
     width: 18rem;
     height: 10rem;
   }
+
+  .videoTitle {
+    width: 30rem;
+  }
 }

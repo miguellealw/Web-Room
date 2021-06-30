@@ -19,7 +19,7 @@ const Video: React.FC<VideoProps> = ({
   videoId,
   publishDate,
 }) => {
-  const datePublished = new Date(publishDate)
+  const datePublished = new Date(publishDate);
 
   return (
     <a href={`https://www.youtube.com/watch?v=${videoId}`}>
@@ -39,15 +39,14 @@ const Video: React.FC<VideoProps> = ({
         {/* Video info */}
         <div className="p-4">
           <div
-            className="font-bold truncate text-sm lg:text-base"
-            style={{
-              width: "30rem",
-            }}
+            className={`font-bold w-72 truncate text-sm lg:text-base ${styles.videoTitle}`}
           >
             {title}
           </div>
 
-          <div className="text-xs text-gray-400 lg:text-sm mb-2">{channel} &#xB7; {datePublished.toDateString()}</div>
+          <div className="text-xs text-gray-400 lg:text-sm mb-2">
+            {channel} &#xB7; {datePublished.toDateString()}
+          </div>
 
           <p className="text-sm hidden lg:block" style={{ width: "30rem" }}>
             {truncateString(description, 280)}
