@@ -1,4 +1,3 @@
-# YouTube Box
 <p align="center">
 	<img src="./yg-client/public/youtubebox-banner.png"/>
 </p>
