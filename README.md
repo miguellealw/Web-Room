@@ -1,4 +1,9 @@
-# YG
+# YouTube Box
+<p align="center">
+	<img src="./yg-client/public/youtubebox-banner.png"/>
+</p>
+
+---
 
 Organize Your YouTube Subscriptions Into Categories
 
