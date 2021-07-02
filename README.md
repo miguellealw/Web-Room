@@ -18,4 +18,7 @@
 ## Categories Page
 <img src="./design-files/categories-page.jpg"/>
 
+## Category Page
+<img src="./design-files/category-page.jpg"/>
+
 
