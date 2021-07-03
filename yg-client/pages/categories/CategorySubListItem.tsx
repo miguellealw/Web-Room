@@ -47,11 +47,11 @@ export const MobileCategorySubListItem: React.FC<CategorySubListItemProps> = ({
   channel,
 }) => {
   return (
-    <li className="mr-4 mb-3 bg-gray-100 rounded-lg relative">
+    <li className="mr-4 rounded-lg relative">
       {!channel.yt_data ? (
         <div className="rounded-full w-14 h-14 bg-gray-500 overflow-hidden"></div>
       ) : (
-        <div>
+        <div className="flex flex-col items-center justify-center">
           <div className="rounded-full w-14 h-14 bg-gray-300 overflow-hidden">
             <Image
               src={channel.yt_data.snippet.thumbnails.default.url}
@@ -61,7 +61,7 @@ export const MobileCategorySubListItem: React.FC<CategorySubListItemProps> = ({
               height={200}
             />
           </div>
-          <span className="text-sm w-16 block truncate text-gray-500">{channel.name}</span>
+          <span className="text-sm w-16 text-center block truncate text-gray-500">{channel.name}</span>
         </div>
       )}
     </li>
