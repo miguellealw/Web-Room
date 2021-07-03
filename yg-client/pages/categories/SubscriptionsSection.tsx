@@ -17,7 +17,7 @@ export const MobileSubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
 }) => {
   return (
     <ul
-      className="w-full overflow-x-scroll flex content-center 2xl:hiddenrounded-md"
+      className="w-full overflow-x-scroll flex content-center 2xl:hidden"
     >
       {channels?.map((channel: Channel) => (
         <MobileCategorySubListItem

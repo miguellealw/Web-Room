@@ -11,7 +11,6 @@ import SubscriptionsSection, {
 import useFetchCategory from "../../shared-hooks/useFetchCategory";
 
 import CategorySkeleton from "../../components/skeletons/CategorySkeleton";
-import MobileTopNavBar from "./MobileTopNavBar";
 
 // const Category = ({ category }) => {
 const Category = () => {
@@ -33,7 +32,6 @@ const Category = () => {
           </div>
         </Link>
 
-        {/* <MobileTopNavBar /> */}
 
         <CategorySkeleton ready={!isLoading}>
           <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-5">
