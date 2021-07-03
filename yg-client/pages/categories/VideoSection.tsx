@@ -59,11 +59,15 @@ const VideoSection: React.FC<VideoSectionProps> = ({ uploads }) => {
         <div>Loading</div>
       ) : (
         <>
-          <h2 className="text-gray-500 text-sm uppercase font-bold inline-block tracking-wider">Videos</h2>
-          <span className="mx-2 text-gray-500">&#xB7;</span>
-          <span className="mb-5 inline-block text-sm text-gray-500">
-            The 5 Most Recent Videos of Each Channel
-          </span>
+          <div className="my-5 lg:mb-5 lg:mt-0">
+            <h2 className="text-gray-500 text-sm uppercase font-bold inline-block tracking-wider">
+              Videos
+            </h2>
+            <span className="mx-2 text-gray-500">&#xB7;</span>
+            <span className="cinline-block text-sm text-gray-500">
+              The 5 Most Recent Videos of Each Channel
+            </span>
+          </div>
 
           {uploads?.length === 0 ? (
             <div className="text-sm text-gray-400">No videos to show</div>
