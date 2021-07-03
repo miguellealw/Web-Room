@@ -50,11 +50,11 @@ const NavCategoryListItem: React.FC<NavCategoryListItemProps> = ({
     <Link href={`/categories/${category.id}`} passHref key={category.id}>
       <a ref={drop} role={`Category`}>
         <li
-          className={`pl-5 py-2 hover:bg-gray-700 flex ${
+          className={`pl-5 py-2 hover:bg-gray-700 flex items-center ${
             isActive && "bg-gray-700"
           }`}
         >
-          <FolderOpenIcon className="w-5 h-5 mr-2" />
+          <FolderOpenIcon className="w-4 h-4 mr-2" />
           <span className="w-40 truncate">{category.name}</span>
         </li>
       </a>
@@ -83,11 +83,11 @@ const DashboardNavigation: React.FC<{
   };
 
   return (
-    <nav className="h-screen w-56 bg-gray-800 text-white hidden lg:flex flex-col items-center fixed left-0">
+    <nav className="h-screen w-56 bg-gray-800 text-white hidden lg:flex flex-col items-center fixed left-0 text-sm tracking-wide">
       {/* Logo */}
-      <div className="w-full  my-3 flex items-center py-2 px-3">
+      <div className="w-full my-3 flex items-center py-2 px-3">
         <Logo className="mr-2 w-6 h-6" />
-        <h1>YouTube Box</h1>
+        <h1 className="text-sm font-bold uppercase">YouTube Box</h1>
       </div>
 
       {/* Subs and Categories */}
@@ -99,9 +99,9 @@ const DashboardNavigation: React.FC<{
               className="flex items-center w-full h-full p-3 pl-5"
             >
               {isCategories ? (
-                <FolderIconSolid className="h-5 w-5" />
+                <FolderIconSolid className="h-4 w-4" />
               ) : (
-                <FolderIcon className="h-5 w-5" />
+                <FolderIcon className="h-4 w-4" />
               )}
               <span className="ml-2">Categories</span>
               {/* <ReactTooltip effect="solid"/> */}
@@ -115,9 +115,9 @@ const DashboardNavigation: React.FC<{
               className="flex items-center w-full h-full p-3 pl-5"
             >
               {isSubscriptions ? (
-                <CollectionIconSolid className="h-5 w-5" />
+                <CollectionIconSolid className="h-4 w-4" />
               ) : (
-                <CollectionIcon className="h-5 w-5" />
+                <CollectionIcon className="h-4 w-4" />
               )}
 
               <span className="ml-2">Subscriptions</span>
