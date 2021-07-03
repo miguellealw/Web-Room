@@ -25,10 +25,10 @@ const Video: React.FC<VideoProps> = ({
 
   return (
     <a href={`https://www.youtube.com/watch?v=${videoId}`}>
-      <li className="bg-white rounded-lg mb-5 flex flex-col lg:flex-row h-56 lg:h-40 overflow-hidden shadow-sm hover:shadow-lg">
+      <li className="bg-white rounded-lg mb-5 flex flex-col sm:flex-row h-56 sm:h-40 overflow-hidden shadow-sm hover:shadow-lg">
         {/* Video Thumbnail */}
         <div
-          className={`bg-gray-300 flex-shrink-0 h-2/3 overflow-hidden lg:h-full rounded-tl-md lg:rounded-bl-md ${styles.videoThumbnail}`}
+          className={`bg-gray-300 lg:flex-shrink-0 h-2/3 overflow-hidden sm:h-full rounded-tl-md lg:rounded-bl-md ${styles.videoThumbnail}`}
         >
           <Image
             src={thumbnail.url}
@@ -40,12 +40,14 @@ const Video: React.FC<VideoProps> = ({
 
         {/* Video info */}
         <div className="p-4">
+          {/* Title */}
           <div
             className={`font-bold w-72 truncate text-sm lg:text-base ${styles.videoTitle}`}
           >
             {title}
           </div>
 
+          {/* Video Channel and Date */}
           <div className="text-xs text-gray-400 lg:text-sm mb-2">
             <a
               href={`https://www.youtube.com/channel/${channelId}`}
@@ -57,8 +59,9 @@ const Video: React.FC<VideoProps> = ({
             {datePublished.toDateString()}
           </div>
 
+          {/* Description */}
           <p
-            className="text-sm hidden lg:block h-20 overflow-hidden"
+            className="text-sm hidden sm:block h-20 overflow-hidden"
             style={{ width: "30rem" }}
           >
             {description !== "" ? (

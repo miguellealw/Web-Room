@@ -11,6 +11,7 @@ import SubscriptionsSection, {
 import useFetchCategory from "../../shared-hooks/useFetchCategory";
 
 import CategorySkeleton from "../../components/skeletons/CategorySkeleton";
+import MobileTopNavBar from "./MobileTopNavBar";
 
 // const Category = ({ category }) => {
 const Category = () => {
@@ -32,6 +33,8 @@ const Category = () => {
           </div>
         </Link>
 
+        {/* <MobileTopNavBar /> */}
+
         <CategorySkeleton ready={!isLoading}>
           <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-5">
             <h1 className="lg:pb-7 text-2xl lg:text-5xl font-bold">
@@ -47,7 +50,7 @@ const Category = () => {
             </div>
           </div>
 
-          <main className="lg:grid lg:grid-cols-3 lg:gap-10">
+          <main className="grid grid-cols-1 lg:grid 2xl:grid-cols-3 lg:gap-10">
             <MobileSubscriptionsSection
               channels={data?.category?.channels}
               categoryId={data?.category?.id}
