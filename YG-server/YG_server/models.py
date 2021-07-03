@@ -84,6 +84,7 @@ class Category(db.Model):
       for upload in upload_list:
         flatten_uploads.append(upload)
 
+    # Sort videos based on publish data
     sorted_list = sorted(flatten_uploads, key=lambda upload: parse(upload["snippet"]["publishedAt"]).timestamp(), reverse=True)
 
     self.uploads=sorted_list
