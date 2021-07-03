@@ -18,9 +18,9 @@ import Logo from "../../components/Logo";
 import { useDrop } from "react-dnd";
 import { Category } from "../api/types";
 import useCategory from "../../shared-hooks/useCategory";
-import useFetchCategories from "../../shared-hooks/useFetchCategories";
 import React from "react";
 import { CategoryResponse } from "../api/categories";
+import LogoType from "../../components/LogoType";
 
 type NavCategoryListItemProps = {
   category: Category;
@@ -86,8 +86,7 @@ const DashboardNavigation: React.FC<{
     <nav className="h-screen w-56 bg-gray-800 text-white hidden lg:flex flex-col items-center fixed left-0 text-sm tracking-wide">
       {/* Logo */}
       <div className="w-full my-3 flex items-center py-2 px-3">
-        <Logo className="mr-2 w-6 h-6" />
-        <h1 className="text-sm font-bold uppercase">YouTube Box</h1>
+        <LogoType />
       </div>
 
       {/* Subs and Categories */}
