@@ -33,11 +33,10 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
     <DndProvider backend={HTML5Backend}>
       <CustomDragLayer />
       <div className="w-full min-h-screen bg-gray-100">
-        <MobileNavigation />
-
-        {/* TODO: if top nav bar is above dashboard nav then svg renders. If it is under it does not redner */}
+        {/* FIXME: if top nav bar is above dashboard nav then svg renders. If it is under it does not redner */}
         <DashboardNavigation data={data} isLoading={isCategoriesLoading} />
         <MobileTopNavBar />
+        <MobileNavigation />
         <div
           className={`${
             tw_className === "" ? "w-4/5 lg:w-1/3 m-auto" : tw_className

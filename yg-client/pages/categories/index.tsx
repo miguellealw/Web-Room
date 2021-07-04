@@ -19,7 +19,9 @@ function Categories() {
         ) : (
           <>
             <div className="flex flex-col lg:flex-row justify-between lg:items-center mb-10">
-              <h1 className="pb-7 text-2xl lg:text-5xl font-bold">Your Categories</h1>
+              <h1 className="pb-7 text-2xl lg:text-5xl font-bold">
+                Your Categories
+              </h1>
               <div className="text-gray-400 text-sm uppercase font-bold">
                 {data?.categories?.length} Categories
               </div>

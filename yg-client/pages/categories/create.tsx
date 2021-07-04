@@ -49,6 +49,7 @@ const CreateCategory = () => {
             <input
               type="text"
               id="name"
+              required
               placeholder="Cooking Channels"
               className="w-full rounded-md p-1 lg:p-2"
               onChange={(e) => {
