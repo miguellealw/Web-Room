@@ -9,15 +9,13 @@ const DeleteConfirmationDialog = ({
   cancel,
   options,
 }) => {
-  // console.log("SHOW", show);
   return (
-    // TODO: onHide -> proceed(false)
     <Modal
       isOpen={show}
-			onRequestClose={() => cancel()}
+      onRequestClose={() => cancel()}
       // onAfterClose={() => proceed(false)}
-			width="20rem"
-			height="13rem"
+      width="20rem"
+      height="13rem"
     >
       <div className="flex flex-col justify-between h-full w-full">
         <h3 className="text-sm font-bold uppercase text-red-600">
@@ -52,6 +50,7 @@ export function confirm(
   cancelLabel = "cancel",
   options = {}
 ) {
+  // confirmable HOC pass props `show`, `dismiss`, `cancel` and `proceed` to your component.
   // Wrap function for easier use
   return createConfirmation(confirmable(DeleteConfirmationDialog))({
     confirmation,
@@ -60,7 +59,3 @@ export function confirm(
     ...options,
   });
 }
-
-// confirmable HOC pass props `show`, `dismiss`, `cancel` and `proceed` to your component.
-// TODO: may not need confirmable here
-export default confirmable(DeleteConfirmationDialog);
