@@ -3,6 +3,10 @@ import useSWR, { mutate } from "swr";
 import { CategoryApi, CategoryResponse } from "../pages/api/categories";
 import { confirm } from "../components/DeleteConfirmationModal";
 
+interface deleteCategoryType {
+  handleDeleteCategory: (id: number, name: string) => void;
+}
+
 function useCategories() {
   // useMemo will return the same instance of CategoryApi instead of creating a new one
   let api = useMemo(() => new CategoryApi(), []);
@@ -10,17 +14,10 @@ function useCategories() {
 
   // TODO: may not need to wrap in useCallback
   const memoDeleteCategory = useCallback(
-    async function deleteCategory(id: number) {
+    async function deleteCategory(id: number, name: string) {
       try {
         // Get category name for confirmation message
-        // const categoryToDelete = data?.categories?.find(
-        //   (category) => category.id === id
-        // );
-        // TODO: find way to get access to name here. Maybe through global store
-        const isConfirmed = await confirm(
-          // `Are your sure you want to delete ${categoryToDelete?.name}?`
-          `Are your sure you want to delete category with ID - ${id}?`
-        );
+        await confirm(`Are your sure you want to delete category ${name}?`);
 
         mutate(
           `/api/v1.0/users/current_user/categories`,

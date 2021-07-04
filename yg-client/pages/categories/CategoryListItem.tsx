@@ -10,9 +10,10 @@ import { Category } from "../api/types";
 type CategoryDropdownProps = {
   isDropdownOpen: boolean;
   categoryId: number;
+  categoryName: string;
   setIsEditing: (value: boolean) => void;
   setIsDropdownOpen: (value: boolean) => void;
-  handleDeleteCategory: (id: number) => void;
+  handleDeleteCategory: (id: number, name: string) => void;
 };
 
 const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
@@ -21,6 +22,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   setIsDropdownOpen,
   handleDeleteCategory,
   categoryId,
+  categoryName
 }) => {
   return (
     <>
@@ -41,7 +43,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
             className="px-3 py-2 hover:bg-gray-300  cursor-pointer flex"
             onClick={(e) => {
               e.preventDefault();
-              handleDeleteCategory(categoryId);
+              handleDeleteCategory(categoryId, categoryName);
               setIsDropdownOpen(false);
             }}
           >
@@ -56,7 +58,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
 
 type CategoryListItemProps = {
   category: Category;
-  handleDeleteCategory: (id: number) => void;
+  handleDeleteCategory: (id: number, name: string) => void;
   handleUpdateCategory: (id: number, value: string) => void;
 };
 
@@ -90,6 +92,7 @@ const CategoryListItem: React.FC<CategoryListItemProps> = ({
               setIsDropdownOpen={setIsDropdownOpen}
               handleDeleteCategory={handleDeleteCategory}
               categoryId={category.id}
+              categoryName={category.name}
             />
           )}
 
