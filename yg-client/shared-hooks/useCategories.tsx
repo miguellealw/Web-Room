@@ -1,25 +1,48 @@
 import { useCallback, useMemo } from "react";
 import useSWR, { mutate } from "swr";
 import { CategoryApi, CategoryResponse } from "../pages/api/categories";
+import { confirm } from "../components/DeleteConfirmationModal";
 
 function useCategories() {
   // useMemo will return the same instance of CategoryApi instead of creating a new one
-  let api = useMemo(() => new CategoryApi(), [])
+  let api = useMemo(() => new CategoryApi(), []);
   api.setup();
 
+  // TODO: may not need to wrap in useCallback
   const memoDeleteCategory = useCallback(
     async function deleteCategory(id: number) {
-      mutate(`/api/v1.0/users/current_user/categories` ,(data: CategoryResponse) => {
-        const categoriesToKeep = data?.categories?.filter(
-          (category) => category.id !== id
+      try {
+        // Get category name for confirmation message
+        // const categoryToDelete = data?.categories?.find(
+        //   (category) => category.id === id
+        // );
+        // TODO: find way to get access to name here. Maybe through global store
+        const isConfirmed = await confirm(
+          // `Are your sure you want to delete ${categoryToDelete?.name}?`
+          `Are your sure you want to delete category with ID - ${id}?`
         );
-        return { ...data, categories: [...categoriesToKeep] };
-      }, false);
 
-      await api.deleteCategory(id);
+        mutate(
+          `/api/v1.0/users/current_user/categories`,
+          async (data: CategoryResponse) => {
+            // Filter out category to delete from data
+            const categoriesToKeep = data?.categories?.filter(
+              (category) => category.id !== id
+            );
 
-      // revalidate to make sure local data is correct
-      mutate(`/api/v1.0/users/current_user/categories`);
+            return { ...data, categories: [...categoriesToKeep] };
+          },
+          false
+        );
+
+        await api.deleteCategory(id);
+
+        // revalidate to make sure local data is correct
+        mutate(`/api/v1.0/users/current_user/categories`);
+      } catch (err) {
+        // console.error(err);
+        return;
+      }
     },
     [api]
   );
@@ -27,9 +50,13 @@ function useCategories() {
   const memoCreateCategory = useCallback(
     async function createCategory(name: string) {
       // Update ui
-      mutate(`/api/v1.0/users/current_user/categories`, (data: CategoryResponse) => {
-        return { ...data, categories: [...data.categories, { name }] };
-      }, false);
+      mutate(
+        `/api/v1.0/users/current_user/categories`,
+        (data: CategoryResponse) => {
+          return { ...data, categories: [...data.categories, { name }] };
+        },
+        false
+      );
 
       await api.createCategory(name);
 
@@ -42,16 +69,20 @@ function useCategories() {
   const memoUpdateCategory = useCallback(
     async function updateCategory(id: number, newName: string) {
       // update local data for optimistic update, but don't revalidate (refetch)
-      mutate(`/api/v1.0/users/current_user/categories`, (data: CategoryResponse) => {
-        // TODO: find better way of doing this
-        const categoriesToKeep = data?.categories?.filter(
-          (category) => category.id !== id
-        );
-        return {
-          ...data,
-          categories: [...categoriesToKeep, { id, name: newName }],
-        };
-      }, false);
+      mutate(
+        `/api/v1.0/users/current_user/categories`,
+        (data: CategoryResponse) => {
+          // TODO: find better way of doing this
+          const categoriesToKeep = data?.categories?.filter(
+            (category) => category.id !== id
+          );
+          return {
+            ...data,
+            categories: [...categoriesToKeep, { id, name: newName }],
+          };
+        },
+        false
+      );
 
       await api.updateCategory(id, newName);
 
