@@ -3,6 +3,7 @@ import {
   FolderIcon,
   FolderOpenIcon,
   LogoutIcon,
+  PlusIcon,
 } from "@heroicons/react/outline";
 import {
   CollectionIcon as CollectionIconSolid,
@@ -47,18 +48,20 @@ const NavCategoryListItem: React.FC<NavCategoryListItemProps> = ({
   const isActive = canDrop && isOver;
 
   return (
-    <Link href={`/categories/${category.id}`} passHref key={category.id}>
-      <a ref={drop} role={`Category`}>
-        <li
+    <li key={category.id}>
+      <Link href={`/categories/${category.id}`} passHref>
+        <a
+          ref={drop}
+          role={`Category`}
           className={`pl-5 py-2 hover:bg-gray-700 flex items-center ${
             isActive && "bg-gray-700"
           }`}
         >
           <FolderOpenIcon className="w-4 h-4 mr-2" />
           <span className="w-40 truncate">{category.name}</span>
-        </li>
-      </a>
-    </Link>
+        </a>
+      </Link>
+    </li>
   );
 };
 
@@ -135,8 +138,17 @@ const DashboardNavigation: React.FC<{
           <LoadingText>Loading Categories...</LoadingText>
         ) : (
           <ul className="mt-3">
+            {/* New Category Button */}
+            <li>
+              <Link href={`/categories/create`} passHref>
+                <a className={`pl-5 py-3 bg-gray-900 hover:bg-gray-700 flex items-center`}>
+                  <PlusIcon className="w-4 h-4 mr-2" />
+                  <span className="w-40 truncate">New Category</span>
+                </a>
+              </Link>
+            </li>
             {data?.categories?.length === 0 ? (
-              <span>No categories available</span>
+              <li>No categories available</li>
             ) : (
               data?.categories?.map((category) => (
                 <NavCategoryListItem key={category.id} category={category} />
