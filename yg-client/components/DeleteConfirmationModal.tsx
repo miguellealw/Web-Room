@@ -14,7 +14,8 @@ const DeleteConfirmationDialog = ({
     // TODO: onHide -> proceed(false)
     <Modal
       isOpen={show}
-      onAfterClose={() => proceed(false)}
+			onRequestClose={() => cancel()}
+      // onAfterClose={() => proceed(false)}
 			width="20rem"
 			height="13rem"
     >
