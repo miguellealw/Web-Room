@@ -2,9 +2,7 @@ import AuthedLayout from "../layouts/authed_layout";
 import Link from "next/link";
 import { ArrowNarrowLeftIcon } from "@heroicons/react/outline";
 import React, { ReactDOM, useState } from "react";
-import { CategoryApi } from "../api/categories";
 import { useRouter } from "next/router";
-import { mutate } from "swr";
 import useCategories from "../../shared-hooks/useCategories";
 
 const CreateCategory = () => {
