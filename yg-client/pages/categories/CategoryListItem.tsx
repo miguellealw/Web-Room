@@ -22,13 +22,21 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   setIsDropdownOpen,
   handleDeleteCategory,
   categoryId,
-  categoryName
+  categoryName,
 }) => {
   return (
     <>
       {isDropdownOpen && (
         <ul className="bg-gray-50 border border-gray-300 w-32 absolute text-sm font-normal top-8 right-3 rounded-md shadow-xl">
-          <li
+          <Link href={`/categories/edit/${categoryId}`} passHref>
+            <a>
+              <li className="px-3 py-2 hover:bg-gray-300  cursor-pointer flex border-b border-gray-200">
+                <PencilAltIcon className="w-5 h-5 mr-3" />
+                Rename
+              </li>
+            </a>
+          </Link>
+          {/* <li
             className="px-3 py-2 hover:bg-gray-300  cursor-pointer flex border-b border-gray-200"
             onClick={(e) => {
               e.preventDefault();
@@ -38,7 +46,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
           >
             <PencilAltIcon className="w-5 h-5 mr-3" />
             Rename
-          </li>
+          </li> */}
           <li
             className="px-3 py-2 hover:bg-gray-300  cursor-pointer flex"
             onClick={(e) => {
