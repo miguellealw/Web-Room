@@ -3,13 +3,11 @@ import AuthedLayout from "../layouts/authed_layout";
 import Link from "next/link";
 import { ArrowNarrowLeftIcon } from "@heroicons/react/outline";
 import useCategory from "../../shared-hooks/useCategory";
-import LoadingText from "../../components/LoadingText";
 import VideoSection from "./VideoSection";
 import SubscriptionsSection, {
   MobileSubscriptionsSection,
 } from "./SubscriptionsSection";
 import useFetchCategory from "../../shared-hooks/useFetchCategory";
-
 import CategorySkeleton from "../../components/skeletons/CategorySkeleton";
 
 // const Category = ({ category }) => {
@@ -31,7 +29,6 @@ const Category = () => {
             Back to Categories
           </div>
         </Link>
-
 
         <CategorySkeleton ready={!isLoading}>
           <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-5">
