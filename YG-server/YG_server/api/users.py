@@ -159,7 +159,9 @@ def remove_channel_from_category(category_id):
   # user_found.channels.append(channel_to_add)
 
   # TODO: only delete channel if no other category references it
+  # TODO: CHECK THE user_channel table if the channel ID is not there, then delete from DB
   # db.session.delete(channel_to_remove)
+
   db.session.commit()
 
   return jsonify( channel_schema.dump(channel_to_remove) )
