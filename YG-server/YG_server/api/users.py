@@ -45,7 +45,7 @@ def get_user_yt_channels(yt_client):
     mine=True, 
     pageToken=nextPageToken,
     # order='alphabetical', 
-    maxResults=27
+    maxResults=40
   )
 
 
