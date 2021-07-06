@@ -14,7 +14,7 @@ interface CategoriesState {
   categories: Category[] | TempCategory[];
   setCategories: (categories: Category[]) => void;
   createCategory: (api: CategoryApi, name: string) => void;
-  getCategory: (id: string | number) => void;
+  getCategory: (id: string | number) => Category | TempCategory | undefined;
   updateCategory: (
     api: CategoryApi,
     id: string | number,
@@ -53,9 +53,9 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     // revalidate to make sure local data is correct
     mutate(`/api/v1.0/users/current_user/categories`);
   },
-  getCategory: (id) => {
-    // set((state) => state.categories.find((category) => category.id === id)),
-  },
+
+  getCategory: (id) => get().categories.find((c) => c.id === parseInt(id)),
+
   updateCategory: async (api, id, newName) => {
     let editedCategory: TempCategory;
 
