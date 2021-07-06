@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AuthedLayout from "../layouts/authed_layout";
 import CategoryListItem from "./CategoryListItem";
 import useCategories from "../../shared-hooks/useCategories";
 import NewCategoryButton from "./NewCategoryButton";
 import useFetchCategories from "../../shared-hooks/useFetchCategories";
+import useCategoriesStore from "../../stores/useCategoriesStore";
 
 function Categories() {
-  const { data, error, isLoading } = useFetchCategories();
+  const { error, isLoading } = useFetchCategories();
   const { deleteCategory, updateCategory } = useCategories();
+  const categories = useCategoriesStore((state) => state.categories);
 
   if (error) return <div>Error loading categories page...</div>;
 
@@ -23,11 +25,13 @@ function Categories() {
                 Your Categories
               </h1>
               <div className="text-gray-400 text-sm uppercase font-bold">
-                {data?.categories?.length} Categories
+                {/* {data?.categories?.length} Categories */}
+                {categories?.length} Categories
               </div>
             </div>
             <ul className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-              {data?.categories?.map((category, index) => (
+              {/* {data?.categories?.map((category, index) => ( */}
+              {categories?.map((category, index) => (
                 <CategoryListItem
                   key={index}
                   category={category}
