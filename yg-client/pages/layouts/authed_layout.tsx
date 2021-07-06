@@ -39,7 +39,7 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
         <MobileNavigation />
         <div
           className={`${
-            tw_className === "" ? "w-4/5 lg:w-1/3 m-auto" : tw_className
+            tw_className === "" ? "w-4/5 lg:w-2/5 m-auto" : tw_className
           }`}
           {...props}
         >

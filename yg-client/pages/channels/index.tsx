@@ -71,14 +71,14 @@ function Channels() {
               }}
               loader={<div>Loading more subs...</div>}
               hasMore={channels?.length < pageInfo?.totalResults}
-              className="grid grid-cols-2 lg:grid-cols-3 gap-3"
+              className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3"
             >
               {channels?.map((channel: any, index: number) => (
                 <SubscriptionListItem
                   key={index}
                   name={channel?.snippet.title}
                   description={channel?.snippet.description}
-                  thumbnail={channel?.snippet.thumbnails.default}
+                  thumbnail={channel?.snippet.thumbnails.medium}
                   channelId={channel?.snippet.resourceId.channelId}
                 />
               ))}

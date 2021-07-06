@@ -34,44 +34,24 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
 
   return (
     <div
-      className={`bg-white translate shadow-sm p-4 flex flex-col lg:flex-row items-center rounded-md ${
+      className={`bg-black translate shadow-sm flex flex-col lg:flex-row items-center rounded-md hover:shadow-md overflow-hidden relative ${
         isDragging && "translate opacity-50 transform scale-90"
-      } hover:shadow-md`}
+      }`}
       ref={drag}
       role="Subscription"
     >
-      <div className="w-20 h-20 rounded-full overflow-hidden">
-        <Image
-          src={thumbnail.url}
-          alt={`${name}'s thumbnail`}
-          className="w-full h-full object-cover object-center"
-          width={200}
-          height={200}
-          // width={thumbnail.width}
-          // height={thumbnail.height}
-        />
-      </div>
+      <Image
+        src={thumbnail.url}
+        alt={`${name}'s thumbnail`}
+        className="w-full h-full object-cover object-center cursor-move transition opacity-30 hover:opacity-60"
+        width={200}
+        height={200}
+      />
 
-      <div className="flex flex-col lg:ml-2">
-        <span className="font-bold my-3 w-24 truncate text-sm lg:font-base">
-          {name}
-        </span>
-
-        <a
-          href={`https://www.youtube.com/channel/${channelId}`}
-          // target="_blank"
-          className="text-xs text-gray-400 hover:underline flex items-center"
-        >
-          Go to Channel
-          <ExternalLinkIcon className="w-4 h-4 ml-1" />
-        </a>
-
-        {/* {
-					description !== "" ? 
-						description : 
-						(<span className="italic text-gray-400">No description available</span>)
-				} */}
-      </div>
+      {/* Name */}
+      <span className="font-bold w-32 truncate text-sm lg:font-base absolute bottom-2 left-2 text-white">
+        {name}
+      </span>
     </div>
   );
 };
