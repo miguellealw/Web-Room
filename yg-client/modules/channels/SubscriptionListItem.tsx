@@ -12,17 +12,19 @@ import { PlusCircleIcon } from "@heroicons/react/solid";
 
 export interface SubscriptionListItem {
   name: string;
-  description?: string;
   thumbnail: any;
   channelId: string;
+  setSelectedChannel: (value: any) => void;
+  setIsModalOpen: (value: boolean) => void;
   // addChannelToCategory: (categoryId: string, channelName: string, channelId: string) => void;
 }
 
 const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
   name,
-  description,
   thumbnail,
   channelId,
+  setSelectedChannel,
+  setIsModalOpen,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -49,7 +51,7 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
       role="Subscription"
     >
       <DotsVerticalIcon
-        className="w-5 h-5 absolute text-white hover:text-black top-0 right-0 m-2 cursor-pointer z-20 hover:bg-gray-50 rounded-full"
+        className="w-5 h-5 absolute text-white hover:text-black top-0 right-0 m-2 cursor-pointer z-10 hover:bg-gray-50 rounded-full"
         onClick={(e) => {
           e.preventDefault();
           setIsOpen(!isOpen);
@@ -60,9 +62,14 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
       </span>
 
       <Dropdown isOpen={isOpen}>
-        <Dropdown.Item>
+        <Dropdown.Item
+          handleClick={() => {
+            setIsModalOpen(true);
+            setSelectedChannel({ name, channelId });
+          }}
+        >
           <span className="flex">
-            <PlusCircleIcon className="w-4 h-4 mr-1"/>
+            <PlusCircleIcon className="w-4 h-4 mr-1" />
             Add to Category
           </span>
         </Dropdown.Item>

@@ -5,6 +5,7 @@ import useChannels from "../../shared-hooks/useChannels";
 import ChannelsSkeleton from "../../components/skeletons/ChannelsSkeleton";
 import { ChannelResponse, ChannelsApi } from "../../pages/api/channels";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { CategoriesModal } from "../categories/CategoriesModal";
 
 export const ChannelsPage: React.FC = () => {
   const {
@@ -16,6 +17,12 @@ export const ChannelsPage: React.FC = () => {
     mutateChannels,
   } = useChannels();
 
+  const [selectedChannel, setSelectedChannel] = useState<{
+    name: string;
+    channelId: string;
+  } | null>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   if (error) {
     return <div>Error loading your subscriptions...</div>;
   }
@@ -23,6 +30,7 @@ export const ChannelsPage: React.FC = () => {
   return (
     <AuthedLayout>
       <div className="py-10">
+        {/* Header */}
         <h1 className="pb-7 text-2xl lg:text-5xl font-bold">
           Your Subscriptions
         </h1>
@@ -43,46 +51,58 @@ export const ChannelsPage: React.FC = () => {
             // TODO: figure out how to only get channels user is subbed to
           }}
         />
+
+        {/* Modal */}
+        {selectedChannel?.name && selectedChannel?.channelId && (
+          <CategoriesModal
+            selectedChannel={selectedChannel}
+            isOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+          />
+        )}
+
+        {/* Channels */}
         <ChannelsSkeleton ready={!isLoading}>
-          <ul>
-            <InfiniteScroll
-              dataLength={channels?.length}
-              next={async () => {
-                // make api call w/ next page token
-                const api = new ChannelsApi();
-                api.setup();
-                const res = await api.get_yt_channels(nextPageToken);
+          <InfiniteScroll
+            dataLength={channels?.length}
+            next={async () => {
+              // make api call w/ next page token
+              const api = new ChannelsApi();
+              api.setup();
+              const res = await api.get_yt_channels(nextPageToken);
 
-                // update local data / cache with mutation
-                mutateChannels((data: ChannelResponse) => {
-                  if (!data || !data.channels) return;
+              // update local data / cache with mutation
+              mutateChannels((data: ChannelResponse) => {
+                if (!data || !data.channels) return;
 
-                  return {
-                    ...data,
-                    channels: {
-                      ...data.channels,
-                      items: [...data.channels.items, ...res.channels.items],
-                      nextPageToken: res.channels.nextPageToken,
-                      prevPageToken: res.channels.prevPageToken,
-                    },
-                  };
-                }, false);
-              }}
-              loader={<div>Loading more subs...</div>}
-              hasMore={channels?.length < pageInfo?.totalResults}
-              className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3"
-            >
+                return {
+                  ...data,
+                  channels: {
+                    ...data.channels,
+                    items: [...data.channels.items, ...res.channels.items],
+                    nextPageToken: res.channels.nextPageToken,
+                    prevPageToken: res.channels.prevPageToken,
+                  },
+                };
+              }, false);
+            }}
+            loader={<div>Loading more subs...</div>}
+            hasMore={channels?.length < pageInfo?.totalResults}
+          >
+            <ul className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
               {channels?.map((channel: any, index: number) => (
+                // TODO: figure out if it's better to send whole channel object or individual properties
                 <SubscriptionListItem
                   key={index}
                   name={channel?.snippet.title}
-                  description={channel?.snippet.description}
                   thumbnail={channel?.snippet.thumbnails.medium}
                   channelId={channel?.snippet.resourceId.channelId}
+                  setSelectedChannel={setSelectedChannel}
+                  setIsModalOpen={setIsModalOpen}
                 />
               ))}
-            </InfiniteScroll>
-          </ul>
+            </ul>
+          </InfiniteScroll>
         </ChannelsSkeleton>
       </div>
     </AuthedLayout>

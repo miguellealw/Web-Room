@@ -2,18 +2,35 @@ import Modal from "react-modal";
 
 Modal.setAppElement("#__next");
 
-const CustomModal = ({ children, width, height, ...props }) => {
+type CustomModal = {
+  width: string;
+  height: string;
+  bgColor?: string;
+  border?: string;
+  children: React.ReactElement;
+};
+
+const CustomModal: React.FC<CustomModal> = ({
+  children,
+  width,
+  height,
+  bgColor = "white",
+  border = "1px solid gray",
+  ...props
+}) => {
   return (
     <Modal
       isOpen={true}
       style={{
         overlay: {
           backgroundColor: "rgba(55, 65, 81, .8)",
-          // ...styles?.overlay,
+          zIndex: "99999",
         },
         content: {
           width,
           height,
+          backgroundColor: bgColor,
+          border,
 
           position: "absolute",
           top: "50%",
