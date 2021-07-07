@@ -22,6 +22,7 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
       width="40rem"
       height="48rem"
       bgColor="#F3F4F6"
+      onRequestClose={() => setIsModalOpen(false)}
     >
       <div className="h-full flex items-center justify-center">
         <div className="w-5/6">
@@ -32,7 +33,10 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
           >
             <XIcon className="w-5 h-5 text-gray-500 hover:text-black" />
           </button>
-          <h2 className="font-bold my-5">Add {selectedChannel.name} to...</h2>
+          <h2 className="font-bold my-5">
+            Add <span className="text-red-500">{selectedChannel.name} </span>
+            to...
+          </h2>
           <ul className="bg-white p-10 rounded-md">
             {categories.map((c) => (
               <li
