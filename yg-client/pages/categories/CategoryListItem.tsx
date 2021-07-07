@@ -5,6 +5,7 @@ import {
 } from "@heroicons/react/outline";
 import Link from "next/link";
 import React, { useState } from "react";
+import Dropdown from "../../components/Dropdown";
 import { Category } from "../api/types";
 
 type CategoryDropdownProps = {
@@ -18,7 +19,6 @@ type CategoryDropdownProps = {
 
 const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   isDropdownOpen,
-  setIsEditing,
   setIsDropdownOpen,
   handleDeleteCategory,
   categoryId,
@@ -26,40 +26,28 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
 }) => {
   return (
     <>
-      {isDropdownOpen && (
-        <ul className="bg-gray-50 border border-gray-300 w-32 absolute text-sm font-normal top-8 right-3 rounded-md shadow-xl">
+      <Dropdown isOpen={isDropdownOpen}>
+        <Dropdown.Item>
           <Link href={`/categories/edit/${categoryId}`} passHref>
-            <a>
-              <li className="px-3 py-2 hover:bg-gray-300  cursor-pointer flex border-b border-gray-200">
-                <PencilAltIcon className="w-5 h-5 mr-3" />
-                Rename
-              </li>
+            <a className="flex items-center w-full h-full">
+              <PencilAltIcon className="w-4 h-4 mr-1" />
+              Rename
             </a>
           </Link>
-          {/* <li
-            className="px-3 py-2 hover:bg-gray-300  cursor-pointer flex border-b border-gray-200"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsEditing(true);
-              setIsDropdownOpen(false);
-            }}
-          >
-            <PencilAltIcon className="w-5 h-5 mr-3" />
-            Rename
-          </li> */}
-          <li
-            className="px-3 py-2 hover:bg-gray-300  cursor-pointer flex"
-            onClick={(e) => {
-              e.preventDefault();
-              handleDeleteCategory(categoryId, categoryName);
-              setIsDropdownOpen(false);
-            }}
-          >
-            <FolderRemoveIcon className="w-5 h-5 mr-3" />
+        </Dropdown.Item>
+        <Dropdown.Item
+          handleClick={(e) => {
+            e.preventDefault();
+            handleDeleteCategory(categoryId, categoryName);
+            setIsDropdownOpen(false);
+          }}
+        >
+          <span className="flex items-center">
+            <FolderRemoveIcon className="w-4 h-4 mr-1" />
             Delete
-          </li>
-        </ul>
-      )}
+          </span>
+        </Dropdown.Item>
+      </Dropdown>
     </>
   );
 };
@@ -85,7 +73,7 @@ const CategoryListItem: React.FC<CategoryListItemProps> = ({
         <li className="bg-white shadow-sm hover:shadow-md transition text-lg font-bold h-28 rounded-md flex justify-center items-center relative cursor-pointer">
           {!isEditing && (
             <DotsVerticalIcon
-              className="w-5 h-5 absolute text-gray-400 top-0 right-0 m-2 cursor-pointer"
+              className="w-5 h-5 absolute text-gray-400 top-0 right-0 m-2 cursor-pointer hover:bg-gray-200 hover:text-black rounded-full"
               onClick={(e) => {
                 e.preventDefault();
                 setIsDropdownOpen(!isDropdownOpen);
