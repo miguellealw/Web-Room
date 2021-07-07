@@ -1,8 +1,8 @@
-import { CategoryResponse } from "../api/categories";
+import { CategoryResponse } from "../../pages/api/categories";
 import CategorySubListItem, {
   MobileCategorySubListItem,
 } from "./CategorySubListItem";
-import { Channel } from "../api/types";
+import { Channel } from "../../pages/api/types";
 
 type SubscriptionSectionProps = {
   channels?: Channel[] | undefined;

@@ -204,6 +204,7 @@ def get_user_categories():
       user_id=fl_current_user.id,
       created_at=dt.now(),
     )
+    # TODO: add empty uploads array when creating category
 
     if new_category is None:
       abort(409, description="Category could not be created")

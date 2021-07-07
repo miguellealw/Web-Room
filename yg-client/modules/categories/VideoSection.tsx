@@ -1,4 +1,4 @@
-import { CategoryResponse } from "../api/categories";
+import { CategoryResponse } from "../../pages/api/categories";
 import Video from "../../components/Video";
 import styles from "../../styles/Video.module.css";
 

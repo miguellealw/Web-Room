@@ -6,7 +6,7 @@ import {
 import Link from "next/link";
 import React, { useState } from "react";
 import Dropdown from "../../components/Dropdown";
-import { Category } from "../api/types";
+import { Category } from "../../pages/api/types";
 
 type CategoryListItemProps = {
   category: Category;

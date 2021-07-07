@@ -51,7 +51,9 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     await api.createCategory(name);
 
     // revalidate to make sure local data is correct
-    mutate(`/api/v1.0/users/current_user/categories`);
+    mutate(`/api/v1.0/users/current_user/categories`, data => {
+      set(() => ({ categories: [...data.categories] }));
+    });
   },
 
   getCategory: (id) => get().categories.find((c) => c.id === parseInt(id)),
@@ -79,7 +81,10 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     await api.updateCategory(id, newName);
 
     // revalidate to make sure local data is correct
-    mutate(`/api/v1.0/users/current_user/categories`);
+    mutate(`/api/v1.0/users/current_user/categories`, data => {
+      // TODO: change store state after revalidation
+      set(() => ({ categories: [...data.categories] }));
+    });
   },
   deleteCategory: async (api, id) => {
     mutate(
