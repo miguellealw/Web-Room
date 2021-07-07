@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import AuthedLayout from "../../pages/layouts/authed_layout";
+import AuthedLayout from "../layouts/authed_layout";
 import CategoryListItem from "./CategoryListItem";
 import useCategories from "../../shared-hooks/useCategories";
 import NewCategoryButton from "./NewCategoryButton";

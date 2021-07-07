@@ -12,15 +12,15 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import ReactTooltip from "react-tooltip";
-import { AuthApi } from "../api/auth";
+import { AuthApi } from "../../pages/api/auth";
 import useUser from "../../shared-hooks/useUser";
 import LoadingText from "../../components/LoadingText";
 import Logo from "../../components/Logo";
 import { useDrop } from "react-dnd";
-import { Category } from "../api/types";
+import { Category } from "../../pages/api/types";
 import useCategory from "../../shared-hooks/useCategory";
 import React from "react";
-import { CategoryResponse } from "../api/categories";
+import { CategoryResponse } from "../../pages/api/categories";
 import LogoType from "../../components/LogoType";
 
 type NavCategoryListItemProps = {

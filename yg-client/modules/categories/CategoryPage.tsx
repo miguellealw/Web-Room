@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import AuthedLayout from "../../pages/layouts/authed_layout";
+import AuthedLayout from "../layouts/authed_layout";
 import Link from "next/link";
 import { ArrowNarrowLeftIcon } from "@heroicons/react/outline";
 import useCategory from "../../shared-hooks/useCategory";
