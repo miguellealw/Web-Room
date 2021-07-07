@@ -52,7 +52,7 @@ export const CategoryPage: React.FC = () => {
               removeChannelFromCategory={removeChannelFromCategory}
             />
 
-            <VideoSection uploads={data?.category?.uploads ? data?.category.uploads : []} />
+            <VideoSection uploads={data?.category?.uploads} />
 
             <SubscriptionsSection
               channels={data?.category?.channels}

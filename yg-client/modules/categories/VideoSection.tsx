@@ -8,7 +8,7 @@ type VideoSectionProps = {
 };
 
 // Uploads - contains last 5 uploads of the channels in the category
-const VideoSection: React.FC<VideoSectionProps> = ({ uploads }) => {
+const VideoSection: React.FC<VideoSectionProps> = ({ uploads = [] }) => {
   return (
     <div className={`w-full ${styles.videoSection}`}>
       <div className="my-5 lg:mb-5 lg:mt-0">
