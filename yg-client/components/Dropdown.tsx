@@ -2,12 +2,14 @@ import React from "react";
 
 type DropdownProps = {
   isOpen: boolean;
-	children: React.ReactElement[]
+  tw_className?: string;
+  children: React.ReactElement | React.ReactElement[];
   // setIsOpen: (value: boolean) => void;
 };
 
 type DropdownItemProps = {
   children: string | React.ReactElement;
+  tw_className?: string;
   handleClick?: (e: React.SyntheticEvent) => void;
 };
 
@@ -19,10 +21,11 @@ type IDropdown<P> = React.FC<P> & {
 const DropdownItem: React.FC<DropdownItemProps> = ({
   children,
   handleClick,
+  tw_className = "",
   ...props
 }) => (
   <li
-    className="text-xs text-gray-500  cursor-pointer flex items-center py-2 px-1 hover:bg-gray-200"
+    className={`text-xs text-gray-500  cursor-pointer flex items-center py-2 px-1 hover:bg-gray-200 ${tw_className}`}
     onClick={handleClick}
     {...props}
   >
@@ -33,13 +36,14 @@ const DropdownItem: React.FC<DropdownItemProps> = ({
 const Dropdown: IDropdown<DropdownProps> = ({
   isOpen,
   children,
+  tw_className = "",
   ...props
 }) => {
   return (
     <>
       {isOpen && (
         <ul
-          className="bg-gray-50 border border-gray-300 w-36 absolute text-sm font-normal top-8 right-3 rounded-sm shadow-xl z-20"
+          className={`bg-gray-50 border border-gray-300 w-36 absolute text-sm font-normal top-8 right-3 rounded-sm shadow-xl z-20 ${tw_className}`}
           {...props}
         >
           {children}
