@@ -1,19 +1,27 @@
 import Modal from "../components/Modal";
-import { confirmable, createConfirmation } from "react-confirm";
+import {
+  confirmable,
+  createConfirmation,
+  ReactConfirmProps,
+} from "react-confirm";
 
-const DeleteConfirmationDialog = ({
+type DialogProps = {
+  show: boolean;
+  proceed: (b: boolean) => void;
+  confirmation: string;
+  cancel: () => void;
+};
+
+const DeleteConfirmationDialog: React.FC<ReactConfirmProps> = ({
   show,
   proceed,
   confirmation,
-  dismiss,
   cancel,
-  options,
 }) => {
   return (
     <Modal
       isOpen={show}
       onRequestClose={() => cancel()}
-      // onAfterClose={() => proceed(false)}
       width="20rem"
       height="13rem"
     >
@@ -45,9 +53,9 @@ const DeleteConfirmationDialog = ({
 
 // Create confirm function to call on handle functions
 export function confirm(
-  confirmation,
+  confirmation: string,
   proceedLabel = "OK",
-  cancelLabel = "cancel",
+  cancelLabel = "Cancel",
   options = {}
 ) {
   // confirmable HOC pass props `show`, `dismiss`, `cancel` and `proceed` to your component.
