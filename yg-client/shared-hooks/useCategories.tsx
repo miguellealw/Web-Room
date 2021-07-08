@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import useSWR, { mutate } from "swr";
 import { CategoryApi, CategoryResponse } from "../pages/api/categories";
-import { confirm } from "../components/DeleteConfirmationModal";
+import { confirm } from "../components/DeleteConfirmationDialog";
 import useCategoriesStore from "../stores/useCategoriesStore";
 
 export interface useCategoriesType {
