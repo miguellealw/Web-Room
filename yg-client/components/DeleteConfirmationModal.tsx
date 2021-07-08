@@ -34,7 +34,7 @@ const DeleteConfirmationDialog: React.FC<ReactConfirmProps> = ({
         <div>
           <button
             className="w-14 h-8 font-bold rounded-sm text-sm text-white bg-red-500 mr-2 hover:bg-red-600"
-            onClick={() => proceed(true)}
+            onClick={() => proceed()}
           >
             Yes
           </button>

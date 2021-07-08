@@ -1,6 +1,6 @@
-import Modal from "react-modal";
+import ReactModal from "react-modal";
 
-Modal.setAppElement("#__next");
+ReactModal.setAppElement("#__next");
 
 type CustomModal = {
   width: string;
@@ -10,7 +10,7 @@ type CustomModal = {
   children: React.ReactElement;
 };
 
-const CustomModal: React.FC<CustomModal> = ({
+const CustomModal: React.FC<CustomModal & ReactModal.Props> = ({
   children,
   width,
   height,
@@ -19,12 +19,11 @@ const CustomModal: React.FC<CustomModal> = ({
   ...props
 }) => {
   return (
-    <Modal
-      isOpen={true}
+    <ReactModal
       style={{
         overlay: {
           backgroundColor: "rgba(55, 65, 81, .8)",
-          zIndex: "99999",
+          zIndex: 99999,
         },
         content: {
           width,
@@ -41,8 +40,8 @@ const CustomModal: React.FC<CustomModal> = ({
       {...props}
     >
       {children}
-    </Modal>
+    </ReactModal>
   );
 };
 
-export default CustomModal as Modal;
+export default CustomModal;
