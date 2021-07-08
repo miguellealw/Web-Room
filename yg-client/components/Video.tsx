@@ -1,6 +1,8 @@
 import { truncateString } from "../utils/helpers";
 import Image from "next/image";
 import styles from "../styles/Video.module.css";
+import { ExternalLinkIcon } from "@heroicons/react/outline";
+import { useCallback, useState } from "react";
 
 type VideoProps = {
   title: string;
@@ -22,13 +24,28 @@ const Video: React.FC<VideoProps> = ({
   channelId,
 }) => {
   const datePublished = new Date(publishDate);
+  const [isHovering, setIsHovering] = useState(false);
+  const handleMouseOver = useCallback(
+    () => setIsHovering(true),
+    [setIsHovering]
+  );
+  const handleMouseOut = useCallback(
+    () => setIsHovering(false),
+    [setIsHovering]
+  );
 
   return (
     <a href={`https://www.youtube.com/watch?v=${videoId}`}>
-      <li className="bg-white rounded-lg mb-5 flex flex-col sm:flex-row h-56 sm:h-40 overflow-hidden shadow-sm hover:shadow-lg">
+      <li
+        className="bg-white rounded-lg mb-5 flex flex-col sm:flex-row h-56 sm:h-40 overflow-hidden shadow-sm"
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
+
+        title={`Watch ${title} on YouTube`}
+      >
         {/* Video Thumbnail */}
         <div
-          className={`bg-gray-300 lg:flex-shrink-0 h-2/3 overflow-hidden sm:h-full rounded-tl-md lg:rounded-bl-md ${styles.videoThumbnail}`}
+          className={`bg-gray-300 lg:flex-shrink-0 h-2/3 overflow-hidden sm:h-full rounded-tl-md lg:rounded-bl-md relative ${styles.videoThumbnail}`}
         >
           <Image
             src={thumbnail.url}
@@ -36,6 +53,10 @@ const Video: React.FC<VideoProps> = ({
             width={thumbnail.width}
             height={thumbnail.height}
           />
+
+          {isHovering && (
+            <ExternalLinkIcon className="w-4 h-4 text-black bg-white absolute bottom-2 right-2" />
+          )}
         </div>
 
         {/* Video info */}
