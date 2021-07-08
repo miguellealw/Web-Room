@@ -24,8 +24,8 @@ export const CategoryPage: React.FC = () => {
       {/* Header */}
       <div className="py-5 lg:py-10">
         <Link href="/categories" passHref>
-          <div className="text-sm lg:text-lg mb-5 hidden lg:flex items-center lg:mb-10 text-gray-400 hover:text-gray-600 cursor-pointer w-48">
-            <ArrowNarrowLeftIcon className="w-6 h-6 mr-2" />
+          <div className="text-sm hidden lg:flex items-center mb-5 lg:mb-10 text-gray-400 hover:text-gray-600 cursor-pointer w-52">
+            <ArrowNarrowLeftIcon className="w-4 h-4 mr-2" />
             Back to Categories
           </div>
         </Link>
