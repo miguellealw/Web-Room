@@ -32,23 +32,34 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
           >
             <XIcon className="w-5 h-5 text-gray-500 hover:text-black" />
           </button>
+
           <h2 className="font-bold my-5">
             Add <span className="text-red-500">{selectedChannel.name} </span>
             to...
           </h2>
+
           <ul className="bg-white p-10 rounded-md">
-            {categories.map((c) => (
-              <li
-                key={c.id}
-                className="bg-gray-100 mb-3 px-8 py-6 rounded-md uppercase font-bold hover:bg-gray-200"
-              >
-                <span>{c.name}</span>
-              </li>
-            ))}
+            {categories.length === 0 ? (
+              <div className="text-sm text-gray-500 italic">You have no categories...</div>
+            ) : (
+              categories.map((c) => (
+                <li
+                  key={c.id}
+                  className="bg-gray-100 cursor-pointer text-sm mb-3 px-5 py-5 rounded-md hover:bg-gray-200"
+                >
+                  <span>{c.name}</span>
+                </li>
+              ))
+            )}
           </ul>
-          <button className="w-full bg-red-600 hover:bg-red-500 py-3 rounded-md text-white font-bold mt-7">
-            Add to Category
-          </button>
+          <div className="flex mt-7">
+            <button className="w-full bg-gray-700 hover:bg-gray-600 py-3 text-sm rounded-md text-white font-bold">
+              Create Category
+            </button>
+            <button className="ml-3 w-full bg-red-600 hover:bg-red-500 py-3 text-sm rounded-md text-white font-bold">
+              Add to Category
+            </button>
+          </div>
         </div>
       </div>
     </Modal>
