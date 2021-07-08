@@ -3,10 +3,14 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     fontFamily: {
-      display: ["Inter", "system-ui", "sans-serif"],
+      display: ["system-ui", "sans-serif"],
       body: ["Inter", "system-ui", "sans-serif"],
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        inter: ["inter", "sans-serif"],
+      },
+    },
   },
   variants: {
     extend: {},

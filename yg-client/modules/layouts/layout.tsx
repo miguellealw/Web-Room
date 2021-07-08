@@ -5,7 +5,7 @@ import LogoType from "../../components/LogoType";
 
 const Layout: FC = ({ children }) => {
   return (
-    <div>
+    <div className="font-inter">
       <nav className="w-full py-5 absolute flex justify-center z-20">
         <Link href="/" passHref>
           <a className="flex items-center">
