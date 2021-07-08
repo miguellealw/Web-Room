@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { useDrag } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
@@ -42,6 +42,19 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
     preview(getEmptyImage(), { captureDraggingState: true });
   });
 
+  const handleAddToCategoryClick = useCallback(() => {
+    setIsModalOpen(true);
+    setSelectedChannel({ name, channelId });
+  }, [setIsModalOpen, setSelectedChannel, name, channelId]);
+
+  const handleOpenModalClick = useCallback(
+    (e) => {
+      e.preventDefault();
+      setIsOpen(!isOpen);
+    },
+    [setIsOpen, isOpen]
+  );
+
   return (
     <div
       className={`bg-black translate shadow-sm flex flex-col lg:flex-row items-center rounded-md hover:shadow-md overflow-hidden relative ${
@@ -52,22 +65,14 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
     >
       <DotsVerticalIcon
         className="w-5 h-5 absolute text-white hover:text-black top-0 right-0 m-2 cursor-pointer z-10 hover:bg-gray-50 rounded-full"
-        onClick={(e) => {
-          e.preventDefault();
-          setIsOpen(!isOpen);
-        }}
+        onClick={handleOpenModalClick}
       />
       <span title={`Drag ${name} to Category`}>
         <HandIcon className="w-5 h-5 absolute text-white opacity-20 hover:opacity-100 top-0 left-0 m-2 cursor-move z-20" />
       </span>
 
       <Dropdown isOpen={isOpen}>
-        <Dropdown.Item
-          handleClick={() => {
-            setIsModalOpen(true);
-            setSelectedChannel({ name, channelId });
-          }}
-        >
+        <Dropdown.Item handleClick={handleAddToCategoryClick}>
           <span className="flex">
             <PlusCircleIcon className="w-4 h-4 mr-1" />
             Add to Category
