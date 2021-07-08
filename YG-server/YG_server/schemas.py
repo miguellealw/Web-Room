@@ -66,6 +66,7 @@ class CategorySchema(ma.SQLAlchemyAutoSchema):
     required=True,
     validate=validate.Length(1, 30)
   )
+
   channels = ma.Nested(ChannelSchema, many=True)
 
   _owner = ma.URLFor("api.get_user", values=dict( user_id="<user_id>"))
@@ -76,9 +77,9 @@ class CategorySchema(ma.SQLAlchemyAutoSchema):
     }
   )
 
-
-
-
 category_schema = CategorySchema()
 # don't send back list of channels in category when fetching all categories
-categories_schema = CategorySchema(many=True, only=("name", "_links", "created_at", "updated_at", "_owner", "id"))
+categories_schema = CategorySchema(
+  many=True, 
+  only=("name", "_links", "created_at", "updated_at", "_owner", "channels", "id")
+)
