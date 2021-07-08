@@ -15,11 +15,8 @@
 
 .Modal {
   /* Default */
-  border: 1px solid #ccc;
-  /* background: #fff; */
   overflow: auto;
   webkitoverflowscrolling: touch;
-  borderradius: 4px;
   outline: none;
   padding: 20px;
 

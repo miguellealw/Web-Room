@@ -15,7 +15,7 @@ const CustomModal: React.FC<CustomModal & ReactModal.Props> = ({
 }) => {
   return (
     <ReactModal
-      className={`${styles.Modal} ${tw_className}`}
+      className={`${styles.Modal} rounded-lg ${tw_className}`}
       overlayClassName={styles.Overlay}
       closeTimeoutMS={200}
       {...props}
