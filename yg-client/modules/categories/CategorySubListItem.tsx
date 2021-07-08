@@ -5,6 +5,7 @@ import { Channel } from "../../pages/api/types";
 import { DotsVerticalIcon, XIcon } from "@heroicons/react/outline";
 import { useCallback, useState } from "react";
 import Dropdown from "../../components/Dropdown";
+import useOuterClick from "../../shared-hooks/useOnOuterClick";
 
 type CategorySubListItemProps = {
   channel: Channel;
@@ -45,13 +46,15 @@ const CategorySubListItem: React.FC<CategorySubListItemProps> = ({
   removeChannelFromCategory,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const innerRef = useOuterClick(() => setIsDropdownOpen(false))
 
   const handleRemoveChannelFromCategory = useCallback(async () => {
     removeChannelFromCategory(channel.name, channel.yt_channel_id);
   }, [channel, removeChannelFromCategory]);
 
+
   return (
-    <li className="py-5 bg-gray-100 mb-3 rounded-lg flex items-center pl-4 relative">
+    <li className="py-5 bg-gray-100 mb-3 rounded-lg flex items-center pl-4 relative" ref={innerRef}>
       {/* Thumbnail */}
       {!channel.yt_data ? (
         <div className="rounded-full w-14 h-14 bg-gray-500 overflow-hidden"></div>
