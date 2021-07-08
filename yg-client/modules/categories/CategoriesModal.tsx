@@ -18,11 +18,10 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
   return (
     <Modal
       isOpen={isOpen}
-      // onRequestClose={() => cancel()}
+      onRequestClose={() => setIsModalOpen(false)}
       width="40rem"
       height="48rem"
       bgColor="#F3F4F6"
-      onRequestClose={() => setIsModalOpen(false)}
     >
       <div className="h-full flex items-center justify-center">
         <div className="w-5/6">
