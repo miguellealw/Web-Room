@@ -9,6 +9,7 @@ import SubscriptionsSection, {
 } from "./SubscriptionsSection";
 import useFetchCategory from "../../shared-hooks/useFetchCategory";
 import CategorySkeleton from "../../components/skeletons/CategorySkeleton";
+import BackToCategoriesLink from "../../components/BackToCategoriesLink";
 
 // const Category = ({ category }) => {
 export const CategoryPage: React.FC = () => {
@@ -23,12 +24,7 @@ export const CategoryPage: React.FC = () => {
     <AuthedLayout tw_className="w-11/12 lg:w-1/2 m-auto pb-10">
       {/* Header */}
       <div className="py-5 lg:py-10">
-        <Link href="/categories" passHref>
-          <div className="text-sm hidden lg:flex items-center mb-5 lg:mb-10 text-gray-400 hover:text-gray-600 cursor-pointer w-52">
-            <ArrowNarrowLeftIcon className="w-4 h-4 mr-2" />
-            Back to Categories
-          </div>
-        </Link>
+        <BackToCategoriesLink />
 
         <CategorySkeleton ready={!isLoading}>
           <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-5">

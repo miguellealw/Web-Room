@@ -4,6 +4,7 @@ import { ArrowNarrowLeftIcon } from "@heroicons/react/outline";
 import React, { ReactDOM, useState } from "react";
 import { useRouter } from "next/router";
 import useCategories from "../../shared-hooks/useCategories";
+import BackToCategoriesLink from "../../components/BackToCategoriesLink";
 
 export const CreateCategoryPage: React.FC = () => {
   const [value, setValue] = useState("");
@@ -28,12 +29,7 @@ export const CreateCategoryPage: React.FC = () => {
   return (
     <AuthedLayout>
       <div className="py-10">
-        <Link href="/categories" passHref>
-          <div className="text-sm lg:text-lg mb-5 hidden lg:flex items-center lg:mb-10 text-gray-400 hover:text-gray-600 cursor-pointer w-48">
-            <ArrowNarrowLeftIcon className="w-6 h-6 mr-2" />
-            Back to Categories
-          </div>
-        </Link>
+        <BackToCategoriesLink />
 
         <h1 className="lg:pb-7 text-2xl lg:text-5xl font-bold">
           Create Category
@@ -41,7 +37,10 @@ export const CreateCategoryPage: React.FC = () => {
 
         <form className="flex flex-col mt-10" onSubmit={handleCreateCategory}>
           <div>
-            <label htmlFor="name" className="text-base lg:text-lg font-bold block mb-1">
+            <label
+              htmlFor="name"
+              className="text-base lg:text-lg font-bold block mb-1"
+            >
               Category Name
             </label>
             <input

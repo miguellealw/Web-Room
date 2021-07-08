@@ -7,6 +7,7 @@ import useCategories from "../../shared-hooks/useCategories";
 import useCategoriesStore from "../../stores/useCategoriesStore";
 import useFetchCategories from "../../shared-hooks/useFetchCategories";
 import React from "react";
+import BackToCategoriesLink from "../../components/BackToCategoriesLink";
 // Path - /categories/edit/<category_id>
 
 export const EditCategoryPage: React.FC = () => {
@@ -40,12 +41,7 @@ export const EditCategoryPage: React.FC = () => {
   return (
     <AuthedLayout>
       <div className="py-10">
-        <Link href="/categories" passHref>
-          <div className="text-sm lg:text-lg mb-5 hidden lg:flex items-center lg:mb-10 text-gray-400 hover:text-gray-600 cursor-pointer w-48">
-            <ArrowNarrowLeftIcon className="w-6 h-6 mr-2" />
-            Back to Categories
-          </div>
-        </Link>
+        <BackToCategoriesLink />
 
         {categoryToEdit ? (
           <>
