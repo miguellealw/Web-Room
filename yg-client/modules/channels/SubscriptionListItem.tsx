@@ -73,7 +73,7 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
           onClick={handleOpenModalClick}
         />
         <span title={`Drag ${name} to Category`}>
-          <HandIcon className="w-5 h-5 absolute text-white opacity-20 hover:opacity-100 top-0 left-0 m-2 cursor-move z-20" />
+          <HandIcon className="w-5 h-5 absolute text-white opacity-20 hover:opacity-100 top-0 left-0 m-2 cursor-move z-20 hidden lg:block" />
         </span>
 
         <Dropdown isOpen={isOpen}>
