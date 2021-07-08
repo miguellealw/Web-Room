@@ -19,12 +19,10 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
     <Modal
       isOpen={isOpen}
       onRequestClose={() => setIsModalOpen(false)}
-      width="40rem"
-      height="48rem"
-      bgColor="#F3F4F6"
+      tw_className="w-11/12 lg:w-1/4 h-30 bg-gray-100"
     >
       <div className="h-full flex items-center justify-center">
-        <div className="w-5/6">
+        <div className="w-11/12 lg:w-5/6">
           <button
             className="absolute top-5 right-5"
             onClick={() => setIsModalOpen(false)}
@@ -33,14 +31,16 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
             <XIcon className="w-5 h-5 text-gray-500 hover:text-black" />
           </button>
 
-          <h2 className="font-bold my-5">
+          <h2 className="font-bold text-base lg:text-lg my-5">
             Add <span className="text-red-500">{selectedChannel.name} </span>
             to...
           </h2>
 
-          <ul className="bg-white p-10 rounded-md">
+          <ul className="bg-white p-5 lg:p-10 rounded-md">
             {categories.length === 0 ? (
-              <div className="text-sm text-gray-500 italic">You have no categories...</div>
+              <div className="text-sm text-gray-500 italic">
+                You have no categories...
+              </div>
             ) : (
               categories.map((c) => (
                 <li
@@ -52,11 +52,11 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
               ))
             )}
           </ul>
-          <div className="flex mt-7">
-            <button className="w-full bg-gray-700 hover:bg-gray-600 py-3 text-sm rounded-md text-white font-bold">
+          <div className="flex flex-col lg:flex-row mt-7">
+            <button className="w-full py-2 lg:py-3 bg-gray-700 hover:bg-gray-600  text-sm rounded-md text-white font-bold">
               Create Category
             </button>
-            <button className="ml-3 w-full bg-red-600 hover:bg-red-500 py-3 text-sm rounded-md text-white font-bold">
+            <button className="mt-3 lg:mt-0 lg:ml-3 w-full py-2 lg:py-3 bg-red-600 hover:bg-red-500 text-sm rounded-md text-white font-bold">
               Add to Category
             </button>
           </div>

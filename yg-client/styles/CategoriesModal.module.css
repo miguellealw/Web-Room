@@ -1,0 +1,47 @@
+/* Mobile first */
+
+.Overlay {
+  /* Default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  /* Custom */
+  background-color: rgba(55, 65, 81, 0.8);
+  z-index: 99999;
+}
+
+.Modal {
+  /* Default */
+  border: 1px solid #ccc;
+  /* background: #fff; */
+  overflow: auto;
+  webkitoverflowscrolling: touch;
+  borderradius: 4px;
+  outline: none;
+  padding: 20px;
+
+  /* Custom */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* md */
+@media (min-width: 768px) {
+}
+
+/* lg */
+@media (min-width: 1024px) {
+}
+
+/* xl */
+@media (min-width: 1280px) {
+}
+
+/* 2xl */
+@media (min-width: 1536px) {
+}

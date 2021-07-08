@@ -22,8 +22,7 @@ const DeleteConfirmationDialog: React.FC<ReactConfirmProps> = ({
     <Modal
       isOpen={show}
       onRequestClose={() => cancel()}
-      width="20rem"
-      height="13rem"
+      tw_className="w-80 h-52 bg-white"
     >
       <div className="flex flex-col justify-between h-full w-full">
         <h3 className="text-sm font-bold uppercase text-red-600">
