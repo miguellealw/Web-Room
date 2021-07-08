@@ -32,7 +32,7 @@ const CategoryListItem: React.FC<CategoryListItemProps> = ({
               setIsDropdownOpen(!isDropdownOpen);
             }}
           />
-          <span className="w-40 truncate text-center">{category.name}</span>
+          <span className="w-40 truncate text-center text-sm lg:text-base p-2">{category.name}</span>
 
           {/* Dropdown */}
           <Dropdown isOpen={isDropdownOpen}>
