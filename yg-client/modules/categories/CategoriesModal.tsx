@@ -1,22 +1,38 @@
 import Modal from "../../components/Modal";
 import useCategoriesStore from "../../stores/useCategoriesStore";
-import { XIcon } from "@heroicons/react/outline";
-import { useCallback } from "react";
-import { Category } from "../../pages/api/types";
+import { XIcon, CheckIcon, PlusSmIcon } from "@heroicons/react/outline";
 import { CheckCircleIcon } from "@heroicons/react/solid";
+import { useCallback, useState } from "react";
+import { Category } from "../../pages/api/types";
+import useCategory from "../../shared-hooks/useCategory";
 
 type ListItemProps = {
   c: Category;
+  channel: { name: string; channelId: string };
   isSelected: boolean;
 };
 
-const ListItem: React.FC<ListItemProps> = ({ c, isSelected }) => {
+const ListItem: React.FC<ListItemProps> = ({
+  c,
+  channel,
+  isSelected: isChannelInCategory = false,
+}) => {
+  const { addChannelToCategory, removeChannelFromCategory } = useCategory(c.id);
+  const [isSelected, setIsSelected] = useState(isChannelInCategory);
+
   return (
     <li
       className={`bg-gray-100 cursor-pointer text-sm mb-3 px-5 py-5 rounded-md hover:bg-gray-200 ${
         isSelected &&
         "bg-gray-800 hover:bg-gray-600 text-white flex justify-between"
       }`}
+      onClick={() => {
+        setIsSelected(!isSelected);
+
+        if (!isSelected)
+          addChannelToCategory(c.id, channel.name, channel.channelId);
+        else removeChannelFromCategory(channel.name, channel.channelId);
+      }}
     >
       <span>{c.name}</span>
 
@@ -49,6 +65,8 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
 }) => {
   const categories = useCategoriesStore((state) => state.categories);
 
+  // TODO: consider fetching channel and return categories the channel is part of
+
   console.log("CATEGORIES in MODAL", categories);
 
   const channelExistsInCategory = (channels) => {
@@ -57,7 +75,14 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
     );
   };
 
-  const handleClickOnCategory = useCallback(() => {}, []);
+  /*
+    TODO: change local store when channel is added / removed from category
+
+    Implement adding channel to category
+  */
+  const handleClickOnCategory = useCallback(() => {
+    // make api call
+  }, []);
 
   return (
     <Modal
@@ -96,16 +121,30 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
               categories.map((c) => {
                 // check if selectedChannel.channelId is in c.channels
                 const isChannelInCategory = channelExistsInCategory(c.channels);
-                return <ListItem key={c.id} c={c} isSelected={isChannelInCategory} />;
+                return (
+                  <ListItem
+                    key={c.id}
+                    c={c}
+                    isSelected={isChannelInCategory}
+                    channel={selectedChannel}
+                  />
+                );
               })
             )}
           </ul>
           <div className="flex flex-col lg:flex-row mt-7">
-            <button className="w-full py-2 lg:py-3 bg-gray-700 hover:bg-gray-600  text-sm rounded-md text-white font-bold">
+            <button className="w-full py-2 lg:py-3 border-2 border-gray-400 text-gray-400 hover:text-white hover:bg-gray-400 text-sm rounded-md font-bold flex justify-center items-center">
+              <PlusSmIcon className="w-5 h-5 mr-2" />
               Create Category
             </button>
-            <button className="mt-3 lg:mt-0 lg:ml-3 w-full py-2 lg:py-3 bg-red-600 hover:bg-red-500 text-sm rounded-md text-white font-bold">
-              Add to Category
+            <button
+              className="mt-3 lg:mt-0 lg:ml-3 w-full py-2 lg:py-3 bg-gray-700 hover:bg-gray-600 text-sm rounded-md text-white font-bold flex justify-center items-center"
+              onClick={() => {
+                setIsModalOpen(false);
+              }}
+            >
+              <CheckIcon className="w-5 h-5 mr-2" />
+              Confirm
             </button>
           </div>
         </div>
