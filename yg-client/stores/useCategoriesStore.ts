@@ -3,8 +3,8 @@ import create from "zustand";
 import { CategoryApi, CategoryResponse } from "../pages/api/categories";
 import { Category } from "../pages/api/types";
 
-// This is used when optimistically updating the UI before revalidating cache
-// used when updating or creating category and client does not yet have all the data from the backend
+// This is used when optimistically updating the UI before revalidating cache.
+// Used when updating or creating category and client does not yet have all the data from the backend
 type TempCategory = {
   name: string;
   id?: string | number;
