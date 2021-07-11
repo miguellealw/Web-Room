@@ -52,6 +52,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
 
     // revalidate to make sure local data is correct
     mutate(`/api/v1.0/users/current_user/categories`, data => {
+      // change store state after revalidation
       set(() => ({ categories: [...data.categories] }));
     });
   },
@@ -82,7 +83,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
 
     // revalidate to make sure local data is correct
     mutate(`/api/v1.0/users/current_user/categories`, data => {
-      // TODO: change store state after revalidation
+      // change store state after revalidation
       set(() => ({ categories: [...data.categories] }));
     });
   },
@@ -102,7 +103,10 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     await api.deleteCategory(id);
 
     // revalidate to make sure local data is correct
-    mutate(`/api/v1.0/users/current_user/categories`);
+    mutate(`/api/v1.0/users/current_user/categories`, data => {
+      // change store state after revalidation
+      set(() => ({ categories: [...data.categories] }));
+    });
   },
 }));
 
