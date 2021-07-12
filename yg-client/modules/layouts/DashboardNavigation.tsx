@@ -17,11 +17,11 @@ import useUser from "../../shared-hooks/useUser";
 import LoadingText from "../../components/LoadingText";
 import Logo from "../../components/Logo";
 import { useDrop } from "react-dnd";
-import { Category } from "../../pages/api/types";
 import useCategory from "../../shared-hooks/useCategory";
 import React from "react";
 import { CategoryResponse } from "../../pages/api/categories";
 import LogoType from "../../components/LogoType";
+import { Category } from "../categories";
 
 type NavCategoryListItemProps = {
   category: Category;
@@ -141,7 +141,9 @@ const DashboardNavigation: React.FC<{
             {/* New Category Button */}
             <li>
               <Link href={`/categories/create`} passHref>
-                <a className={`pl-5 py-3 bg-gray-900 hover:bg-gray-700 flex items-center`}>
+                <a
+                  className={`pl-5 py-3 bg-gray-900 hover:bg-gray-700 flex items-center`}
+                >
                   <PlusIcon className="w-4 h-4 mr-2" />
                   <span className="w-40 truncate">New Category</span>
                 </a>

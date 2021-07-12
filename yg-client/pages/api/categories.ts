@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Api } from "./api";
-import { Category } from "./types";
+import { Category } from "../../modules/categories";
 
 export interface CategoryResponse {
   kind: string;

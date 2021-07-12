@@ -1,7 +1,7 @@
 import { mutate } from "swr";
 import create from "zustand";
 import { CategoryApi, CategoryResponse } from "../pages/api/categories";
-import { Category } from "../pages/api/types";
+import { Category } from "../modules/categories";
 
 // This is used when optimistically updating the UI before revalidating cache.
 // Used when updating or creating category and client does not yet have all the data from the backend
@@ -23,7 +23,7 @@ interface CategoriesState {
   deleteCategory: (api: CategoryApi, id: string | number) => void;
 }
 
-// Call swr mutates in setters
+// Call swr mutations in setters
 const useCategoriesStore = create<CategoriesState>((set, get) => ({
   categories: [],
 
@@ -41,6 +41,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
       `/api/v1.0/users/current_user/categories`,
       (data: CategoryResponse) => {
         newCategory = { name };
+
         // Update store
         set(() => ({ categories: [...data.categories, newCategory] }));
         return { ...data, categories: [...data.categories, newCategory] };
@@ -51,7 +52,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     await api.createCategory(name);
 
     // revalidate to make sure local data is correct
-    mutate(`/api/v1.0/users/current_user/categories`, data => {
+    mutate(`/api/v1.0/users/current_user/categories`, (data) => {
       // change store state after revalidation
       set(() => ({ categories: [...data.categories] }));
     });
@@ -69,11 +70,15 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
         editedCategory = { id, name: newName };
         // TODO: find better way of doing this
         const categoriesToKeep = data?.categories?.filter((c) => c.id !== id);
+        const updatedCategoriesState = categoriesToKeep
+          ? [...categoriesToKeep, editedCategory]
+          : [];
+
         // Update store
-        set(() => ({ categories: [...categoriesToKeep, editedCategory] }));
+        set(() => ({ categories: updatedCategoriesState }));
         return {
           ...data,
-          categories: [...categoriesToKeep, editedCategory],
+          categories: updatedCategoriesState,
         };
       },
       false
@@ -82,7 +87,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     await api.updateCategory(id, newName);
 
     // revalidate to make sure local data is correct
-    mutate(`/api/v1.0/users/current_user/categories`, data => {
+    mutate(`/api/v1.0/users/current_user/categories`, (data) => {
       // change store state after revalidation
       set(() => ({ categories: [...data.categories] }));
     });
@@ -103,7 +108,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     await api.deleteCategory(id);
 
     // revalidate to make sure local data is correct
-    mutate(`/api/v1.0/users/current_user/categories`, data => {
+    mutate(`/api/v1.0/users/current_user/categories`, (data) => {
       // change store state after revalidation
       set(() => ({ categories: [...data.categories] }));
     });

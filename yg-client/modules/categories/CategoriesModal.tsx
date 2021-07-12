@@ -3,7 +3,7 @@ import useCategoriesStore from "../../stores/useCategoriesStore";
 import { XIcon, CheckIcon, PlusSmIcon } from "@heroicons/react/outline";
 import { CheckCircleIcon } from "@heroicons/react/solid";
 import { useCallback, useState } from "react";
-import { Category } from "../../pages/api/types";
+import { Category } from "./";
 import useCategory from "../../shared-hooks/useCategory";
 
 type ListItemProps = {

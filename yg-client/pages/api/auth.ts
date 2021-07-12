@@ -1,5 +1,5 @@
 import { Api } from "./api";
-import { User } from "./types";
+import { User } from "../../modules/auth";
 import { AxiosResponse } from "axios";
 
 type AuthResponse = {

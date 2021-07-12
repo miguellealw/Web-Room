@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Api } from "./api";
-import { Channel } from "./types";
+import { Channel } from "../../modules/channels";
 
 export type ChannelResponse = {
   kind: string;

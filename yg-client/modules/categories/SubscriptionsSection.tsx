@@ -1,8 +1,7 @@
-import { CategoryResponse } from "../../pages/api/categories";
 import CategorySubListItem, {
   MobileCategorySubListItem,
 } from "./CategorySubListItem";
-import { Channel } from "../../pages/api/types";
+import { Channel } from "../channels";
 
 type SubscriptionSectionProps = {
   channels?: Channel[] | undefined;
@@ -16,9 +15,7 @@ export const MobileSubscriptionsSection: React.FC<SubscriptionSectionProps> = ({
   categoryId,
 }) => {
   return (
-    <ul
-      className="w-full overflow-x-scroll flex content-center 2xl:hidden"
-    >
+    <ul className="w-full overflow-x-scroll flex content-center 2xl:hidden">
       {channels?.map((channel: Channel) => (
         <MobileCategorySubListItem
           key={channel.yt_channel_id}

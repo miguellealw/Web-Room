@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Api } from "./api";
-import { User } from "./types";
+import { User } from "../../modules/auth";
 
 export type GetUserResult = {
   kind: string;

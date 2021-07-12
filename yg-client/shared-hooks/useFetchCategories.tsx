@@ -20,7 +20,7 @@ const useFetchCategories = () => {
   // Update store
   const setCategories = useCategoriesStore((state) => state.setCategories);
   React.useEffect(() => {
-    if (data) setCategories(data.categories);
+    if (data && !error) setCategories(data.categories);
   }, [data, setCategories, data?.categories]);
 
   return {

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { numberWithCommas } from "../../utils/helpers";
 import { ExternalLinkIcon } from "@heroicons/react/outline";
-import { Channel } from "../../pages/api/types";
+import { Channel } from "../channels";
 import { DotsVerticalIcon, XIcon } from "@heroicons/react/outline";
 import { useCallback, useState } from "react";
 import Dropdown from "../../components/Dropdown";
