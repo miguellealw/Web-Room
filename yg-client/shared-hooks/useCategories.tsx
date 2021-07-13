@@ -3,6 +3,7 @@ import useSWR, { mutate } from "swr";
 import { CategoryApi, CategoryResponse } from "../pages/api/categories";
 import { confirm } from "../components/DeleteConfirmationDialog";
 import useCategoriesStore from "../stores/useCategoriesStore";
+import shallow from "zustand/shallow";
 
 export interface useCategoriesType {
   // handleDeleteCategory: (id: number, name: string) => void;
@@ -12,10 +13,15 @@ export interface useCategoriesType {
 }
 
 const useCategories: () => useCategoriesType = () => {
-  // const createCategory = useCategoriesStore(useCallback((state) => state.createCategory, []));
-  const createCategory = useCategoriesStore((state) => state.createCategory);
-  const updateCategory = useCategoriesStore((state) => state.updateCategory);
-  const deleteCategory = useCategoriesStore((state) => state.deleteCategory);
+  const { createCategory, updateCategory, deleteCategory } = useCategoriesStore(
+    (state) => ({
+      createCategory: state.createCategory,
+      updateCategory: state.updateCategory,
+      deleteCategory: state.deleteCategory,
+    }),
+    shallow
+  );
+
   // useMemo will return the same instance of CategoryApi instead of creating a new one
   let api = useMemo(() => new CategoryApi(), []);
   api.setup();
