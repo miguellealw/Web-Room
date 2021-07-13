@@ -14,13 +14,9 @@ interface CategoriesState {
   categories: Category[] | TempCategory[];
   setCategories: (categories: Category[]) => void;
   createCategory: (api: CategoryApi, name: string) => void;
-  getCategory: (id: string | number) => Category | TempCategory | undefined;
-  updateCategory: (
-    api: CategoryApi,
-    id: string | number,
-    newName: string
-  ) => void;
-  deleteCategory: (api: CategoryApi, id: string | number) => void;
+  getCategory: (id: number) => Category | TempCategory | undefined;
+  updateCategory: (api: CategoryApi, id: number, newName: string) => void;
+  deleteCategory: (api: CategoryApi, id: number) => void;
 }
 
 // Call swr mutations in setters
@@ -41,10 +37,13 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
       `/api/v1.0/users/current_user/categories`,
       (data: CategoryResponse) => {
         newCategory = { name };
+        const updatedState = data?.categories
+          ? [...data.categories, newCategory]
+          : [];
 
         // Update store
-        set(() => ({ categories: [...data.categories, newCategory] }));
-        return { ...data, categories: [...data.categories, newCategory] };
+        set(() => ({ categories: updatedState }));
+        return { ...data, categories: updatedState };
       },
       false
     );
@@ -52,13 +51,19 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     await api.createCategory(name);
 
     // revalidate to make sure local data is correct
-    mutate(`/api/v1.0/users/current_user/categories`, (data) => {
-      // change store state after revalidation
-      set(() => ({ categories: [...data.categories] }));
-    });
+    mutate(
+      `/api/v1.0/users/current_user/categories`,
+      (data: CategoryResponse) => {
+        // change store state after revalidation
+        const updatedState = data?.categories ? [...data.categories] : [];
+
+        set(() => ({ categories: updatedState }));
+        return { ...data };
+      }
+    );
   },
 
-  getCategory: (id) => get().categories.find((c) => c.id === parseInt(id)),
+  getCategory: (id) => get().categories.find((c) => c.id === id),
 
   updateCategory: async (api, id, newName) => {
     let editedCategory: TempCategory;
@@ -70,15 +75,15 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
         editedCategory = { id, name: newName };
         // TODO: find better way of doing this
         const categoriesToKeep = data?.categories?.filter((c) => c.id !== id);
-        const updatedCategoriesState = categoriesToKeep
+        const updatedState = categoriesToKeep
           ? [...categoriesToKeep, editedCategory]
           : [];
 
         // Update store
-        set(() => ({ categories: updatedCategoriesState }));
+        set(() => ({ categories: updatedState }));
         return {
           ...data,
-          categories: updatedCategoriesState,
+          categories: updatedState,
         };
       },
       false
@@ -87,10 +92,19 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     await api.updateCategory(id, newName);
 
     // revalidate to make sure local data is correct
-    mutate(`/api/v1.0/users/current_user/categories`, (data) => {
-      // change store state after revalidation
-      set(() => ({ categories: [...data.categories] }));
-    });
+    mutate(
+      `/api/v1.0/users/current_user/categories`,
+      (data: CategoryResponse) => {
+        // change store state after revalidation
+        const updatedState = data.categories ? [...data.categories] : [];
+
+        set(() => ({
+          categories: updatedState,
+        }));
+
+        return { ...data };
+      }
+    );
   },
   deleteCategory: async (api, id) => {
     mutate(
@@ -98,9 +112,11 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
       async (data: CategoryResponse) => {
         // Filter out category to delete from data
         const categoriesToKeep = data?.categories?.filter((c) => c.id !== id);
+        const updatedState = categoriesToKeep ? [...categoriesToKeep] : [];
+
         // Update store
-        set(() => ({ categories: [...categoriesToKeep] }));
-        return { ...data, categories: [...categoriesToKeep] };
+        set(() => ({ categories: updatedState }));
+        return { ...data, categories: updatedState };
       },
       false
     );
@@ -108,10 +124,17 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     await api.deleteCategory(id);
 
     // revalidate to make sure local data is correct
-    mutate(`/api/v1.0/users/current_user/categories`, (data) => {
-      // change store state after revalidation
-      set(() => ({ categories: [...data.categories] }));
-    });
+    mutate(
+      `/api/v1.0/users/current_user/categories`,
+      (data: CategoryResponse) => {
+        const updatedState = data.categories ? [...data.categories] : [];
+
+        // change store state after revalidation
+        set(() => ({ categories: updatedState }));
+
+        return { ...data };
+      }
+    );
   },
 }));
 
