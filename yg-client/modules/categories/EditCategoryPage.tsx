@@ -20,7 +20,7 @@ export const EditCategoryPage: React.FC = () => {
 
   // Get category from store
   const { edit_category_id } = router.query;
-  const categoryToEdit = getCategory(edit_category_id as string);
+  const categoryToEdit = getCategory(parseInt(edit_category_id as string));
   React.useEffect(() => {
     if (categoryToEdit) setValue(categoryToEdit?.name);
   }, [categoryToEdit]);
@@ -31,7 +31,7 @@ export const EditCategoryPage: React.FC = () => {
     setIsError(false);
 
     try {
-      updateCategory(edit_category_id, value);
+      updateCategory(parseInt(edit_category_id as string), value);
       router.replace("/categories");
     } catch (err) {
       setIsError(true);
