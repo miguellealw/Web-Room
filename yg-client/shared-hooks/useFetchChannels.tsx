@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { ChannelsApi } from "../pages/api/channels";
 
-function useChannels() {
+function useFetchChannels() {
   const api = new ChannelsApi();
   api.setup();
   const fetcher = () => api.get_yt_channels();
@@ -28,4 +28,4 @@ function useChannels() {
   };
 }
 
-export default useChannels;
+export default useFetchChannels;

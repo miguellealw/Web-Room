@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AuthedLayout from "../layouts/authed_layout";
 import SubscriptionListItem from "./SubscriptionListItem";
-import useChannels from "../../shared-hooks/useChannels";
+import useFetchChannels from "../../shared-hooks/useFetchChannels";
 import ChannelsSkeleton from "../../components/skeletons/ChannelsSkeleton";
 import { ChannelResponse, ChannelsApi } from "../../pages/api/channels";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -15,7 +15,7 @@ export const ChannelsPage: React.FC = () => {
     error,
     isLoading,
     mutateChannels,
-  } = useChannels();
+  } = useFetchChannels();
 
   const [selectedChannel, setSelectedChannel] = useState<{
     name: string;

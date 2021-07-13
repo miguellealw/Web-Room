@@ -41,12 +41,14 @@ user_schema = UserSchema(only=("email", "username", "created_at", "id"))
 class ChannelSchema(ma.SQLAlchemyAutoSchema):
   class Meta:
     model = Channel
-    fields = ("name", "yt_channel_id", "yt_data", "_links")
+    fields = ("name", "yt_channel_id", "categories", "yt_data", "_links")
     include_relationships = True
+
+  # channels = ma.Nested(CategorySchema, many=True)
 
   _links = ma.Hyperlinks(
     {
-      "self": ma.URLFor("api.get_user_channel", values=dict( channel_id="<id>" )),
+      "self": ma.URLFor("api.get_user_channel", values=dict( yt_channel_id="<yt_channel_id>" )),
       "collection": ma.URLFor("api.get_user_channels"),
     }
   )

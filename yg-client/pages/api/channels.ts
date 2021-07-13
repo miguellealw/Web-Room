@@ -4,10 +4,9 @@ import { Channel } from "../../modules/channels";
 
 export type ChannelResponse = {
   kind: string;
-  channels: Channel[] | [] | null;
+  channels: Channel[] | [] | Channel | null;
   errorMessage: any;
 };
-
 export class ChannelsApi extends Api {
   async get_channels(): Promise<ChannelResponse> {
     try {
@@ -20,6 +19,27 @@ export class ChannelsApi extends Api {
         channels: response.data,
         errorMessage: null,
       };
+    } catch (err) {
+      return {
+        kind: "bad-data",
+        channels: null,
+        errorMessage: err,
+      };
+    }
+  }
+
+  async getChannelById(channelId: string): Promise<ChannelResponse> {
+    try {
+      const response: AxiosResponse<any> = await this.axios.get(
+        `/api/v1.0/users/current_user/channels/${channelId}`
+      );
+
+      return {
+        kind: "ok",
+        channels: response.data,
+        errorMessage: null,
+      };
+
     } catch (err) {
       return {
         kind: "bad-data",

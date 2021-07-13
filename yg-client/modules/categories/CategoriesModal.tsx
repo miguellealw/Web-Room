@@ -2,9 +2,12 @@ import Modal from "../../components/Modal";
 import useCategoriesStore from "../../stores/useCategoriesStore";
 import { XIcon, CheckIcon, PlusSmIcon } from "@heroicons/react/outline";
 import { CheckCircleIcon } from "@heroicons/react/solid";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Category } from "./";
 import useCategory from "../../shared-hooks/useCategory";
+import { Channel } from "../channels";
+import useCategoryStore from "../../stores/useCategoryStore";
+import useFetchChannel from "../../shared-hooks/useFetchChannel";
 
 type ListItemProps = {
   c: Category;
@@ -17,8 +20,13 @@ const ListItem: React.FC<ListItemProps> = ({
   channel,
   isSelected: isChannelInCategory = false,
 }) => {
+  console.log("LIST ITEM");
   const { addChannelToCategory, removeChannelFromCategory } = useCategory(c.id);
   const [isSelected, setIsSelected] = useState(isChannelInCategory);
+
+  useEffect(() => {
+    setIsSelected(isChannelInCategory);
+  }, [isChannelInCategory]);
 
   return (
     <li
@@ -27,11 +35,14 @@ const ListItem: React.FC<ListItemProps> = ({
         "bg-gray-800 hover:bg-gray-600 text-white flex justify-between"
       }`}
       onClick={() => {
+        // Set current category so store knows what category to add channel to
         setIsSelected(!isSelected);
 
-        if (!isSelected)
-          addChannelToCategory(c.id, channel.name, channel.channelId);
-        else removeChannelFromCategory(channel.name, channel.channelId);
+        if (!isSelected) {
+          addChannelToCategory(channel.name, channel.channelId);
+        } else {
+          removeChannelFromCategory(channel.name, channel.channelId);
+        }
       }}
     >
       <span>{c.name}</span>
@@ -65,24 +76,14 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
 }) => {
   const categories = useCategoriesStore((state) => state.categories);
 
-  // TODO: consider fetching channel and return categories the channel is part of
+  // fetch channel and return categories the channel is part of
+  const { data: channelData } = useFetchChannel(selectedChannel.channelId);
 
-  console.log("CATEGORIES in MODAL", categories);
-
-  const channelExistsInCategory = (channels) => {
-    return channels.some(
-      (ch) => ch.yt_channel_id === selectedChannel.channelId
-    );
-  };
-
-  /*
-    TODO: change local store when channel is added / removed from category
-
-    Implement adding channel to category
-  */
-  const handleClickOnCategory = useCallback(() => {
-    // make api call
-  }, []);
+  // check if selected channel is in category list item
+  const channelExistsInCategory = (
+    currentCategoryId: number,
+    channelCategories: number[]
+  ) => channelCategories.some((categoryId) => categoryId === currentCategoryId);
 
   return (
     <Modal
@@ -120,7 +121,11 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
             ) : (
               categories.map((c) => {
                 // check if selectedChannel.channelId is in c.channels
-                const isChannelInCategory = channelExistsInCategory(c.channels);
+                const isChannelInCategory = channelExistsInCategory(
+                  c.id as number,
+                  channelData?.categories || []
+                );
+
                 return (
                   <ListItem
                     key={c.id}

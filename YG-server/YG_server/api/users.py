@@ -35,6 +35,7 @@ def current_user():
     "isLoggedIn": True
   })
 
+# This will return the users subscriptions
 @bp.route('/users/current_user/yt-channels', methods=['GET'])
 @login_required
 @yt_auth_required
@@ -48,15 +49,14 @@ def get_user_yt_channels(yt_client):
     maxResults=40
   )
 
-
-
-  # return jsonify({ "channels": channels })
   return jsonify( channels )
 
+# This will return the channels that a user has in categories
 @bp.route('/users/current_user/channels', methods=['GET'])
-@yt_auth_required
+# @yt_auth_required
 @login_required
-def get_user_channels(yt_client):
+# def get_user_channels(yt_client):
+def get_user_channels():
   user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
   channels = user_found.channels
   if channels is None:
@@ -66,27 +66,26 @@ def get_user_channels(yt_client):
   channel_ids = [channel.yt_channel_id for channel in channels]
 
   # Get channel data from youtube
-  yt_channels = get_channel(yt_client, 
-    part='snippet,contentDetails', 
-    id=channel_ids
-  )
+  # yt_channels = get_channel(yt_client, 
+  #   part='snippet,contentDetails', 
+  #   id=channel_ids
+  # )
 
   # USE THIS INSTEAD OF CODE BELOW
   # if len(found_category.channels) != 0:
   #   found_category.add_yt_data(yt_client, get_channel)
 
   # Apply YouTube channel data to response
-  res = []
-  for channel in channels_schema.dump(user_found.channels):
-    # Add YouTube data to each channel
-    channel["yt_data"] = next(filter(lambda yt_channel: yt_channel["id"] == channel["yt_channel_id"], yt_channels["items"]), None)
-    res.append(channel)
+  # res = []
+  # for channel in channels_schema.dump(user_found.channels):
+  #   # Add YouTube data to each channel
+  #   channel["yt_data"] = next(filter(lambda yt_channel: yt_channel["id"] == channel["yt_channel_id"], yt_channels["items"]), None)
+  #   res.append(channel)
 
   # TODO: return object w/ data from yt_channels like nextPage toke and pageInfo
-  return jsonify( res )
-  # return jsonify( channels_schema.dump(user_found.channels) )
+  # return jsonify( res )
+  return jsonify( channels_schema.dump(user_found.channels) )
 
-# TODO: allow passing array of yt_channel_id's to add mutliple channels to category
 @bp.route('/users/current_user/categories/<int:category_id>/add_channel', methods=['POST'])
 @login_required
 def add_channel_to_category(category_id):
@@ -167,13 +166,13 @@ def remove_channel_from_category(category_id):
   return jsonify( channel_schema.dump(channel_to_remove) )
 
 
-@bp.route('/users/current_user/channels/<int:channel_id>', methods=['GET'])
+@bp.route('/users/current_user/channels/<string:yt_channel_id>', methods=['GET'])
 @login_required
-def get_user_channel(channel_id):
+def get_user_channel(yt_channel_id):
   user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
 
   # get channel specified
-  channel_found = next(filter(lambda ch: ch.id == channel_id, user_found.channels), None)
+  channel_found = next(filter(lambda ch: ch.yt_channel_id == yt_channel_id, user_found.channels), None)
   if channel_found is None:
     abort(404, description="User does not own channel")
 
@@ -215,6 +214,8 @@ def get_user_categories():
     return jsonify( category_schema.dump(new_category) ), 201
 
   # ==== GET ====
+  # TODO: pass ?channels=true when fetching categories to return channels. for now it returning channels by default
+
   return jsonify(categories_schema.dump(categories))
 
 @bp.route('/users/current_user/categories/<int:category_id>', methods=['GET', 'PUT', 'DELETE'])

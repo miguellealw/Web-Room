@@ -22,6 +22,7 @@ import React from "react";
 import { CategoryResponse } from "../../pages/api/categories";
 import LogoType from "../../components/LogoType";
 import { Category } from "../categories";
+import useCategoryStore from "../../stores/useCategoryStore";
 
 type NavCategoryListItemProps = {
   category: Category;
@@ -31,12 +32,14 @@ const NavCategoryListItem: React.FC<NavCategoryListItemProps> = ({
   category,
 }) => {
   const { addChannelToCategory } = useCategory(category.id);
+  const setCurrentCategory = useCategoryStore(state => state.setCurrentCategory)
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: "SUB_ITEM",
     // what is returned from here will be accessible from end in useDrag
     drop: (channel) => {
-      addChannelToCategory(category.id, channel.name, channel.id);
+      setCurrentCategory(category)
+      addChannelToCategory(channel.name, channel.id);
       return { name: `${category.name}`, id: category.id };
     },
     collect: (monitor) => ({
