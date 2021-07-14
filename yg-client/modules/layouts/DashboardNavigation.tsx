@@ -35,7 +35,7 @@ const NavCategoryListItem: React.FC<NavCategoryListItemProps> = ({
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: "SUB_ITEM",
     // what is returned from here will be accessible from end in useDrag
-    drop: (channel) => {
+    drop: (channel: { name: string; id: string }) => {
       addChannelToCategory(channel.name, channel.id);
       return { name: `${category.name}`, id: category.id };
     },
@@ -65,10 +65,15 @@ const NavCategoryListItem: React.FC<NavCategoryListItemProps> = ({
   );
 };
 
-const DashboardNavigation: React.FC<{
+type DashboardNavigationProps = {
   data: CategoryResponse | undefined;
   isLoading: boolean;
-}> = ({ data, isLoading }) => {
+};
+
+const DashboardNavigation: React.FC<DashboardNavigationProps> = ({
+  data,
+  isLoading,
+}) => {
   // FIXME: these hooks may have to do with memo not working (keeps rerendering nav)
   const { mutateUser } = useUser();
   const router = useRouter();
@@ -185,7 +190,10 @@ const DashboardNavigation: React.FC<{
 // 	return { props: {categories: res.categories} }
 // }
 
-function areEqual(prevProps, nextProps) {
+function areEqual(
+  prevProps: DashboardNavigationProps,
+  nextProps: DashboardNavigationProps
+) {
   // console.log(
   //   "ARE EQUAL",
   //   prevProps.data?.categories?.length === nextProps.data?.categories?.length &&
