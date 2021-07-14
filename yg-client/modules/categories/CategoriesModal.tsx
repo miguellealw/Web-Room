@@ -5,13 +5,12 @@ import { CheckCircleIcon } from "@heroicons/react/solid";
 import { useCallback, useEffect, useState } from "react";
 import { Category } from "./";
 import useCategory from "../../shared-hooks/useCategory";
-import { Channel } from "../channels";
-import useCategoryStore from "../../stores/useCategoryStore";
 import useFetchChannel from "../../shared-hooks/useFetchChannel";
+import { Channel } from "../channels";
 
 type ListItemProps = {
   c: Category;
-  channel: { name: string; channelId: string };
+  channel: Channel;
   isSelected: boolean;
 };
 
@@ -20,7 +19,6 @@ const ListItem: React.FC<ListItemProps> = ({
   channel,
   isSelected: isChannelInCategory = false,
 }) => {
-  console.log("LIST ITEM");
   const { addChannelToCategory, removeChannelFromCategory } = useCategory(c.id);
   const [isSelected, setIsSelected] = useState(isChannelInCategory);
 
@@ -39,9 +37,13 @@ const ListItem: React.FC<ListItemProps> = ({
         setIsSelected(!isSelected);
 
         if (!isSelected) {
-          addChannelToCategory(channel.name, channel.channelId);
+          addChannelToCategory(channel.name, channel.yt_channel_id);
+          channel.categories.push(c.id);
+
+          console.log("AFTER ADDING", channel.categories)
         } else {
-          removeChannelFromCategory(channel.name, channel.channelId);
+          removeChannelFromCategory(channel.name, channel.yt_channel_id);
+          channel.categories = channel.categories.filter((cId) => cId !== c.id);
         }
       }}
     >
@@ -77,7 +79,8 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
   const categories = useCategoriesStore((state) => state.categories);
 
   // fetch channel and return categories the channel is part of
-  const { data: channelData } = useFetchChannel(selectedChannel.channelId);
+  // will return null if channel is not part of category yet.
+  const { data: channelData, isLoading: isChannelDataLoading } = useFetchChannel(selectedChannel.channelId);
 
   // check if selected channel is in category list item
   const channelExistsInCategory = (
@@ -126,12 +129,24 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
                   channelData?.categories || []
                 );
 
+                if(isChannelDataLoading) {
+                  return <div key={c.id}>Loading channel data...</div>
+                }
+
                 return (
                   <ListItem
                     key={c.id}
                     c={c}
                     isSelected={isChannelInCategory}
-                    channel={selectedChannel}
+                    // If channel data is null, it means channel is not part of category, therefore it is not stored
+                    // in DB, so pass dummy channel data for local state
+                    channel={
+                      channelData || {
+                        name: selectedChannel.name,
+                        yt_channel_id: selectedChannel.channelId,
+                        categories: [],
+                      }
+                    }
                   />
                 );
               })

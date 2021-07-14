@@ -18,12 +18,6 @@ interface CategoriesState {
   getCategory: (id: number) => Category | TempCategory | undefined;
   updateCategory: (api: CategoryApi, id: number, newName: string) => void;
   deleteCategory: (api: CategoryApi, id: number) => void;
-  addChannelToCategory: (
-    api: CategoryApi,
-    categoryId: number,
-    channelName: string,
-    channelId: string
-  ) => void;
 }
 
 // Call swr mutations in setters
@@ -143,59 +137,6 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
         return { ...data };
       }
     );
-  },
-
-  addChannelToCategory: async (api, categoryId, channelName, channelId) => {
-    mutate(
-      `/api/v1.0/users/current_user/categories/${categoryId}`,
-      (data: CategoryResponse) => {
-        // FIXME: this does not always run, look like data is sometimes undefined so it returns early
-        console.log("IN ZXUASTAND ACXTION", data)
-        if (!data || !data.category) return;
-
-        // Update store
-        set(
-          produce((state) => {
-            const category = get().categories.find(
-              (c: Category) => c.id === categoryId
-            );
-
-            if (category) {
-              // get index of category the channel is added to
-              const idx = get().categories.indexOf(category as Category);
-
-              console.log("INDEX OF CATEGORY TO ADD CHANNEL TO", idx)
-
-              // update store
-              state.categories[idx].channels.push({
-                name: channelName,
-                yt_channel_id: channelId,
-              });
-            }
-          })
-        );
-
-        return {
-          ...data,
-          category: {
-            ...data.category,
-            channels: [
-              ...data.category.channels,
-              {
-                name: channelName,
-                yt_channel_id: channelId,
-              },
-            ],
-          },
-        };
-      },
-      false
-    );
-
-    await api.addChannelToCategory(categoryId, channelName, channelId);
-
-    // Revalidate cache
-    mutate(`/api/v1.0/users/current_user/categories/${categoryId}`);
   },
 }));
 
