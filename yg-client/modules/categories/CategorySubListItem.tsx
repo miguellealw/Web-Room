@@ -81,7 +81,7 @@ const CategorySubListItem: React.FC<CategorySubListItemProps> = ({
           }}
         />
         {/* Name */}
-        <div className="font-bold text-lg max-w-48 truncate">
+        <div className="font-bold text-lg w-48 truncate" title={channel.name}>
           {channel.name}
         </div>
 
