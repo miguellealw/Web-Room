@@ -1,10 +1,14 @@
 import { useCallback, useMemo } from "react";
 import { mutate } from "swr";
 import { CategoryApi, CategoryResponse } from "../pages/api/categories";
+import useEmitToast from "./useEmitToast";
 
 function useCategory(id: number) {
   const api = useMemo(() => new CategoryApi(), []);
   api.setup();
+
+  const { notifySuccess: notifySuccessAdd } = useEmitToast();
+  const { notifySuccess: notifySuccessRemove } = useEmitToast();
 
   const memoAddChannelToCategory = useCallback(
     async (channelName: string, channelId: string) => {
@@ -32,11 +36,12 @@ function useCategory(id: number) {
       );
 
       await api.addChannelToCategory(id, channelName, channelId);
+      notifySuccessAdd(`${channelName} Added to Category`);
 
       // Revalidate cache
       mutate(`/api/v1.0/users/current_user/categories/${id}`);
     },
-    [api, id]
+    [api, id, notifySuccessAdd]
   );
 
   const memoRemoveChannelFromCategory = useCallback(
@@ -59,11 +64,12 @@ function useCategory(id: number) {
       );
 
       await api.removeChannelFromCategory(id, channelName, channelId);
+      notifySuccessRemove(`${channelName} Removed from Category`);
 
       // revalidate cache
       mutate(`/api/v1.0/users/current_user/categories/${id}`);
     },
-    [api, id]
+    [api, id, notifySuccessRemove]
   );
 
   return {

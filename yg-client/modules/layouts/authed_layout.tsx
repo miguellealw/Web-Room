@@ -6,6 +6,7 @@ import CustomDragLayer from "../channels/CustomDragLayer";
 import useFetchCategories from "../../shared-hooks/useFetchCategories";
 import MobileNavigation from "./MobileNavigation";
 import MobileTopNavBar from "./MobileTopNavBar";
+import Toast from "../../components/Toast";
 
 interface AuthedLayoutProps {
   tw_className?: string;
@@ -44,6 +45,7 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
           {...props}
         >
           {children}
+          <Toast />
         </div>
       </div>
     </DndProvider>
