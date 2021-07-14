@@ -7,24 +7,28 @@ import { Category } from "./";
 import useCategory from "../../shared-hooks/useCategory";
 import useFetchChannel from "../../shared-hooks/useFetchChannel";
 import { Channel } from "../channels";
+import { mutate } from "swr";
 
 type ListItemProps = {
   c: Category;
   channel: Channel;
+  mutate: any;
   isSelected: boolean;
 };
 
 const ListItem: React.FC<ListItemProps> = ({
   c,
   channel,
+  mutate,
   isSelected: isChannelInCategory = false,
 }) => {
   const { addChannelToCategory, removeChannelFromCategory } = useCategory(c.id);
   const [isSelected, setIsSelected] = useState(isChannelInCategory);
 
   useEffect(() => {
-    setIsSelected(isChannelInCategory);
-  }, [isChannelInCategory]);
+    console.log("USEEFFECT RAN", isSelected);
+    setIsSelected(isSelected);
+  }, [isSelected]);
 
   return (
     <li
@@ -32,19 +36,22 @@ const ListItem: React.FC<ListItemProps> = ({
         isSelected &&
         "bg-gray-800 hover:bg-gray-600 text-white flex justify-between"
       }`}
-      onClick={() => {
+      onClick={async () => {
         // Set current category so store knows what category to add channel to
         setIsSelected(!isSelected);
 
         if (!isSelected) {
-          addChannelToCategory(channel.name, channel.yt_channel_id);
+          await addChannelToCategory(channel.name, channel.yt_channel_id);
           channel.categories.push(c.id);
+          mutate()
 
-          console.log("AFTER ADDING", channel.categories)
+          console.log("AFTER ADDING", channel.categories);
         } else {
-          removeChannelFromCategory(channel.name, channel.yt_channel_id);
+          await removeChannelFromCategory(channel.name, channel.yt_channel_id);
           channel.categories = channel.categories.filter((cId) => cId !== c.id);
+          mutate()
         }
+
       }}
     >
       <span>{c.name}</span>
@@ -80,7 +87,8 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
 
   // fetch channel and return categories the channel is part of
   // will return null if channel is not part of category yet.
-  const { data: channelData, isLoading: isChannelDataLoading } = useFetchChannel(selectedChannel.channelId);
+  const { data: channelData, isLoading: isChannelDataLoading, mutateChannel } =
+    useFetchChannel(selectedChannel.channelId);
 
   // check if selected channel is in category list item
   const channelExistsInCategory = (
@@ -121,23 +129,24 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
               <div className="text-sm text-gray-500 italic">
                 You have no categories...
               </div>
+            ) : isChannelDataLoading ? (
+              <div>Loading channel data...</div>
             ) : (
               categories.map((c) => {
                 // check if selectedChannel.channelId is in c.channels
-                const isChannelInCategory = channelExistsInCategory(
-                  c.id as number,
-                  channelData?.categories || []
-                );
-
-                if(isChannelDataLoading) {
-                  return <div key={c.id}>Loading channel data...</div>
-                }
+                const isChannelInCategory = channelData?.categories
+                  ? channelExistsInCategory(
+                      c.id as number,
+                      channelData.categories
+                    )
+                  : false;
 
                 return (
                   <ListItem
                     key={c.id}
                     c={c}
                     isSelected={isChannelInCategory}
+                    mutate={mutateChannel}
                     // If channel data is null, it means channel is not part of category, therefore it is not stored
                     // in DB, so pass dummy channel data for local state
                     channel={

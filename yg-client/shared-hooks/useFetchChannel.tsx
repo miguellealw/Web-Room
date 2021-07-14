@@ -17,7 +17,7 @@ function useFetchChannel(id: string) {
   return {
     data: data?.channels,
     error,
-    mutateChannels: mutate,
+    mutateChannel: mutate,
     isLoading: !data,
   };
 }
