@@ -3,6 +3,7 @@ import Image from "next/image";
 import styles from "../styles/Video.module.css";
 import { ExternalLinkIcon } from "@heroicons/react/outline";
 import { useCallback, useState } from "react";
+import useOnHover from "../shared-hooks/useOnHover";
 
 type VideoProps = {
   title: string;
@@ -24,15 +25,7 @@ const Video: React.FC<VideoProps> = ({
   channelId,
 }) => {
   const datePublished = new Date(publishDate);
-  const [isHovering, setIsHovering] = useState(false);
-  const handleMouseOver = useCallback(
-    () => setIsHovering(true),
-    [setIsHovering]
-  );
-  const handleMouseOut = useCallback(
-    () => setIsHovering(false),
-    [setIsHovering]
-  );
+  const {isHovering, handleMouseOut, handleMouseOver} = useOnHover()
 
   return (
     <a href={`https://www.youtube.com/watch?v=${videoId}`}>

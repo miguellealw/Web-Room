@@ -1,6 +1,11 @@
 import Modal from "../../components/Modal";
 import useCategoriesStore from "../../stores/useCategoriesStore";
-import { XIcon, CheckIcon, PlusSmIcon } from "@heroicons/react/outline";
+import {
+  XIcon,
+  CheckIcon,
+  PlusSmIcon,
+  XCircleIcon,
+} from "@heroicons/react/outline";
 import { CheckCircleIcon } from "@heroicons/react/solid";
 import { useCallback, useEffect, useState } from "react";
 import { Category } from "./";
@@ -8,6 +13,7 @@ import useCategory from "../../shared-hooks/useCategory";
 import useFetchChannel from "../../shared-hooks/useFetchChannel";
 import { Channel } from "../channels";
 import { mutate } from "swr";
+import useOnHover from "../../shared-hooks/useOnHover";
 
 type ListItemProps = {
   c: Category;
@@ -22,50 +28,69 @@ const ListItem: React.FC<ListItemProps> = ({
   mutate,
   isSelected: isChannelInCategory = false,
 }) => {
-  const { addChannelToCategory, removeChannelFromCategory } = useCategory(c.id);
   const [isSelected, setIsSelected] = useState(isChannelInCategory);
+  const { addChannelToCategory, removeChannelFromCategory } = useCategory(c.id);
+  const { isHovering, handleMouseOut, handleMouseOver } = useOnHover();
 
   useEffect(() => {
-    console.log("USEEFFECT RAN", isSelected);
     setIsSelected(isSelected);
   }, [isSelected]);
+
+  const handleClick = useCallback(async () => {
+    // Set current category so store knows what category to add channel to
+    setIsSelected(!isSelected);
+
+    if (!isSelected) {
+      await addChannelToCategory(channel.name, channel.yt_channel_id);
+      channel.categories.push(c.id);
+      mutate();
+
+      console.log("AFTER ADDING", channel.categories);
+    } else {
+      await removeChannelFromCategory(channel.name, channel.yt_channel_id);
+      channel.categories = channel.categories.filter((cId) => cId !== c.id);
+      mutate();
+    }
+  }, [
+    addChannelToCategory,
+    removeChannelFromCategory,
+    c.id,
+    mutate,
+    channel,
+    isSelected,
+  ]);
 
   return (
     <li
       className={`bg-gray-100 cursor-pointer text-sm mb-3 px-5 py-5 rounded-md hover:bg-gray-200 ${
         isSelected &&
-        "bg-gray-800 hover:bg-gray-600 text-white flex justify-between"
+        "bg-gray-800 hover:bg-gray-700 text-white flex justify-between"
       }`}
-      onClick={async () => {
-        // Set current category so store knows what category to add channel to
-        setIsSelected(!isSelected);
-
-        if (!isSelected) {
-          await addChannelToCategory(channel.name, channel.yt_channel_id);
-          channel.categories.push(c.id);
-          mutate()
-
-          console.log("AFTER ADDING", channel.categories);
-        } else {
-          await removeChannelFromCategory(channel.name, channel.yt_channel_id);
-          channel.categories = channel.categories.filter((cId) => cId !== c.id);
-          mutate()
-        }
-
-      }}
+      onClick={handleClick}
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
     >
       <span>{c.name}</span>
 
       {/* Icon */}
       {isSelected && (
         <span
-          className="text-green-500 text-sm uppercase font-bold flex items-center"
+          className={`text-sm uppercase font-bold flex items-center ${
+            isHovering ? "text-red-500" : "text-green-500"
+          }`}
           style={{
             fontSize: ".7rem",
           }}
         >
-          <CheckCircleIcon className="w-4 h-4 mr-1" />
-          Added
+          {isHovering ? (
+            <>
+              <XCircleIcon className="w-4 h-4 mr-1" /> Remove
+            </>
+          ) : (
+            <>
+              <CheckCircleIcon className="w-4 h-4 mr-1" /> Added
+            </>
+          )}
         </span>
       )}
     </li>
@@ -87,8 +112,11 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
 
   // fetch channel and return categories the channel is part of
   // will return null if channel is not part of category yet.
-  const { data: channelData, isLoading: isChannelDataLoading, mutateChannel } =
-    useFetchChannel(selectedChannel.channelId);
+  const {
+    data: channelData,
+    isLoading: isChannelDataLoading,
+    mutateChannel,
+  } = useFetchChannel(selectedChannel.channelId);
 
   // check if selected channel is in category list item
   const channelExistsInCategory = (
