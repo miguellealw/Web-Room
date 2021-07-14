@@ -2,14 +2,7 @@ import { mutate } from "swr";
 import create from "zustand";
 import { CategoryApi, CategoryResponse } from "../pages/api/categories";
 import { Category } from "../modules/categories";
-import produce from "immer";
-
-// This is used when optimistically updating the UI before revalidating cache.
-// Used when updating or creating category and client does not yet have all the data from the backend
-type TempCategory = {
-  name: string;
-  id?: string | number;
-};
+import { TempCategory } from "../modules/categories";
 
 interface CategoriesState {
   categories: Category[] | TempCategory[];
