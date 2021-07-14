@@ -12,7 +12,6 @@ import { Category } from "./";
 import useCategory from "../../shared-hooks/useCategory";
 import useFetchChannel from "../../shared-hooks/useFetchChannel";
 import { Channel } from "../channels";
-import { mutate } from "swr";
 import useOnHover from "../../shared-hooks/useOnHover";
 
 type ListItemProps = {
@@ -44,8 +43,6 @@ const ListItem: React.FC<ListItemProps> = ({
       await addChannelToCategory(channel.name, channel.yt_channel_id);
       channel.categories.push(c.id);
       mutate();
-
-      console.log("AFTER ADDING", channel.categories);
     } else {
       await removeChannelFromCategory(channel.name, channel.yt_channel_id);
       channel.categories = channel.categories.filter((cId) => cId !== c.id);
@@ -172,7 +169,7 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
                 return (
                   <ListItem
                     key={c.id}
-                    c={c}
+                    c={c as Category}
                     isSelected={isChannelInCategory}
                     mutate={mutateChannel}
                     // If channel data is null, it means channel is not part of category, therefore it is not stored
@@ -189,6 +186,8 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
               })
             )}
           </ul>
+
+          {/* Buttons */}
           <div className="flex flex-col lg:flex-row mt-7">
             <button className="w-full py-2 lg:py-3 border-2 border-gray-400 text-gray-400 hover:text-white hover:bg-gray-400 text-sm rounded-md font-bold flex justify-center items-center">
               <PlusSmIcon className="w-5 h-5 mr-2" />

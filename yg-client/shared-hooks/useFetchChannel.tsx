@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import { Channel } from "../modules/channels";
 import { ChannelsApi } from "../pages/api/channels";
 
 function useFetchChannel(id: string) {
@@ -15,7 +16,7 @@ function useFetchChannel(id: string) {
   );
 
   return {
-    data: data?.channels,
+    data: data?.channels as Channel,
     error,
     mutateChannel: mutate,
     isLoading: !data,
