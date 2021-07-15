@@ -10,8 +10,9 @@ import {
 import Dropdown from "../../components/Dropdown";
 import { PlusCircleIcon } from "@heroicons/react/solid";
 import useOuterClick from "../../shared-hooks/useOnOuterClick";
+import React from "react";
 
-export interface SubscriptionListItem {
+export interface SubscriptionListItemProps {
   name: string;
   thumbnail: any;
   channelId: string;
@@ -20,7 +21,7 @@ export interface SubscriptionListItem {
   // addChannelToCategory: (categoryId: string, channelName: string, channelId: string) => void;
 }
 
-const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
+const SubscriptionListItem: React.FC<SubscriptionListItemProps> = ({
   name,
   thumbnail,
   channelId,
@@ -31,6 +32,8 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
   const innerRef = useOuterClick(() => {
     setIsOpen(false);
   });
+
+  // console.log("SUB LIST ITEM RENDERED")
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: "SUB_ITEM",
@@ -44,7 +47,7 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
   useEffect(() => {
     // For react-dnd
     preview(getEmptyImage(), { captureDraggingState: true });
-  });
+  }, [preview]);
 
   const handleAddToCategoryClick = useCallback(() => {
     setIsModalOpen(true);
@@ -112,4 +115,18 @@ const SubscriptionListItem: React.FC<SubscriptionListItem> = ({
   );
 };
 
-export default SubscriptionListItem;
+export default React.memo(
+  SubscriptionListItem,
+  (
+    prevProps: SubscriptionListItemProps,
+    nextProps: SubscriptionListItemProps
+  ) => {
+    return (
+      prevProps.name === nextProps.name &&
+      prevProps.thumbnail === nextProps.thumbnail &&
+      prevProps.channelId === nextProps.channelId &&
+      prevProps.setSelectedChannel === nextProps.setSelectedChannel &&
+      prevProps.setIsModalOpen === nextProps.setIsModalOpen
+    );
+  }
+);
