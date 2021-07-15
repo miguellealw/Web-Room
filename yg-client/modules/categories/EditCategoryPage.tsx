@@ -32,7 +32,7 @@ export const EditCategoryPage: React.FC = () => {
 
     try {
       updateCategory(parseInt(edit_category_id as string), value);
-      router.replace("/categories");
+      router.push("/categories");
     } catch (err) {
       setIsError(true);
     }

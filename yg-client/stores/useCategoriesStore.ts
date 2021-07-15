@@ -3,9 +3,10 @@ import create from "zustand";
 import { CategoryApi, CategoryResponse } from "../pages/api/categories";
 import { Category } from "../modules/categories";
 import { TempCategory } from "../modules/categories";
+import { toast } from "react-toastify";
 
 interface CategoriesState {
-  categories: Category[] | TempCategory[];
+  categories: (Category | TempCategory)[];
   setCategories: (categories: Category[]) => void;
   createCategory: (api: CategoryApi, name: string) => void;
   getCategory: (id: number) => Category | TempCategory | undefined;
@@ -57,6 +58,8 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
         return { ...data };
       }
     );
+
+    toast.dark("Category Created");
   },
 
   updateCategory: async (api, id, newName) => {
@@ -99,6 +102,8 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
         return { ...data };
       }
     );
+
+    toast.dark("Category Updated");
   },
 
   deleteCategory: async (api, id) => {
@@ -111,6 +116,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
 
         // Update store
         set(() => ({ categories: updatedState }));
+        toast.dark("Category Deleted");
         return { ...data, categories: updatedState };
       },
       false

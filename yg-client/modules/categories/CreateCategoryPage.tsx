@@ -20,7 +20,7 @@ export const CreateCategoryPage: React.FC = () => {
 
     try {
       createCategory(value);
-      router.replace("/categories");
+      router.push("/categories");
     } catch (err) {
       setIsError(true);
     }
