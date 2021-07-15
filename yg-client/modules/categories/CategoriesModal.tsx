@@ -13,6 +13,7 @@ import useCategory from "../../shared-hooks/useCategory";
 import useFetchChannel from "../../shared-hooks/useFetchChannel";
 import { Channel } from "../channels";
 import useOnHover from "../../shared-hooks/useOnHover";
+import router from "next/router";
 
 type ListItemProps = {
   c: Category;
@@ -189,7 +190,19 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
 
           {/* Buttons */}
           <div className="flex flex-col lg:flex-row mt-7">
-            <button className="w-full py-2 lg:py-3 border-2 border-gray-400 text-gray-400 hover:text-white hover:bg-gray-400 text-sm rounded-md font-bold flex justify-center items-center">
+            <button
+              className="w-full py-2 lg:py-3 border-2 border-gray-400 text-gray-400 hover:text-white hover:bg-gray-400 text-sm rounded-md font-bold flex justify-center items-center"
+              onClick={() => {
+                localStorage.setItem(
+                  "channelToAdd",
+                  JSON.stringify({
+                    channelName: selectedChannel.name,
+                    channelId: selectedChannel.channelId,
+                  })
+                );
+                router.push("/categories/custom-create");
+              }}
+            >
               <PlusSmIcon className="w-5 h-5 mr-2" />
               Create Category
             </button>
