@@ -1,19 +1,20 @@
-import { ToastContainer, toast, Zoom } from "react-toastify";
+import { ToastContainer, toast, Zoom, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Toast = () => {
   return (
     <ToastContainer
-      position="bottom-right"
-      autoClose={2000}
-      hideProgressBar
+      position="bottom-center"
+      autoClose={2500}
+      // hideProgressBar
       newestOnTop={false}
       closeOnClick
       rtl={false}
       pauseOnFocusLoss
       draggable
       pauseOnHover
-      transition={Zoom}
+      // transition={Zoom}
+      transition={Slide}
       style={{
         zIndex: 100000,
       }}

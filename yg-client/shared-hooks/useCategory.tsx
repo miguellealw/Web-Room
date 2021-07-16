@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { mutate } from "swr";
 import { CategoryApi, CategoryResponse } from "../pages/api/categories";
 import useEmitToast from "./useEmitToast";
@@ -50,9 +50,22 @@ function useCategory(id: number) {
       // });
 
       if (!errorMessage) {
-        notifySuccessAdd(`✅ ${channelName} Added to Category`);
+        // <CheckCircleIcon className="w-4 h-4 mr-1" /> Added
+        // notifySuccessAdd(`✅ ${channelName} Added to Category`);
+        notifySuccessAdd(
+          <div>
+            <span className="text-green-500 font-bold">{channelName} </span>
+            Added to Category!
+          </div>
+        );
       } else {
-        notifyErrorAdd(`${channelName} Already in Category`);
+        // notifyErrorAdd(`${channelName} Already in Category!`);
+        notifyErrorAdd(
+          <div>
+            <span className="font-bold text-red-500">{channelName} </span>
+            Already in Category!
+          </div>
+        );
       }
     },
     [api, id, notifySuccessAdd, notifyErrorAdd]
@@ -78,7 +91,13 @@ function useCategory(id: number) {
       );
 
       await api.removeChannelFromCategory(id, channelName, channelId);
-      notifySuccessRemove(`${channelName} Removed from Category`);
+      // notifySuccessRemove(`⚠ ${channelName} Removed from Category`);
+      notifySuccessRemove(
+        <div>
+          <span className="text-red-500 font-bold">{channelName} </span>
+          Removed from Category!
+        </div>
+      );
 
       // revalidate cache
       mutate(`/api/v1.0/users/current_user/categories/${id}`);
