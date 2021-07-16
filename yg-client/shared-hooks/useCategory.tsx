@@ -7,41 +7,55 @@ function useCategory(id: number) {
   const api = useMemo(() => new CategoryApi(), []);
   api.setup();
 
-  const { notifySuccess: notifySuccessAdd } = useEmitToast();
+  const { notifySuccess: notifySuccessAdd, notifyError: notifyErrorAdd } =
+    useEmitToast();
   const { notifySuccess: notifySuccessRemove } = useEmitToast();
 
   const memoAddChannelToCategory = useCallback(
     async (channelName: string, channelId: string) => {
       // Update ui
-      mutate(
-        `/api/v1.0/users/current_user/categories/${id}`,
-        (data: CategoryResponse) => {
-          if (!data || !data.category) return;
+      // mutate(
+      //   `/api/v1.0/users/current_user/categories/${id}`,
+      //   (data: CategoryResponse) => {
+      //     if (!data || !data.category) return;
 
-          return {
-            ...data,
-            category: {
-              ...data.category,
-              channels: [
-                ...data.category.channels,
-                {
-                  name: channelName,
-                  yt_channel_id: channelId,
-                },
-              ],
-            },
-          };
-        },
-        false
+      //     // TODO: use immer here
+      //     return {
+      //       ...data,
+      //       category: {
+      //         ...data.category,
+      //         channels: [
+      //           ...data.category.channels,
+      //           {
+      //             name: channelName,
+      //             yt_channel_id: channelId,
+      //           },
+      //         ],
+      //       },
+      //     };
+      //   },
+      //   false
+      // );
+
+      const { category, errorMessage } = await api.addChannelToCategory(
+        id,
+        channelName,
+        channelId
       );
 
-      await api.addChannelToCategory(id, channelName, channelId);
-      notifySuccessAdd(`${channelName} Added to Category`);
-
       // Revalidate cache
-      mutate(`/api/v1.0/users/current_user/categories/${id}`);
+      // FIXME: cache check does not remove dummy data from prev mutate when channel is already present in category
+      // mutate(`/api/v1.0/users/current_user/categories/${id}`, data => {
+      //   console.log("data", data)
+      // });
+
+      if (!errorMessage) {
+        notifySuccessAdd(`✅ ${channelName} Added to Category`);
+      } else {
+        notifyErrorAdd(`${channelName} Already in Category`);
+      }
     },
-    [api, id, notifySuccessAdd]
+    [api, id, notifySuccessAdd, notifyErrorAdd]
   );
 
   const memoRemoveChannelFromCategory = useCallback(

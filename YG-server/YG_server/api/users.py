@@ -105,6 +105,11 @@ def add_channel_to_category(category_id):
     # check if channel is already in DB, if it is skip creation; fetch channel and relate to category
     channel_to_add = Channel.query.filter_by(yt_channel_id = valid_data["yt_channel_id"]).first()
 
+    # check if channel is already in specified category. if it is, return error code
+    if channel_to_add is not None:
+      if category_found in channel_to_add.categories:
+        abort(409, description="Channel already exists in category")
+
     # if channel is not in db, create it 
     if channel_to_add is None:
       channel_to_add = Channel(
