@@ -30,7 +30,8 @@ const useCategories: () => useCategoriesType = () => {
   // CREATE
   const memoCreateCategory = useCallback(
     async (name: string) => {
-      await createCategory(api, name);
+      const res = await createCategory(api, name);
+      return res.category;
     },
     [api, createCategory]
   );
@@ -38,7 +39,7 @@ const useCategories: () => useCategoriesType = () => {
   // UPDATE
   const memoUpdateCategory = useCallback(
     async (id: number, newName: string) => {
-      await updateCategory(api, id, newName);
+      return await updateCategory(api, id, newName);
     },
     [api, updateCategory]
   );
@@ -49,7 +50,7 @@ const useCategories: () => useCategoriesType = () => {
       try {
         // If confirm is cancelled it will throw exception
         await confirm(`Are you sure you want to delete ${name}?`);
-        await deleteCategory(api, id);
+        return await deleteCategory(api, id);
       } catch {}
     },
     [api, deleteCategory]

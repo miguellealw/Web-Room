@@ -8,10 +8,10 @@ import { toast } from "react-toastify";
 interface CategoriesState {
   categories: (Category | TempCategory)[];
   setCategories: (categories: Category[]) => void;
-  createCategory: (api: CategoryApi, name: string) => void;
   getCategory: (id: number) => Category | TempCategory | undefined;
-  updateCategory: (api: CategoryApi, id: number, newName: string) => void;
-  deleteCategory: (api: CategoryApi, id: number) => void;
+  createCategory: (api: CategoryApi, name: string) => any;
+  updateCategory: (api: CategoryApi, id: number, newName: string) => any;
+  deleteCategory: (api: CategoryApi, id: number) => any;
 }
 
 // Call swr mutations in setters
@@ -45,7 +45,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
       false
     );
 
-    await api.createCategory(name);
+    let createdCategory = await api.createCategory(name);
 
     // revalidate to make sure local data is correct
     mutate(
@@ -60,6 +60,8 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     );
 
     toast.dark("Category Created");
+
+    return createdCategory;
   },
 
   updateCategory: async (api, id, newName) => {
@@ -86,7 +88,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
       false
     );
 
-    await api.updateCategory(id, newName);
+    let cat = await api.updateCategory(id, newName);
 
     // revalidate to make sure local data is correct
     mutate(
@@ -104,6 +106,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     );
 
     toast.dark("Category Updated");
+    return cat;
   },
 
   deleteCategory: async (api, id) => {
@@ -122,7 +125,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
       false
     );
 
-    await api.deleteCategory(id);
+    const cat = await api.deleteCategory(id);
 
     // revalidate to make sure local data is correct
     mutate(
@@ -136,6 +139,8 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
         return { ...data };
       }
     );
+
+    return cat;
   },
 }));
 

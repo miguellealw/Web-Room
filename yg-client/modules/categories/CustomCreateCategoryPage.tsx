@@ -14,11 +14,12 @@ export const CustomCreateCategoryPage: React.FC = () => {
   const [channelId, setChannelId] = useState<string | null>(null);
   const router = useRouter();
   // TODO: figure out how to get category ID here
-  // const { addChannelToCategory } = useCategory(c.id);
+  const { addChannelToCategory } = useCategory();
 
   const { createCategory } = useCategories();
 
   useEffect(() => {
+    // redirect to categories if page is loaded without channel to add
     if (!localStorage.getItem("channelToAdd")) {
       router.replace("/categories");
     } else {
@@ -37,9 +38,13 @@ export const CustomCreateCategoryPage: React.FC = () => {
     setIsError(false);
 
     try {
-      await createCategory(value);
       // TODO: add channel to category
-      router.replace("/categories");
+      // router.replace("/categories");
+      
+      const newCategory = await createCategory(value);
+      console.log("new category", newCategory)
+      await addChannelToCategory(channelName, channelId, newCategory.id)
+
       localStorage.removeItem("channelToAdd");
     } catch (err) {
       setIsError(true);

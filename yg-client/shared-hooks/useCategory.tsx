@@ -3,7 +3,8 @@ import { mutate } from "swr";
 import { CategoryApi, CategoryResponse } from "../pages/api/categories";
 import useEmitToast from "./useEmitToast";
 
-function useCategory(id: number) {
+// TODO: id is optional to category id is not known when adding channel to category
+function useCategory(categoryId?: number) {
   const api = useMemo(() => new CategoryApi(), []);
   api.setup();
 
@@ -11,8 +12,9 @@ function useCategory(id: number) {
     useEmitToast();
   const { notifySuccess: notifySuccessRemove } = useEmitToast();
 
+  // TODO: pass ID to function for deferred creation of category
   const memoAddChannelToCategory = useCallback(
-    async (channelName: string, channelId: string) => {
+    async (channelName: string, channelId: string, id?: number) => {
       // Update ui
       // mutate(
       //   `/api/v1.0/users/current_user/categories/${id}`,
@@ -37,8 +39,10 @@ function useCategory(id: number) {
       //   false
       // );
 
+      const selectedID = categoryId ? categoryId : id
+
       const { category, errorMessage } = await api.addChannelToCategory(
-        id,
+        selectedID,
         channelName,
         channelId
       );
@@ -68,7 +72,7 @@ function useCategory(id: number) {
         );
       }
     },
-    [api, id, notifySuccessAdd, notifyErrorAdd]
+    [api, categoryId, notifySuccessAdd, notifyErrorAdd]
   );
 
   const memoRemoveChannelFromCategory = useCallback(
@@ -90,7 +94,7 @@ function useCategory(id: number) {
         false
       );
 
-      await api.removeChannelFromCategory(id, channelName, channelId);
+      await api.removeChannelFromCategory(categoryId, channelName, channelId);
       // notifySuccessRemove(`⚠ ${channelName} Removed from Category`);
       notifySuccessRemove(
         <div>
@@ -102,7 +106,7 @@ function useCategory(id: number) {
       // revalidate cache
       mutate(`/api/v1.0/users/current_user/categories/${id}`);
     },
-    [api, id, notifySuccessRemove]
+    [api, categoryId, notifySuccessRemove]
   );
 
   return {
