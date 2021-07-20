@@ -39,11 +39,11 @@ export const CustomCreateCategoryPage: React.FC = () => {
 
     try {
       // TODO: add channel to category
-      // router.replace("/categories");
       
       const newCategory = await createCategory(value);
       console.log("new category", newCategory)
       await addChannelToCategory(channelName, channelId, newCategory.id)
+      router.replace("/channels");
 
       localStorage.removeItem("channelToAdd");
     } catch (err) {

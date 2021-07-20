@@ -16,7 +16,7 @@ export const CategoryPage: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
   const { data, error, isLoading } = useFetchCategory(id);
-  const { removeChannelFromCategory } = useCategory(id);
+  const { removeChannelFromCategory } = useCategory(parseInt(id as string));
 
   if (error) return <div>Error loading category page...</div>;
 

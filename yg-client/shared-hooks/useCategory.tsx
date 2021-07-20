@@ -78,7 +78,7 @@ function useCategory(categoryId?: number) {
   const memoRemoveChannelFromCategory = useCallback(
     async (channelName: string, channelId: string) => {
       mutate(
-        `/api/v1.0/users/current_user/categories/${id}`,
+        `/api/v1.0/users/current_user/categories/${categoryId}`,
         (data: CategoryResponse) => {
           if (!data || !data.category) return;
 
@@ -104,7 +104,7 @@ function useCategory(categoryId?: number) {
       );
 
       // revalidate cache
-      mutate(`/api/v1.0/users/current_user/categories/${id}`);
+      mutate(`/api/v1.0/users/current_user/categories/${categoryId}`);
     },
     [api, categoryId, notifySuccessRemove]
   );
