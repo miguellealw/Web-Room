@@ -115,7 +115,8 @@ const CategorySubListItem: React.FC<CategorySubListItemProps> = ({
           <Dropdown.Item>
             <a
               href={`https://www.youtube.com/channel/${channel.yt_channel_id}`}
-              // target="_blank"
+              target="_blank"
+              rel="noreferrer"
               className="flex"
             >
               <ExternalLinkIcon className="w-4 h-4 mr-1" />
