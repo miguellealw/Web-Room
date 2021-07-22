@@ -49,7 +49,7 @@ export const CustomCreateCategoryPage: React.FC = () => {
         channelId as string,
         newCategory.id
       );
-      router.replace("/channels");
+      router.replace(`/categories/${newCategory.id}`);
 
       localStorage.removeItem("channelToAdd");
     } catch (err) {

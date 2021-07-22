@@ -7,9 +7,9 @@ import shallow from "zustand/shallow";
 
 export interface useCategoriesType {
   // handleDeleteCategory: (id: number, name: string) => void;
-  updateCategory: (id: number, newName: string) => Promise<void>;
-  deleteCategory: (id: number, name: string) => Promise<void>;
-  createCategory: (name: string) => Promise<void>;
+  updateCategory: (id: number, newName: string) => any;
+  deleteCategory: (id: number, name: string) => any;
+  createCategory: (name: string) => any;
 }
 
 const useCategories: () => useCategoriesType = () => {
