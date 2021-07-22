@@ -34,15 +34,21 @@ export const CustomCreateCategoryPage: React.FC = () => {
 
   const handleCreateCategory = async (e: React.FormEvent) => {
     // TODO: data validtion
+    if (!channelId && !channelName)
+      console.error("NO CHANNEL ID OR NAME PROVIDED");
     e.preventDefault();
     setIsError(false);
 
     try {
       // TODO: add channel to category
-      
+
       const newCategory = await createCategory(value);
-      console.log("new category", newCategory)
-      await addChannelToCategory(channelName, channelId, newCategory.id)
+      console.log("new category", newCategory);
+      await addChannelToCategory(
+        channelName as string,
+        channelId as string,
+        newCategory.id
+      );
       router.replace("/channels");
 
       localStorage.removeItem("channelToAdd");

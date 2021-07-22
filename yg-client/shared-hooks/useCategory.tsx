@@ -3,7 +3,7 @@ import { mutate } from "swr";
 import { CategoryApi, CategoryResponse } from "../pages/api/categories";
 import useEmitToast from "./useEmitToast";
 
-// TODO: id is optional to category id is not known when adding channel to category
+// id is optional to category id is not known when adding channel to category
 function useCategory(categoryId?: number) {
   const api = useMemo(() => new CategoryApi(), []);
   api.setup();
@@ -15,33 +15,38 @@ function useCategory(categoryId?: number) {
   // TODO: pass ID to function for deferred creation of category
   const memoAddChannelToCategory = useCallback(
     async (channelName: string, channelId: string, id?: number) => {
+      if(!id && !categoryId) {
+        throw new Error("Id must be passed to addChannelToCategory callback or to the useCategory hook");
+      }
+
       // Update ui
-      // mutate(
-      //   `/api/v1.0/users/current_user/categories/${id}`,
-      //   (data: CategoryResponse) => {
-      //     if (!data || !data.category) return;
+      mutate(
+        `/api/v1.0/users/current_user/categories/${id}`,
+        (data: CategoryResponse) => {
+          if (!data || !data.category) return;
 
-      //     // TODO: use immer here
-      //     return {
-      //       ...data,
-      //       category: {
-      //         ...data.category,
-      //         channels: [
-      //           ...data.category.channels,
-      //           {
-      //             name: channelName,
-      //             yt_channel_id: channelId,
-      //           },
-      //         ],
-      //       },
-      //     };
-      //   },
-      //   false
-      // );
+          // TODO: use immer here
+          return {
+            ...data,
+            category: {
+              ...data.category,
+              channels: [
+                ...data.category.channels,
+                {
+                  name: channelName,
+                  yt_channel_id: channelId,
+                },
+              ],
+            },
+          };
+        },
+        false
+      );
 
-      const selectedID = categoryId ? categoryId : id
 
-      const { category, errorMessage } = await api.addChannelToCategory(
+      const selectedID = categoryId as number || id as number;
+
+      const { errorMessage } = await api.addChannelToCategory(
         selectedID,
         channelName,
         channelId
@@ -77,6 +82,10 @@ function useCategory(categoryId?: number) {
 
   const memoRemoveChannelFromCategory = useCallback(
     async (channelName: string, channelId: string) => {
+      if(!categoryId) {
+        throw new Error("Id must be passed to addChannelToCategory callback or to the useCategory hook");
+      }
+
       mutate(
         `/api/v1.0/users/current_user/categories/${categoryId}`,
         (data: CategoryResponse) => {
