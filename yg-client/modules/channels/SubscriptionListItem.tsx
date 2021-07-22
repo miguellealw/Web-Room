@@ -65,7 +65,7 @@ const SubscriptionListItem: React.FC<SubscriptionListItemProps> = ({
   return (
     <div ref={innerRef}>
       <div
-        className={`bg-black translate shadow-sm flex flex-col lg:flex-row items-center rounded-md hover:shadow-md overflow-hidden relative ${
+        className={`bg-black translate flex flex-col lg:flex-row items-center rounded-md overflow-hidden relative ${
           isDragging && "translate opacity-50 transform scale-90"
         }`}
         ref={drag}
@@ -102,7 +102,7 @@ const SubscriptionListItem: React.FC<SubscriptionListItemProps> = ({
         <Image
           src={thumbnail.url}
           alt={`${name}'s thumbnail`}
-          className="w-full h-full object-cover object-center transition opacity-30 hover:opacity-60"
+          className="w-full h-full object-cover object-center transition opacity-50 hover:opacity-70"
           width={200}
           height={200}
         />
