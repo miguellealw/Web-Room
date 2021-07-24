@@ -25,15 +25,18 @@ const Video: React.FC<VideoProps> = ({
   channelId,
 }) => {
   const datePublished = new Date(publishDate);
-  const {isHovering, handleMouseOut, handleMouseOver} = useOnHover()
+  const { isHovering, handleMouseOut, handleMouseOver } = useOnHover();
 
   return (
-    <a href={`https://www.youtube.com/watch?v=${videoId}`}>
+    <a
+      href={`https://www.youtube.com/watch?v=${videoId}`}
+      target="_blank"
+      rel="noreferrer"
+    >
       <li
         className="bg-white rounded-lg mb-5 flex flex-col sm:flex-row h-56 sm:h-40 overflow-hidden shadow-sm"
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
-
         title={`Watch ${title} on YouTube`}
       >
         {/* Video Thumbnail */}
@@ -66,6 +69,8 @@ const Video: React.FC<VideoProps> = ({
             <a
               href={`https://www.youtube.com/channel/${channelId}`}
               className="hover:underline"
+              target="_blank"
+              rel="noreferrer"
             >
               {channel}
             </a>
