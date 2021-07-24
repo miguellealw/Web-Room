@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import g, request, redirect, url_for, session
+from flask import redirect, session, abort
 from YG_server.auth.oauth import get_authenticated_service
 
 def yt_auth_required(f):
@@ -13,3 +13,16 @@ def yt_auth_required(f):
 		yt_client = get_authenticated_service()
 		return f(yt_client, *args, **kwargs)
 	return route_handler
+
+
+# For Auth0
+def requires_auth(f):
+	@wraps(f)
+	def decorated(*args, **kwargs):
+		if 'profile' not in session:
+			# Redirect to Login page here
+			abort(500, description="NOT AUTHED WITH AUTH0")
+			# return redirect('/')
+		return f(*args, **kwargs)
+
+	return decorated
