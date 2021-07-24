@@ -98,7 +98,7 @@ const LoginForm: React.FC = () => {
 export const LandingPage: React.FC = () => {
   const { loginWithRedirect, logout, user } = useAuth0();
 
-  console.log("USER", user)
+  // console.log("USER", user)
 
   return (
     <Layout>
