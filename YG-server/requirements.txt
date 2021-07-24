@@ -2,12 +2,16 @@ alembic==1.6.5
 aniso8601==9.0.1
 atomicwrites==1.4.0
 attrs==21.2.0
+Authlib==0.15.4
+autopep8==1.5.7
 blinker==1.4
 cachetools==4.2.2
 certifi==2021.5.30
+cffi==1.14.6
 chardet==4.0.0
 click==8.0.1
 colorama==0.4.4
+cryptography==3.4.7
 Deprecated==1.2.12
 dnspython==2.1.0
 Flask==1.1.0
@@ -47,6 +51,8 @@ py==1.10.0
 py-buzz==1.0.3
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
+pycodestyle==2.7.0
+pycparser==2.20
 PyJWT==2.1.0
 pyparsing==2.4.7
 pytest==6.2.4
