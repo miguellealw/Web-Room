@@ -152,6 +152,7 @@ def oauth2callback():
   # ACTION ITEM for developers:
   #     Store user's access and refresh tokens in your data store if
   #     incorporating this code into your real app.
+  # TODO: store in redis
   credentials = flow.credentials
   session['credentials'] = {
       'token': credentials.token,

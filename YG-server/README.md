@@ -1,6 +1,6 @@
 ## TODO: create instructions on how to set up project
 
-- [ ] Set up environment variables
+- [x] Set up environment variables
 
 	* API
 		* `API_VERSION` - version of api
