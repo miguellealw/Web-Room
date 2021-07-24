@@ -9,3 +9,7 @@
 - [ ] How to run tests
 
 - [x] Start flask server: Git Bash in Windows: `source venv/Scripts/activate`
+
+
+## Other Notes
+- After installing dependency do `pip freeze > requirements.txt` to add to requirements.txt file
