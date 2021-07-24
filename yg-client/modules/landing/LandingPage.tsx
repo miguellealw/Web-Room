@@ -8,6 +8,7 @@ import CategoriesImage from "../../public/categories-landing-image.png";
 import useUser from "../../shared-hooks/useUser";
 import { AuthApi } from "../../pages/api/auth";
 import { useRouter } from "next/router";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const LoginForm: React.FC = () => {
   const router = useRouter();
@@ -95,6 +96,10 @@ const LoginForm: React.FC = () => {
 };
 
 export const LandingPage: React.FC = () => {
+  const { loginWithRedirect, logout, user } = useAuth0();
+
+  console.log("USER", user)
+
   return (
     <Layout>
       <div className="flex flex-col justify-center items-center w-full">
@@ -127,6 +132,19 @@ export const LandingPage: React.FC = () => {
               Register
             </button>
           </Link>
+          <button
+            className="bg-red-600 hover:bg-red-500 font-bold mt-4 w-44 py-3 text-white rounded-md uppercase text-xs"
+            onClick={() => loginWithRedirect()}
+          >
+            Log In
+          </button>
+
+          <button
+            className="bg-red-600 hover:bg-red-500 font-bold mt-4 w-44 py-3 text-white rounded-md uppercase text-xs"
+            onClick={() => logout({ returnTo: "http://localhost:3000" })}
+          >
+            Logout
+          </button>
 
           <div className="mt-5">
             <Image
@@ -137,7 +155,7 @@ export const LandingPage: React.FC = () => {
             />
           </div>
 
-          <LoginForm />
+          {/* <LoginForm /> */}
         </main>
       </div>
     </Layout>
