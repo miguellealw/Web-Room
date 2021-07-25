@@ -31,11 +31,18 @@ def default_handler(e):
 
   return jsonify({"error": f"Non-HTTP Error: {e}"}), 500
 
+# Error handler
+
+# For Auth0
+class AuthError(Exception):
+  def __init__(self, error, status_code):
+    self.error = error
+    self.status_code = status_code
+
 # config_name will be development, production, testing
 def create_app(is_test_config=None):
   ## CREATE APP AND LOAD CONFIG
   app = Flask(__name__, instance_relative_config=True)
-
 
   # app.config.from_object('config.DevConfig')
   # app.config.from_object('config.ProdConfig')
@@ -67,6 +74,12 @@ def create_app(is_test_config=None):
   app.register_error_handler(403, resource_forbidden)
   app.register_error_handler(Exception, default_handler)
 
+  # For Auth0
+  @app.errorhandler(AuthError)
+  def handle_auth_error(ex):
+      response = jsonify(ex.error)
+      response.status_code = ex.status_code
+      return response
 
   ## REGISTER BLUEPRINTS
   with app.app_context():
