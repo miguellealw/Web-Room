@@ -7,11 +7,10 @@ import { Auth0Provider } from "@auth0/auth0-react";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Auth0Provider
-      domain="yg-dev.us.auth0.com"
-      clientId="wL0OxZSODBa6chE5nG1jIFutMVI5jC49"
-      // redirectUri={window.location.origin}
+      domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN as string}
+      clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID as string}
+      audience={process.env.NEXT_PUBLIC_AUTH0_AUDIENCE}
       redirectUri="http://localhost:3000"
-      // redirectUri="/categories"
     >
       <SWRConfig
         value={{
@@ -23,4 +22,5 @@ function MyApp({ Component, pageProps }: AppProps) {
     </Auth0Provider>
   );
 }
+
 export default MyApp;
