@@ -131,12 +131,12 @@ class Channel(db.Model):
 ######## Users ########
 class User(UserMixin, db.Model):
   __tablename__ = 'user'
-  id = db.Column(db.Integer, primary_key=True)
-  username = db.Column(db.String(25), unique=True, nullable=False, index=True)
-  email = db.Column(db.String(40), unique=True, nullable=False, index=True)
-  created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-  updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-  hashed_password = db.Column(db.String(200), nullable=False)
+  id = db.Column(db.String(40), primary_key=True)
+  # username = db.Column(db.String(25), unique=True, nullable=False, index=True)
+  # email = db.Column(db.String(40), unique=True, nullable=False, index=True)
+  # created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+  # updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+  # hashed_password = db.Column(db.String(200), nullable=False)
 
   # user.categories = gets categories of user
   categories = db.relationship(
@@ -147,7 +147,7 @@ class User(UserMixin, db.Model):
   )
 
   def __repr__(self):
-    return '<User %r>' % self.username
+    return '<User %r>' % self.id
 
   def set_password(self, password):                                              
     self.hashed_password = generate_password_hash(password)
