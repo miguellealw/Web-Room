@@ -1,3 +1,5 @@
+from YG_server.decorators import requires_auth
+from flask_cors.decorator import cross_origin
 from YG_server.auth.oauth import CLIENT_SECRETS_FILE, SCOPES
 from flask import jsonify, request, abort, url_for, session, redirect
 from datetime import datetime
@@ -111,8 +113,41 @@ def logout():
   logout_user()
   return jsonify({"flash": "User logged out"})
 
+
+### AUTH0
+
+# This will be called after user logs in to check if user is in DB
+@bp.route('/check_user/<string:user_id>', methods=['GET'])
+@cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth
+def check_user(user_id):
+  # assign user_id to session to avoid querying db.
+  # TODO: check if user id is in session. if it is return.
+
+  # get user from db
+  user_found = User.query.filter_by(auth_id=user_id).first()
+
+  # if user is not in db then insert it
+  if user_found is None:
+    user_found = User(auth_id = user_id)
+    db.session.add(user_found)
+    db.session.commit()
+
+
+  return jsonify({
+    "user": user_found.user_id
+  })
+
+
+# @bp.route('/auth0callback')
+# def auth0callback():
+#   # TODO: store user id in db if not in there yet
+#   print("AUTH0 CALLBACK WAS CALLED")
+#   pass
+
 ### YOUTUBE API / GOOGLE OAUTH
 
+# This endpoint is visited after user is authed with YouTube
 @bp.route('/authorize')
 def authorize():
   # Create a flow instance to manage the OAuth 2.0 Authorization Grant Flow

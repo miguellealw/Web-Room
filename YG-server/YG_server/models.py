@@ -129,14 +129,11 @@ class Channel(db.Model):
     
 
 ######## Users ########
-class User(UserMixin, db.Model):
+# class User(UserMixin, db.Model):
+class User(db.Model):
   __tablename__ = 'user'
-  id = db.Column(db.String(40), primary_key=True)
-  # username = db.Column(db.String(25), unique=True, nullable=False, index=True)
-  # email = db.Column(db.String(40), unique=True, nullable=False, index=True)
-  # created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-  # updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-  # hashed_password = db.Column(db.String(200), nullable=False)
+  id = db.Column(db.Integer, primary_key=True)
+  auth_id = db.Column(db.String(40), nullable=False, index=True)
 
   # user.categories = gets categories of user
   categories = db.relationship(
