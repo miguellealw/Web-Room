@@ -121,9 +121,6 @@ def logout():
 @cross_origin(headers=["Content-Type", "Authorization"])
 @requires_auth
 def check_user(user_id):
-  # assign user_id to session to avoid querying db.
-  # TODO: check if user id is in session. if it is return.
-
   # get user from db
   user_found = User.query.filter_by(auth_id=user_id).first()
 
@@ -133,9 +130,8 @@ def check_user(user_id):
     db.session.add(user_found)
     db.session.commit()
 
-
   return jsonify({
-    "user": user_found.user_id
+    "user": user_found.auth_id
   })
 
 

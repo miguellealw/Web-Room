@@ -2,16 +2,11 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import { SWRConfig } from "swr";
-import { Auth0Provider } from "@auth0/auth0-react";
+import { UserProvider } from "@auth0/nextjs-auth0";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Auth0Provider
-      domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN as string}
-      clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID as string}
-      audience={process.env.NEXT_PUBLIC_AUTH0_AUDIENCE}
-      redirectUri="http://localhost:3000"
-    >
+    <UserProvider>
       <SWRConfig
         value={{
           dedupingInterval: 5000,
@@ -19,7 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       >
         <Component {...pageProps} />
       </SWRConfig>
-    </Auth0Provider>
+    </UserProvider>
   );
 }
 

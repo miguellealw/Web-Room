@@ -1,3 +1,5 @@
+import { useUser } from "@auth0/nextjs-auth0";
+import axios from "axios";
 import React from "react";
 import { useMemo } from "react";
 import useSWR from "swr";
@@ -5,9 +7,7 @@ import { CategoryApi } from "../pages/api/categories";
 import useCategoriesStore from "../stores/useCategoriesStore";
 
 const useFetchCategories = () => {
-  let api = useMemo(() => new CategoryApi(), []);
-  api.setup();
-  const fetcher = () => api.getUserCategories();
+  const fetcher = () => axios.get(`/api/n_categories`).then((res) => res.data);
 
   const {
     data,
@@ -20,8 +20,8 @@ const useFetchCategories = () => {
   // Update store
   const setCategories = useCategoriesStore((state) => state.setCategories);
   React.useEffect(() => {
-    if (data && !error) setCategories(data.categories);
-  }, [data, setCategories, data?.categories]);
+    if (data && !error) setCategories(data);
+  }, [data, error, setCategories]);
 
   return {
     data,

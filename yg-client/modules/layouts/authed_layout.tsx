@@ -1,4 +1,4 @@
-import useUser from "../../shared-hooks/useUser";
+// import useUser from "../../shared-hooks/useUser";
 import DashboardNavigation from "./DashboardNavigation";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -7,6 +7,17 @@ import useFetchCategories from "../../shared-hooks/useFetchCategories";
 import MobileNavigation from "./MobileNavigation";
 import MobileTopNavBar from "./MobileTopNavBar";
 import Toast from "../../components/Toast";
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { UsersApi } from "../../pages/api/users";
+import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0";
+import axios from "axios";
 
 interface AuthedLayoutProps {
   tw_className?: string;
@@ -14,15 +25,14 @@ interface AuthedLayoutProps {
 
 const AuthedLayout: React.FC<AuthedLayoutProps> = ({
   children,
+  user,
   tw_className = "",
   ...props
 }) => {
-  const { isLoading } = useUser({
-    redirectTo: "/login",
-  });
   const { data, isLoading: isCategoriesLoading } = useFetchCategories();
+  console.log("DATA", data)
 
-  if (isLoading) {
+  if (user.isLoading || isCategoriesLoading) {
     return (
       <div className="w-full h-screen flex justify-center items-center font-bold text-red-500">
         Dashboard Loading...
@@ -35,9 +45,9 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
       <CustomDragLayer />
       <div className="w-full min-h-screen bg-gray-100 font-inter">
         {/* FIXME: if top nav bar is above dashboard nav then svg renders. If it is under it does not redner */}
-        <DashboardNavigation data={data} isLoading={isCategoriesLoading} />
+        <DashboardNavigation isLoading={isCategoriesLoading} />
         <MobileTopNavBar />
-        <MobileNavigation />
+        {/* <MobileNavigation /> */}
         <div
           className={`${
             tw_className === "" ? "w-4/5 lg:w-2/5 m-auto" : tw_className
@@ -52,4 +62,10 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
   );
 };
 
-export default AuthedLayout;
+const Loading = () => <div>Redirecting to Login Page...</div>;
+
+// export default withAuthenticationRequired(AuthedLayout, {
+export default withPageAuthRequired(AuthedLayout, {
+  onRedirecting: () => <Loading />,
+  // returnTo: "/",
+});

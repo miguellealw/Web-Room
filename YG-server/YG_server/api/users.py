@@ -1,8 +1,9 @@
-from YG_server.decorators import yt_auth_required
+from YG_server.decorators import requires_auth, yt_auth_required
 from YG_server.auth.oauth import get_channel, get_channel_videos, get_subscriptions
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, session
 from datetime import datetime as dt
 from marshmallow.exceptions import ValidationError
+from flask_cors import cross_origin
 
 from YG_server.models import db, User, Category, Channel
 from YG_server.schemas import (
@@ -28,12 +29,18 @@ def get_user(user_id):
   return jsonify({"username": user_found.username})
 
 @bp.route('/users/current_user', methods=['GET'])
-@login_required
+# @login_required
+# Auth0
+@cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth
 def current_user():
   return jsonify({
-    "username": fl_current_user.username, 
-    "isLoggedIn": True
+    "message": "THIS IS A PRIVATE ROUTE OF AUTH0"
   })
+  # return jsonify({
+  #   "username": fl_current_user.username, 
+  #   "isLoggedIn": True
+  # })
 
 # This will return the users subscriptions
 @bp.route('/users/current_user/yt-channels', methods=['GET'])
@@ -63,7 +70,7 @@ def get_user_channels():
     abort(404, description="User channels could not be loaded")
 
   # Get id's of channels and pass to get_channel as dict
-  channel_ids = [channel.yt_channel_id for channel in channels]
+  # channel_ids = [channel.yt_channel_id for channel in channels]
 
   # Get channel data from youtube
   # yt_channels = get_channel(yt_client, 
@@ -184,9 +191,14 @@ def get_user_channel(yt_channel_id):
   return jsonify( channel_schema.dump(channel_found) )
 
 @bp.route('/users/current_user/categories', methods=['GET', 'POST'])
-@login_required
+@cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth
+# @login_required
 def get_user_categories():
-  user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
+  auth_id = request.args.get('auth_id')
+
+  # user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
+  user_found = User.query.filter_by(auth_id=auth_id).first_or_404(description="User not found")
   categories = user_found.categories
 
   if categories is None:
@@ -205,7 +217,7 @@ def get_user_categories():
       
     new_category = Category(
       name=valid_data["name"],
-      user_id=fl_current_user.id,
+      user_id=user_found.id,
       created_at=dt.now(),
     )
     # TODO: add empty uploads array when creating category
@@ -225,7 +237,9 @@ def get_user_categories():
 
 @bp.route('/users/current_user/categories/<int:category_id>', methods=['GET', 'PUT', 'DELETE'])
 @yt_auth_required
-@login_required
+@cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth
+# @login_required
 def get_user_category(yt_client, category_id):
   user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
   # TODO consider using user_found.categories

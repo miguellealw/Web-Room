@@ -1,17 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AuthedLayout from "../layouts/authed_layout";
 import CategoryListItem from "./CategoryListItem";
 import useCategories from "../../shared-hooks/useCategories";
 import NewCategoryButton from "./NewCategoryButton";
 import useFetchCategories from "../../shared-hooks/useFetchCategories";
 import useCategoriesStore from "../../stores/useCategoriesStore";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
-export const CategoriesPage: React.FC = () => {
+const CategoriesPage: React.FC = () => {
+  // const { getAccessTokenSilently } = useAuth0();
+  // const token = useAuthStore((state) => state.token);
+
   const { error, isLoading } = useFetchCategories();
   const { deleteCategory, updateCategory } = useCategories();
   const categories = useCategoriesStore((state) => state.categories);
 
-  if (error) return <div>Error loading categories page...</div>;
+  // if (error) return <div>Error loading categories page...</div>;
 
   return (
     <AuthedLayout>
@@ -26,11 +30,10 @@ export const CategoriesPage: React.FC = () => {
               </h1>
               <div className="text-gray-400 text-sm uppercase font-bold">
                 {/* {data?.categories?.length} Categories */}
-                {categories?.length} Categories
+                {/* {categories?.length} Categories */}
               </div>
             </div>
             <ul className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* {data?.categories?.map((category, index) => ( */}
               {categories?.map((category, index) => (
                 <CategoryListItem
                   key={index}
@@ -47,4 +50,6 @@ export const CategoriesPage: React.FC = () => {
       </div>
     </AuthedLayout>
   );
-}
+};
+
+export default withPageAuthRequired(CategoriesPage);

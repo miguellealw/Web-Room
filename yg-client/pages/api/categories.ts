@@ -10,10 +10,11 @@ export interface CategoryResponse {
 }
 
 export class CategoryApi extends Api {
-  async getUserCategories(): Promise<CategoryResponse> {
+  async getUserCategories(token?: string): Promise<CategoryResponse> {
     try {
       const response: AxiosResponse<any> = await this.axios.get(
-        "/api/v1.0/users/current_user/categories"
+        "/api/v1.0/users/current_user/categories",
+        // { headers: { Authorization: `Bearer ${token}` } }
       );
 
       return {

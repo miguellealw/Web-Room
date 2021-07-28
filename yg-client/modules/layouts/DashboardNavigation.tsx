@@ -22,6 +22,7 @@ import React from "react";
 import { CategoryResponse } from "../../pages/api/categories";
 import LogoType from "../../components/LogoType";
 import { Category } from "../categories";
+import useCategoriesStore from "../../stores/useCategoriesStore";
 
 type NavCategoryListItemProps = {
   category: Category;
@@ -71,24 +72,14 @@ type DashboardNavigationProps = {
 };
 
 const DashboardNavigation: React.FC<DashboardNavigationProps> = ({
-  data,
   isLoading,
 }) => {
   // FIXME: these hooks may have to do with memo not working (keeps rerendering nav)
-  const { mutateUser } = useUser();
   const router = useRouter();
   const isCategories = router.pathname === "/categories";
   const isSubscriptions = router.pathname === "/channels";
+  const categories = useCategoriesStore((state) => state.categories);
   // console.log("NAV RENDERS");
-
-  const handleLogout = async () => {
-    mutateUser();
-    const api = new AuthApi();
-    api.setup();
-    await api.logout();
-    router.replace("/");
-    mutateUser();
-  };
 
   return (
     <nav className="h-screen w-56 bg-gray-800 text-white hidden lg:flex flex-col items-center fixed left-0 text-sm tracking-wide">
@@ -154,10 +145,10 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({
                 </a>
               </Link>
             </li>
-            {data?.categories?.length === 0 ? (
+            {categories.length === 0 ? (
               <li>No categories available</li>
             ) : (
-              data?.categories?.map((category) => (
+              categories.map((category) => (
                 <NavCategoryListItem key={category.id} category={category} />
               ))
             )}
@@ -166,15 +157,18 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({
       </div>
 
       {/* Log Out */}
-      <button
-        data-tip="Log Out"
-        onClick={handleLogout}
-        className="flex items-center my-3"
-      >
-        <LogoutIcon className="h-5 w-5" />
-        <span className="ml-2 hover:text-gray-300">Log Out</span>
-        {/* <ReactTooltip effect="solid"/> */}
-      </button>
+      <Link href="/api/auth/logout" passHref>
+        <a>
+          <button
+            data-tip="Log Out"
+            className="flex items-center my-3"
+          >
+            <LogoutIcon className="h-5 w-5" />
+            <span className="ml-2 hover:text-gray-300">Log Out</span>
+            {/* <ReactTooltip effect="solid"/> */}
+          </button>
+        </a>
+      </Link>
     </nav>
   );
 };

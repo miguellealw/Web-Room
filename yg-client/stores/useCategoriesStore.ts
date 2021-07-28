@@ -4,12 +4,14 @@ import { CategoryApi, CategoryResponse } from "../pages/api/categories";
 import { Category } from "../modules/categories";
 import { TempCategory } from "../modules/categories";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 interface CategoriesState {
   categories: (Category | TempCategory)[];
   setCategories: (categories: Category[]) => void;
   getCategory: (id: number) => Category | TempCategory | undefined;
-  createCategory: (api: CategoryApi, name: string) => any;
+  // createCategory: (api: CategoryApi, name: string) => any;
+  createCategory: (name: string) => any;
   updateCategory: (api: CategoryApi, id: number, newName: string) => any;
   deleteCategory: (api: CategoryApi, id: number) => any;
 }
@@ -26,7 +28,8 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     });
   },
 
-  createCategory: async (api: CategoryApi, name: string) => {
+  // createCategory: async (api: CategoryApi, name: string) => {
+  createCategory: async (name: string) => {
     let newCategory: TempCategory;
 
     // Update UI
@@ -34,28 +37,33 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
       `/api/v1.0/users/current_user/categories`,
       (data: CategoryResponse) => {
         newCategory = { name };
-        const updatedState = data?.categories
-          ? [...data.categories, newCategory]
-          : [];
+        const updatedState = data ? [...data, newCategory] : [];
 
         // Update store
         set(() => ({ categories: updatedState }));
-        return { ...data, categories: updatedState };
+        // return { ...data, categories: updatedState };
+        return [ ...updatedState ];
       },
       false
     );
 
-    let createdCategory = await api.createCategory(name);
+    // let createdCategory = await api.createCategory(name);
+
+    let createdCategory = await axios({
+      method: "post",
+      url: `/api/n_categories`,
+      data: { categoryName: name },
+    }).then((res) => res.data);
 
     // revalidate to make sure local data is correct
     mutate(
       `/api/v1.0/users/current_user/categories`,
       (data: CategoryResponse) => {
         // change store state after revalidation
-        const updatedState = data?.categories ? [...data.categories] : [];
+        const updatedState = data ? [...data] : [];
 
         set(() => ({ categories: updatedState }));
-        return { ...data };
+        return [ ...data ];
       }
     );
 
@@ -64,6 +72,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     return createdCategory;
   },
 
+  // REMINDINDER: remember when you remove api from here to remove it from useCategories
   updateCategory: async (api, id, newName) => {
     let editedCategory: TempCategory;
 

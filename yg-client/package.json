@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^1.6.0",
+    "@auth0/nextjs-auth0": "^1.5.0",
     "@heroicons/react": "^1.0.1",
     "@tailwindcss/forms": "^0.3.3",
     "@types/react-confirm": "^0.1.4",
