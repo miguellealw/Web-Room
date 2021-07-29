@@ -27,7 +27,7 @@ export default withApiAuthRequired(async function getCategories(req, res) {
 
     // POST - create categories
     case "POST": {
-      const name: string = req.body.categoryName;
+      const name: string = req.body.name;
       const response = await axios({
         method: "POST",
         url: `http://localhost:5000/api/v1.0/users/current_user/categories?auth_id=${user.sub}`,
@@ -40,13 +40,6 @@ export default withApiAuthRequired(async function getCategories(req, res) {
 			res.status(200).json(response.data)
       break;
     }
-    // PUT - update category - TODO: move this file to folder - read here https://nextjs.org/docs/api-routes/dynamic-api-routes#index-routes-and-dynamic-api-routes
-    case "PUT": {
-      break;
-    }
-    // DELETE - delete category
-    case "DELETE": {
-      break;
-    }
   }
 });
+

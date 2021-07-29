@@ -197,7 +197,6 @@ def get_user_channel(yt_channel_id):
 def get_user_categories():
   auth_id = request.args.get('auth_id')
 
-  # user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
   user_found = User.query.filter_by(auth_id=auth_id).first_or_404(description="User not found")
   categories = user_found.categories
 
@@ -236,12 +235,15 @@ def get_user_categories():
   return jsonify(categories_schema.dump(categories))
 
 @bp.route('/users/current_user/categories/<int:category_id>', methods=['GET', 'PUT', 'DELETE'])
-@yt_auth_required
+# @yt_auth_required
 @cross_origin(headers=["Content-Type", "Authorization"])
 @requires_auth
 # @login_required
-def get_user_category(yt_client, category_id):
-  user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
+# def get_user_category(yt_client, category_id):
+def get_user_category(category_id):
+  auth_id = request.args.get('auth_id')
+  user_found = User.query.filter_by(auth_id=auth_id).first_or_404(description="User not found")
+  # user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
   # TODO consider using user_found.categories
   found_category = Category.query.get_or_404(category_id, description="Category does not exist")
 

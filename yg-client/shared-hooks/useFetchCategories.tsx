@@ -3,11 +3,11 @@ import axios from "axios";
 import React from "react";
 import { useMemo } from "react";
 import useSWR from "swr";
-import { CategoryApi } from "../pages/api/categories";
+import { CategoryApi } from "../pages/api/old_categories";
 import useCategoriesStore from "../stores/useCategoriesStore";
 
 const useFetchCategories = () => {
-  const fetcher = () => axios.get(`/api/n_categories`).then((res) => res.data);
+  const fetcher = () => axios.get(`/api/categories`).then((res) => res.data);
 
   const {
     data,

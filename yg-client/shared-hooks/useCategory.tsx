@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import { mutate } from "swr";
-import { CategoryApi, CategoryResponse } from "../pages/api/categories";
+import { CategoryApi, CategoryResponse } from "../pages/api/old_categories";
 import useEmitToast from "./useEmitToast";
 
 // id is optional to category id is not known when adding channel to category

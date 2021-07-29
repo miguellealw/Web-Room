@@ -19,7 +19,7 @@ import Logo from "../../components/Logo";
 import { useDrop } from "react-dnd";
 import useCategory from "../../shared-hooks/useCategory";
 import React from "react";
-import { CategoryResponse } from "../../pages/api/categories";
+import { CategoryResponse } from "../../pages/api/old_categories";
 import LogoType from "../../components/LogoType";
 import { Category } from "../categories";
 import useCategoriesStore from "../../stores/useCategoriesStore";

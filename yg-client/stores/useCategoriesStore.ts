@@ -1,6 +1,6 @@
 import { mutate } from "swr";
 import create from "zustand";
-import { CategoryApi, CategoryResponse } from "../pages/api/categories";
+import { CategoryApi, CategoryResponse } from "../pages/api/old_categories";
 import { Category } from "../modules/categories";
 import { TempCategory } from "../modules/categories";
 import { toast } from "react-toastify";
@@ -42,7 +42,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
         // Update store
         set(() => ({ categories: updatedState }));
         // return { ...data, categories: updatedState };
-        return [ ...updatedState ];
+        return [...updatedState];
       },
       false
     );
@@ -50,9 +50,9 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     // let createdCategory = await api.createCategory(name);
 
     let createdCategory = await axios({
-      method: "post",
-      url: `/api/n_categories`,
-      data: { categoryName: name },
+      method: "POST",
+      url: `/api/categories`,
+      data: { name },
     }).then((res) => res.data);
 
     // revalidate to make sure local data is correct
@@ -63,7 +63,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
         const updatedState = data ? [...data] : [];
 
         set(() => ({ categories: updatedState }));
-        return [ ...data ];
+        return [...data];
       }
     );
 
@@ -82,35 +82,38 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
       (data: CategoryResponse) => {
         editedCategory = { id, name: newName };
         // TODO: find better way of doing this
-        const categoriesToKeep = data?.categories?.filter((c) => c.id !== id);
+        const categoriesToKeep = data?.filter((c) => c.id !== id);
         const updatedState = categoriesToKeep
           ? [...categoriesToKeep, editedCategory]
           : [];
 
         // Update store
         set(() => ({ categories: updatedState }));
-        return {
-          ...data,
-          categories: updatedState,
-        };
+        return [...updatedState];
       },
       false
     );
 
-    let cat = await api.updateCategory(id, newName);
+    // let cat = await api.updateCategory(id, newName);
+
+    let cat = await axios({
+      method: "PUT",
+      url: `/api/categories/${id}`,
+      data: { name: newName },
+    }).then((res) => res.data);
 
     // revalidate to make sure local data is correct
     mutate(
       `/api/v1.0/users/current_user/categories`,
       (data: CategoryResponse) => {
         // change store state after revalidation
-        const updatedState = data.categories ? [...data.categories] : [];
+        const updatedState = data ? [...data] : [];
 
         set(() => ({
           categories: updatedState,
         }));
 
-        return { ...data };
+        return [...data];
       }
     );
 
@@ -123,29 +126,34 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
       `/api/v1.0/users/current_user/categories`,
       async (data: CategoryResponse) => {
         // Filter out category to delete from data
-        const categoriesToKeep = data?.categories?.filter((c) => c.id !== id);
+        const categoriesToKeep = data?.filter((c) => c.id !== id);
         const updatedState = categoriesToKeep ? [...categoriesToKeep] : [];
 
         // Update store
         set(() => ({ categories: updatedState }));
         toast.dark("Category Deleted");
-        return { ...data, categories: updatedState };
+        // return { ...data, categories: updatedState };
+        return [...data];
       },
       false
     );
 
-    const cat = await api.deleteCategory(id);
+    // const cat = await api.deleteCategory(id);
+    let cat = await axios({
+      method: "DELETE",
+      url: `/api/categories/${id}`,
+    }).then((res) => res.data);
 
     // revalidate to make sure local data is correct
     mutate(
       `/api/v1.0/users/current_user/categories`,
       (data: CategoryResponse) => {
-        const updatedState = data.categories ? [...data.categories] : [];
+        const updatedState = data ? [...data] : [];
 
         // change store state after revalidation
         set(() => ({ categories: updatedState }));
 
-        return { ...data };
+        return [...data];
       }
     );
 

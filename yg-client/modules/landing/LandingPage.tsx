@@ -10,7 +10,7 @@ import { AuthApi } from "../../pages/api/auth";
 import { useRouter } from "next/router";
 import { UsersApi } from "../../pages/api/users";
 import axios from "axios";
-import { CategoryApi } from "../../pages/api/categories";
+import { CategoryApi } from "../../pages/api/old_categories";
 import { useUser } from "@auth0/nextjs-auth0";
 
 const LoginForm: React.FC = () => {
@@ -112,7 +112,7 @@ export const LandingPage: React.FC = () => {
       const userFetched = await axios.get(`/api/check_user?auth_id=${user?.sub}`)
       console.log("user fetched", userFetched)
   
-      const categories = await axios.get(`/api/n_categories?auth_id=${user?.sub}`)
+      const categories = await axios.get(`/api/categories?auth_id=${user?.sub}`)
       console.log("categories", categories)
 
     } catch(e) {
