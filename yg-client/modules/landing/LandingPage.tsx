@@ -104,9 +104,6 @@ export const LandingPage: React.FC = () => {
 
   const { user, error, isLoading } = useUser();
 
-  console.log("USER", user)
-
-
   const getCurrentUser = async () => {
     try {
       const userFetched = await axios.get(`/api/check_user?auth_id=${user?.sub}`)
