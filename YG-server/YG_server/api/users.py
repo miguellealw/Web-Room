@@ -1,3 +1,4 @@
+from werkzeug.wrappers import response
 from YG_server.decorators import requires_auth, yt_auth_required
 from YG_server.auth.oauth import get_channel, get_channel_videos, get_subscriptions
 from flask import jsonify, request, abort, session
@@ -44,9 +45,6 @@ def current_user():
 # This will return the users subscriptions
 @bp.route('/users/current_user/yt-channels', methods=['GET'])
 @yt_auth_required
-# @cross_origin(headers=["Content-Type", "Authorization"])
-# @requires_auth
-# def get_user_yt_channels(yt_client, auth_id):
 def get_user_yt_channels(yt_client):
   nextPageToken = request.args.get('nextPageToken')
   channels = get_subscriptions(yt_client, 
@@ -194,7 +192,8 @@ def get_user_channel(auth_id, yt_channel_id):
   # get channel specified
   channel_found = next(filter(lambda ch: ch.yt_channel_id == yt_channel_id, user_found.channels), None)
   if channel_found is None:
-    abort(404, description="User does not own channel")
+    return jsonify({"message": "User does not have channel in category"}), 200
+    # abort(404, description="User does not own channel or it does not exist in database")
 
   return jsonify( channel_schema.dump(channel_found) )
 

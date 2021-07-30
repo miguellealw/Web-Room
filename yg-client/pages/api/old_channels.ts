@@ -8,6 +8,7 @@ export type ChannelResponse = {
   errorMessage: any;
 };
 export class ChannelsApi extends Api {
+  // NOT USED
   async get_channels(): Promise<ChannelResponse> {
     try {
       const response: AxiosResponse<any> = await this.axios.get(

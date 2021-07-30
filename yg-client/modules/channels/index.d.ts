@@ -12,4 +12,6 @@ export type Channel = {
   };
   categories: number[];
   yt_data: YT_Data;
+  // For when channel is not in db
+  message?: string
 };

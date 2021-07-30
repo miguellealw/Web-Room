@@ -13,7 +13,6 @@ export default withApiAuthRequired(async function getChannels(req, res) {
   // If your Access Token is expired and you have a Refresh Token
   // `getAccessToken` will fetch you a new one using the `refresh_token` grant
   const { accessToken } = await getAccessToken(req, res);
-  const { user } = getSession(req, res);
   const nextPageToken = req.query.nextPageToken;
 
   switch (req.method) {

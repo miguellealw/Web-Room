@@ -159,11 +159,20 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
               <div>Loading channel data...</div>
             ) : (
               categories.map((c) => {
+                // Check if channelData is a channel or message
+                // if it is a message that means the channel is not in DB
+                // or does not belong to user.
+                const channel = channelData.message ? {
+                  name: selectedChannel.name,
+                  yt_channel_id: selectedChannel.channelId,
+                  categories: [],
+                } : channelData;
+
                 // check if selectedChannel.channelId is in c.channels
-                const isChannelInCategory = channelData?.categories
+                const isChannelInCategory = channel.categories
                   ? channelExistsInCategory(
                       c.id as number,
-                      channelData.categories
+                      channel.categories
                     )
                   : false;
 
@@ -175,13 +184,7 @@ export const CategoriesModal: React.FC<CategoriesModalProps> = ({
                     mutate={mutateChannel}
                     // If channel data is null, it means channel is not part of category, therefore it is not stored
                     // in DB, so pass dummy channel data for local state
-                    channel={
-                      channelData || {
-                        name: selectedChannel.name,
-                        yt_channel_id: selectedChannel.channelId,
-                        categories: [],
-                      }
-                    }
+                    channel={channel}
                   />
                 );
               })
