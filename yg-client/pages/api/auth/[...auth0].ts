@@ -6,7 +6,6 @@ import {
   handleCallback,
 } from "@auth0/nextjs-auth0";
 import { ManagementClient } from "auth0";
-import axios from "axios";
 
 export default handleAuth({
   async login(req, res) {
