@@ -30,8 +30,8 @@ const useCategories: () => useCategoriesType = () => {
   // CREATE
   const memoCreateCategory = useCallback(
     async (name: string) => {
-      const res = await createCategory(name);
-      return res.category;
+      return await createCategory(name);
+      // return res.category;
     },
     [createCategory]
   );
