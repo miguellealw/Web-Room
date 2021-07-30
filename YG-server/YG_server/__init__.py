@@ -17,6 +17,7 @@ ma = Marshmallow()
 migrate = Migrate()
 
 def resource_not_found(e):
+  print("404 ERROR HANDLER", e)
   return jsonify(error=str(e)), 404
 
 def resource_conflict(e):
@@ -26,8 +27,10 @@ def resource_forbidden(e):
   return jsonify(error=str(e)), 403
 
 def default_handler(e):
+  print("DEFAULT ERROR HANDLER", e)
   if isinstance(e, HTTPException):
     return jsonify(error=str(e)), 404
+
 
   return jsonify({"error": f"Non-HTTP Error: {e}"}), 500
 
@@ -63,7 +66,7 @@ def create_app(is_test_config=None):
   ## REGISTER PLUGINS - make globally accessible to other parts of app
   db.init_app(app)
   login_manager.init_app(app)
-  cors.init_app(app)
+  cors.init_app(app, supports_credentials=True)
   ma.init_app(app)
   migrate.init_app(app, db)
 

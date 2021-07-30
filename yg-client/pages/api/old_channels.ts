@@ -39,7 +39,6 @@ export class ChannelsApi extends Api {
         channels: response.data,
         errorMessage: null,
       };
-
     } catch (err) {
       return {
         kind: "bad-data",
@@ -51,8 +50,12 @@ export class ChannelsApi extends Api {
 
   async get_yt_channels(nextPageToken?: string): Promise<any> {
     try {
+      // const response: AxiosResponse<any> = await this.axios.get(
+      //   `/api/v1.0/users/current_user/yt-channels${nextPageToken ? `?nextPageToken=${nextPageToken}` : ''}`
+      // );
+
       const response: AxiosResponse<any> = await this.axios.get(
-        `/api/v1.0/users/current_user/yt-channels${nextPageToken ? `?nextPageToken=${nextPageToken}` : ''}`
+        `/api/channels${nextPageToken ? `?nextPageToken=${nextPageToken}` : ""}`
       );
 
       return {

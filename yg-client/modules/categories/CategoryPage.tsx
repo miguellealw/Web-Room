@@ -29,11 +29,11 @@ export const CategoryPage: React.FC = () => {
         <CategorySkeleton ready={!isLoading}>
           <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-5">
             <h1 className="lg:pb-7 text-2xl lg:text-5xl font-bold">
-              {data?.category?.name}
+              {data?.name}
             </h1>
             <div className="flex justify-between items-center">
               <span className="text-gray-500">
-                {data?.category?.channels.length} channels
+                {data?.channels.length} channels
               </span>
               {/* <button className="rounded-full bg-red-600 hover:bg-red-500 text-white text-xs px-4 py-2 ml-5">
                 Add Channels
@@ -43,16 +43,16 @@ export const CategoryPage: React.FC = () => {
 
           <main className="grid grid-cols-1 lg:grid 2xl:grid-cols-3 lg:gap-10">
             <MobileSubscriptionsSection
-              channels={data?.category?.channels}
-              categoryId={data?.category?.id}
+              channels={data?.channels}
+              categoryId={data?.id}
               removeChannelFromCategory={removeChannelFromCategory}
             />
 
-            <VideoSection uploads={data?.category?.uploads} />
+            <VideoSection uploads={data?.uploads} />
 
             <SubscriptionsSection
-              channels={data?.category?.channels}
-              categoryId={data?.category?.id}
+              channels={data?.channels}
+              categoryId={data?.id}
               removeChannelFromCategory={removeChannelFromCategory}
             />
           </main>

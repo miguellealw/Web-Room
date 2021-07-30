@@ -16,7 +16,7 @@ export default withApiAuthRequired(async function getCategories(req, res) {
     case "GET": {
       const response = await axios({
         method: "get",
-        url: `http://localhost:5000/api/v1.0/users/current_user/categories?auth_id=${user.sub}`,
+        url: `${process.env.API_URL}/api/v1.0/users/current_user/categories?auth_id=${user.sub}`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -30,7 +30,7 @@ export default withApiAuthRequired(async function getCategories(req, res) {
       const name: string = req.body.name;
       const response = await axios({
         method: "POST",
-        url: `http://localhost:5000/api/v1.0/users/current_user/categories?auth_id=${user.sub}`,
+        url: `${process.env.API_URL}/api/v1.0/users/current_user/categories?auth_id=${user.sub}`,
         data: { name },
         headers: {
           Authorization: `Bearer ${accessToken}`,

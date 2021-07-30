@@ -5,98 +5,11 @@ import Layout from "../layouts/layout";
 import WaveSVG from "./WaveSVG";
 import Image from "next/image";
 import CategoriesImage from "../../public/categories-landing-image.png";
-// import useUser from "../../shared-hooks/useUser";
 import { AuthApi } from "../../pages/api/auth";
 import { useRouter } from "next/router";
-import { UsersApi } from "../../pages/api/users";
 import axios from "axios";
 import { CategoryApi } from "../../pages/api/old_categories";
 import { useUser } from "@auth0/nextjs-auth0";
-
-const LoginForm: React.FC = () => {
-  const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isError, setIsError] = useState(false);
-
-  // const { mutateUser } = useUser({
-  //   redirectTo: "/channels",
-  //   redirectIfFound: true,
-  // });
-
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsError(false);
-    try {
-      const api = new AuthApi();
-      api.setup();
-      const response = await api.login(username, password);
-
-      if (response.kind === "ok") {
-        mutateUser();
-        router.push("/categories");
-      } else {
-        setIsError(true);
-      }
-    } catch (err) {
-      setIsError(true);
-    }
-  };
-
-  return (
-    <form
-      action="post"
-      onSubmit={onSubmit}
-      className="w-11/12 bg-white shadow-xl rounded-md p-5 relative -top-16 lg:-top-24"
-    >
-      <div className="lg:w-80 m-auto">
-        <h3 className="font-bold text-3xl text-center mb-5">Log In</h3>
-        <div className="flex flex-col text-xs mb-6">
-          <label htmlFor="username" className="uppercase font-bold mb-1">
-            Username
-          </label>
-          <input
-            type="text"
-            id="username"
-            className="rounded-md border-2 border-gray-200 focus:border-red-400 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 text-sm"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setUsername(e.target.value);
-            }}
-          />
-        </div>
-
-        <div className="flex flex-col text-xs">
-          <label htmlFor="password" className="uppercase font-bold mb-1">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            className="rounded-md border-2 border-gray-200 focus:border-red-400 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 text-sm"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setPassword(e.target.value);
-            }}
-          />
-          {isError && (
-            <div className="font-bold text-sm text-red-600 mt-2">
-              There&apos;s an error while login, try again!
-            </div>
-          )}
-          {/* TODO: change to link */}
-          <span className="text-xs text-gray-400 underline mt-2">
-            Forgot My Password
-          </span>
-        </div>
-
-        <input
-          type="submit"
-          value="Log In"
-          className="relative -bottom-10 bg-red-600 hover:bg-red-500 text-white font-bold border-none w-full text-xs uppercase py-3 rounded-md shadow-lg cursor-pointer"
-        />
-      </div>
-    </form>
-  );
-};
 
 export const LandingPage: React.FC = () => {
   const categoriesApi = React.useMemo(() => new CategoryApi(), []);

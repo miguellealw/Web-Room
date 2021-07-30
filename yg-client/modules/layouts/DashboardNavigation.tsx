@@ -12,14 +12,11 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import ReactTooltip from "react-tooltip";
-import { AuthApi } from "../../pages/api/auth";
-import useUser from "../../shared-hooks/useUser";
 import LoadingText from "../../components/LoadingText";
 import Logo from "../../components/Logo";
 import { useDrop } from "react-dnd";
 import useCategory from "../../shared-hooks/useCategory";
 import React from "react";
-import { CategoryResponse } from "../../pages/api/old_categories";
 import LogoType from "../../components/LogoType";
 import { Category } from "../categories";
 import useCategoriesStore from "../../stores/useCategoriesStore";
@@ -67,7 +64,6 @@ const NavCategoryListItem: React.FC<NavCategoryListItemProps> = ({
 };
 
 type DashboardNavigationProps = {
-  data: CategoryResponse | undefined;
   isLoading: boolean;
 };
 
@@ -194,7 +190,7 @@ function areEqual(
   //     prevProps.isLoading === nextProps.isLoading
   // );
   return (
-    prevProps.data?.categories?.length === nextProps.data?.categories?.length &&
+    prevProps.data?.length === nextProps.data?.length &&
     prevProps.isLoading === nextProps.isLoading
   );
 }

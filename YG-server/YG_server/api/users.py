@@ -29,7 +29,6 @@ def get_user(user_id):
   return jsonify({"username": user_found.username})
 
 @bp.route('/users/current_user', methods=['GET'])
-# @login_required
 # Auth0
 @cross_origin(headers=["Content-Type", "Authorization"])
 @requires_auth
@@ -44,8 +43,10 @@ def current_user():
 
 # This will return the users subscriptions
 @bp.route('/users/current_user/yt-channels', methods=['GET'])
-@login_required
 @yt_auth_required
+# @cross_origin(headers=["Content-Type", "Authorization"])
+# @requires_auth
+# def get_user_yt_channels(yt_client, auth_id):
 def get_user_yt_channels(yt_client):
   nextPageToken = request.args.get('nextPageToken')
   channels = get_subscriptions(yt_client, 
@@ -60,11 +61,13 @@ def get_user_yt_channels(yt_client):
 
 # This will return the channels that a user has in categories
 @bp.route('/users/current_user/channels', methods=['GET'])
-# @yt_auth_required
-@login_required
-# def get_user_channels(yt_client):
-def get_user_channels():
-  user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
+# @login_required
+@cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth
+@yt_auth_required
+def get_user_channels(auth_id, yt_client):
+  # user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
+  user_found = User.query.filter_by(auth_id=auth_id).first_or_404(description="User not found")
   channels = user_found.channels
   if channels is None:
     abort(404, description="User channels could not be loaded")
@@ -94,8 +97,9 @@ def get_user_channels():
   return jsonify( channels_schema.dump(user_found.channels) )
 
 @bp.route('/users/current_user/categories/<int:category_id>/add_channel', methods=['POST'])
-@login_required
-def add_channel_to_category(category_id):
+@cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth
+def add_channel_to_category(auth_id, category_id):
   valid_data = None
   try:
     valid_data = ChannelSchema().load({
@@ -130,7 +134,8 @@ def add_channel_to_category(category_id):
     category_found.channels.append(channel_to_add)
 
     # relate channel to user
-    user_found = User.query.get_or_404(fl_current_user.id, description="Channel could not be created because user does not Exist")
+    # user_found = User.query.get_or_404(fl_current_user.id, description="Channel could not be created because user does not Exist")
+    user_found = User.query.filter_by(auth_id=auth_id).first_or_404(description="User not found")
     user_found.channels.append(channel_to_add)
 
     db.session.add(channel_to_add)
@@ -142,8 +147,9 @@ def add_channel_to_category(category_id):
 # TODO: make endpiont a delete method
 # TODO: .../remove_channel/<yt_channel_id>
 @bp.route('/users/current_user/categories/<int:category_id>/remove_channel', methods=['POST'])
-@login_required
-def remove_channel_from_category(category_id):
+@cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth
+def remove_channel_from_category(auth_id, category_id):
   valid_data = None
   try:
     valid_data = ChannelSchema().load({
@@ -159,8 +165,6 @@ def remove_channel_from_category(category_id):
 
   if channel_to_remove is None:
     abort(409, description="Channels was not deleted because it does not exist.")
-
-  # TODO: check if channel exists in category first
 
   # Remove channel relationship with cateogry
   category_found.channels.remove(channel_to_remove)
@@ -179,9 +183,13 @@ def remove_channel_from_category(category_id):
 
 
 @bp.route('/users/current_user/channels/<string:yt_channel_id>', methods=['GET'])
-@login_required
-def get_user_channel(yt_channel_id):
-  user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
+# @login_required
+@cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth
+# def get_user_channel(yt_channel_id):
+def get_user_channel(auth_id, yt_channel_id):
+  # user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
+  user_found = User.query.filter_by(auth_id=auth_id).first_or_404(description="User not found")
 
   # get channel specified
   channel_found = next(filter(lambda ch: ch.yt_channel_id == yt_channel_id, user_found.channels), None)
@@ -194,9 +202,7 @@ def get_user_channel(yt_channel_id):
 @cross_origin(headers=["Content-Type", "Authorization"])
 @requires_auth
 # @login_required
-def get_user_categories():
-  auth_id = request.args.get('auth_id')
-
+def get_user_categories(auth_id):
   user_found = User.query.filter_by(auth_id=auth_id).first_or_404(description="User not found")
   categories = user_found.categories
 
@@ -235,15 +241,11 @@ def get_user_categories():
   return jsonify(categories_schema.dump(categories))
 
 @bp.route('/users/current_user/categories/<int:category_id>', methods=['GET', 'PUT', 'DELETE'])
-# @yt_auth_required
+@yt_auth_required
 @cross_origin(headers=["Content-Type", "Authorization"])
 @requires_auth
-# @login_required
-# def get_user_category(yt_client, category_id):
-def get_user_category(category_id):
-  auth_id = request.args.get('auth_id')
+def get_user_category(auth_id, yt_client, category_id):
   user_found = User.query.filter_by(auth_id=auth_id).first_or_404(description="User not found")
-  # user_found = User.query.get_or_404(fl_current_user.id, description="User not found")
   # TODO consider using user_found.categories
   found_category = Category.query.get_or_404(category_id, description="Category does not exist")
 

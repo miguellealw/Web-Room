@@ -1,6 +1,7 @@
 from functools import wraps
 from os import environ
-from flask import redirect, session, _request_ctx_stack, request
+from flask import redirect, session, _request_ctx_stack, request, abort
+from flask.json import jsonify
 from YG_server.auth.oauth import get_authenticated_service
 
 # For requires_auth
@@ -17,7 +18,8 @@ def yt_auth_required(f):
 		# Check if user is authed by youtube
 		if 'credentials' not in session:
 			# TODO: handle this properly. send json message to frontend and have frontend handle redirection
-			return redirect('auth.authorize')
+			return abort(401, "You are not authorized with YouTube")
+			# return redirect('auth.authorize')
 
 		yt_client = get_authenticated_service()
 		return f(yt_client, *args, **kwargs)
@@ -119,7 +121,9 @@ def requires_auth(f):
 					}, 401)
 
 				_request_ctx_stack.top.current_user = payload
-				return f(*args, **kwargs)
+
+				auth_id = request.args.get('auth_id')
+				return f(auth_id, *args, **kwargs)
 		raise AuthError({"code": "invalid_header", "description": "Unable to find appropriate key"}, 401)
 
 	return decorated

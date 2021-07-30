@@ -1,4 +1,3 @@
-// import useUser from "../../shared-hooks/useUser";
 import DashboardNavigation from "./DashboardNavigation";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -30,7 +29,6 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
   ...props
 }) => {
   const { data, isLoading: isCategoriesLoading } = useFetchCategories();
-  console.log("DATA", data)
 
   if (user.isLoading || isCategoriesLoading) {
     return (
@@ -47,7 +45,7 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
         {/* FIXME: if top nav bar is above dashboard nav then svg renders. If it is under it does not redner */}
         <DashboardNavigation isLoading={isCategoriesLoading} />
         <MobileTopNavBar />
-        {/* <MobileNavigation /> */}
+        <MobileNavigation />
         <div
           className={`${
             tw_className === "" ? "w-4/5 lg:w-2/5 m-auto" : tw_className
@@ -62,10 +60,4 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
   );
 };
 
-const Loading = () => <div>Redirecting to Login Page...</div>;
-
-// export default withAuthenticationRequired(AuthedLayout, {
-export default withPageAuthRequired(AuthedLayout, {
-  onRedirecting: () => <Loading />,
-  // returnTo: "/",
-});
+export default withPageAuthRequired(AuthedLayout);

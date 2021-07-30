@@ -195,4 +195,5 @@ def oauth2callback():
   }
 
   # TODO: change to client route
+  return redirect('http://localhost:3000/categories')
   return redirect(url_for('api.get_user_yt_channels'))

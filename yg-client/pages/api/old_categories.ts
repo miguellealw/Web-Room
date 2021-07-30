@@ -10,6 +10,7 @@ export interface CategoryResponse {
 }
 
 export class CategoryApi extends Api {
+  // NOT USED ANYMORE
   async getUserCategories(token?: string): Promise<CategoryResponse> {
     try {
       const response: AxiosResponse<any> = await this.axios.get(
@@ -31,6 +32,7 @@ export class CategoryApi extends Api {
     }
   }
 
+  // NOT USED ANYMRE
   async getUserCategoryById(
     id: string | string[] | undefined
   ): Promise<CategoryResponse> {
@@ -53,6 +55,7 @@ export class CategoryApi extends Api {
     }
   }
 
+  // NOT USED ANYMORE
   async createCategory(name: string): Promise<CategoryResponse> {
     if (name.trim() === "") throw Error;
 
@@ -78,6 +81,7 @@ export class CategoryApi extends Api {
     }
   }
 
+  // NOT USED ANYMORE
   async deleteCategory(id: number): Promise<CategoryResponse> {
     try {
       const response: AxiosResponse<any> = await this.axios.delete(
@@ -98,6 +102,7 @@ export class CategoryApi extends Api {
     }
   }
 
+  // NOT USED ANYMORE
   async updateCategory(id: number, newName: string): Promise<CategoryResponse> {
     try {
       const response: AxiosResponse<any> = await this.axios.put(

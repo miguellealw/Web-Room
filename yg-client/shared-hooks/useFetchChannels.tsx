@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { ChannelsApi } from "../pages/api/channels";
+import { ChannelsApi } from "../pages/api/old_channels";
 
 function useFetchChannels() {
   const api = new ChannelsApi();

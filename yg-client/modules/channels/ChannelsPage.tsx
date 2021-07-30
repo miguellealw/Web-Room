@@ -3,7 +3,7 @@ import AuthedLayout from "../layouts/authed_layout";
 import SubscriptionListItem from "./SubscriptionListItem";
 import useFetchChannels from "../../shared-hooks/useFetchChannels";
 import ChannelsSkeleton from "../../components/skeletons/ChannelsSkeleton";
-import { ChannelResponse, ChannelsApi } from "../../pages/api/channels";
+import { ChannelResponse, ChannelsApi } from "../../pages/api/old_channels";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { CategoriesModal } from "../categories/CategoriesModal";
 

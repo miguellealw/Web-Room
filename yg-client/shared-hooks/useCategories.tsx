@@ -39,9 +39,9 @@ const useCategories: () => useCategoriesType = () => {
   // UPDATE
   const memoUpdateCategory = useCallback(
     async (id: number, newName: string) => {
-      return await updateCategory(api, id, newName);
+      return await updateCategory(id, newName);
     },
-    [api, updateCategory]
+    [updateCategory]
   );
 
   // DELETE
@@ -50,10 +50,10 @@ const useCategories: () => useCategoriesType = () => {
       try {
         // If confirm is cancelled it will throw exception
         await confirm(`Are you sure you want to delete ${name}?`);
-        return await deleteCategory(api, id);
+        return await deleteCategory(id);
       } catch {}
     },
-    [api, deleteCategory]
+    [deleteCategory]
   );
 
   return {

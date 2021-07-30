@@ -10,10 +10,9 @@ interface CategoriesState {
   categories: (Category | TempCategory)[];
   setCategories: (categories: Category[]) => void;
   getCategory: (id: number) => Category | TempCategory | undefined;
-  // createCategory: (api: CategoryApi, name: string) => any;
   createCategory: (name: string) => any;
-  updateCategory: (api: CategoryApi, id: number, newName: string) => any;
-  deleteCategory: (api: CategoryApi, id: number) => any;
+  updateCategory: (id: number, newName: string) => any;
+  deleteCategory: (id: number) => any;
 }
 
 // Call swr mutations in setters
@@ -28,7 +27,6 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     });
   },
 
-  // createCategory: async (api: CategoryApi, name: string) => {
   createCategory: async (name: string) => {
     let newCategory: TempCategory;
 
@@ -46,8 +44,6 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
       },
       false
     );
-
-    // let createdCategory = await api.createCategory(name);
 
     let createdCategory = await axios({
       method: "POST",
@@ -72,8 +68,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     return createdCategory;
   },
 
-  // REMINDINDER: remember when you remove api from here to remove it from useCategories
-  updateCategory: async (api, id, newName) => {
+  updateCategory: async (id, newName) => {
     let editedCategory: TempCategory;
 
     // update local data for optimistic update, but don't revalidate (refetch)
@@ -93,8 +88,6 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
       },
       false
     );
-
-    // let cat = await api.updateCategory(id, newName);
 
     let cat = await axios({
       method: "PUT",
@@ -121,7 +114,7 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
     return cat;
   },
 
-  deleteCategory: async (api, id) => {
+  deleteCategory: async (id) => {
     mutate(
       `/api/v1.0/users/current_user/categories`,
       async (data: CategoryResponse) => {
@@ -138,7 +131,6 @@ const useCategoriesStore = create<CategoriesState>((set, get) => ({
       false
     );
 
-    // const cat = await api.deleteCategory(id);
     let cat = await axios({
       method: "DELETE",
       url: `/api/categories/${id}`,

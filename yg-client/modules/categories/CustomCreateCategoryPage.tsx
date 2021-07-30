@@ -13,7 +13,6 @@ export const CustomCreateCategoryPage: React.FC = () => {
   const [channelName, setChannelName] = useState<string | null>(null);
   const [channelId, setChannelId] = useState<string | null>(null);
   const router = useRouter();
-  // TODO: figure out how to get category ID here
   const { addChannelToCategory } = useCategory();
 
   const { createCategory } = useCategories();

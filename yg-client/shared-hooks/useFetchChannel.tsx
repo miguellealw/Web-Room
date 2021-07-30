@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { Channel } from "../modules/channels";
-import { ChannelsApi } from "../pages/api/channels";
+import { ChannelsApi } from "../pages/api/old_channels";
 
 function useFetchChannel(id: string) {
   const api = new ChannelsApi();

@@ -9,25 +9,11 @@ import {
 } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { AuthApi } from "../../pages/api/auth";
-import useUser from "../../shared-hooks/useUser";
 
 const MobileNavigation = () => {
   const router = useRouter();
   const isCategories = router.pathname === "/categories";
   const isSubscriptions = router.pathname === "/channels";
-
-  // TODO: optimize this to not use useUser
-  const { mutateUser } = useUser();
-
-  const handleLogout = async () => {
-    mutateUser();
-    const api = new AuthApi();
-    api.setup();
-    await api.logout();
-    router.replace("/");
-    mutateUser();
-  };
 
   return (
     <nav className="w-full h-14 fixed left-0 bottom-0 bg-white z-10 block lg:hidden shadow-sm border">
@@ -56,17 +42,20 @@ const MobileNavigation = () => {
             </a>
           </Link>
         </li>
-        <li className={`h-full text-black`}>
-          <button
-            data-tip="Log Out"
-            onClick={handleLogout}
-            // className="flex items-center my-3"
-            className="h-full flex flex-col items-center justify-center"
-          >
-            <LogoutIcon className="h-5 w-5" />
-            <span className="text-xs">Log Out</span>
-          </button>
-        </li>
+        <Link href="/api/auth/logout" passHref>
+          <a>
+            <li className={`h-full text-black`}>
+              <button
+                data-tip="Log Out"
+                // className="flex items-center my-3"
+                className="h-full flex flex-col items-center justify-center"
+              >
+                <LogoutIcon className="h-5 w-5" />
+                <span className="text-xs">Log Out</span>
+              </button>
+            </li>
+          </a>
+        </Link>
       </ul>
     </nav>
   );
