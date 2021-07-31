@@ -12,18 +12,12 @@ import { CategoryApi } from "../../pages/api/old_categories";
 import { useUser } from "@auth0/nextjs-auth0";
 
 export const LandingPage: React.FC = () => {
-  const categoriesApi = React.useMemo(() => new CategoryApi(), []);
-  categoriesApi.setup();
-
   const { user, error, isLoading } = useUser();
 
   const getCurrentUser = async () => {
     try {
       const userFetched = await axios.get(`/api/check_user?auth_id=${user?.sub}`)
       console.log("user fetched", userFetched)
-  
-      const categories = await axios.get(`/api/categories?auth_id=${user?.sub}`)
-      console.log("categories", categories)
 
     } catch(e) {
       console.log("ERROR FETCHING")

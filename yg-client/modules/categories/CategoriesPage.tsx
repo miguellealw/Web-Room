@@ -29,8 +29,7 @@ const CategoriesPage: React.FC = () => {
                 Your Categories
               </h1>
               <div className="text-gray-400 text-sm uppercase font-bold">
-                {/* {data?.categories?.length} Categories */}
-                {/* {categories?.length} Categories */}
+                {categories?.length} Categories
               </div>
             </div>
             <ul className="grid grid-cols-2 lg:grid-cols-4 gap-4">
