@@ -5,15 +5,19 @@ import management from "../../../lib/ManagementClient";
 export default withApiAuthRequired(async function ytCallback(req, res) {
   const { user } = getSession(req, res);
 
-  // Set users app_metadata in Auth0
-  await management.users.update(
-    { id: user.sub },
-    {
-      app_metadata: {
-        is_authed_with_youtube: true,
-      },
-    }
-  );
+  try {
+    // Set users app_metadata in Auth0
+    await management.users.update(
+      { id: user.sub },
+      {
+        app_metadata: {
+          is_authed_with_youtube: true,
+        },
+      }
+    );
 
-  res.redirect("/channels");
+    res.redirect("/channels");
+  } catch (error) {
+    res.status(error.status || 500).end(error.message);
+  }
 });
