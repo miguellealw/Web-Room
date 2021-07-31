@@ -166,6 +166,7 @@ def authorize():
   return redirect(authorization_url)
 
 
+# This will run after user is authorized with YouTube
 @bp.route('/oauth2callback')
 def oauth2callback():
   # Specify the state when creating the flow in the callback so that it can
@@ -195,5 +196,5 @@ def oauth2callback():
   }
 
   # TODO: change to client route
-  return redirect('http://localhost:3000/categories')
-  return redirect(url_for('api.get_user_yt_channels'))
+  return redirect('http://localhost:3000/api/auth/yt-callback')
+  # return redirect(url_for('api.get_user_yt_channels'))

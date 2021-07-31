@@ -1,4 +1,5 @@
 import Button from "../../components/Button";
+import Link from "next/link";
 
 export const YouTubeMessagePage = () => {
   return (
@@ -7,9 +8,13 @@ export const YouTubeMessagePage = () => {
       <p className="text-gray-500 py-3">
         Connect to your YouTube account to get started
       </p>
-      <Button tw_className="text-sm flex justify-center items-center">
-          Connect Now
-      </Button>
+      <Link href="/api/auth/yt-authorize" passHref>
+        <a>
+          <Button tw_className="text-sm flex justify-center items-center">
+            Connect Now
+          </Button>
+        </a>
+      </Link>
     </div>
   );
 };

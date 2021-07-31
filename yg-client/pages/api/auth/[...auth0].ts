@@ -1,13 +1,12 @@
 import {
   handleAuth,
-  getAccessToken,
   handleLogin,
-  getSession,
   handleCallback,
 } from "@auth0/nextjs-auth0";
-import { ManagementClient } from "auth0";
+import management from "../../../lib/ManagementClient";
 
 export default handleAuth({
+  // This is here to access the access token using the getAccessToken
   async login(req, res) {
     try {
       await handleLogin(req, res, {
@@ -28,19 +27,11 @@ export default handleAuth({
     try {
       await handleCallback(req, res, {
         afterCallback: async (req, res, session, state) => {
-          var management = new ManagementClient({
-            domain: process.env.AUTH0_DOMAIN as string,
-            clientId: process.env.MM_AUTH0_CLIENT_ID,
-            clientSecret: process.env.MM_AUTH0_CLIENT_SECRET,
-            scope: "read:users update:users",
-          });
-
           const user = await management.users.get({ id: session.user.sub });
-          // console.log("USER in Callback", user);
+          console.log("USER in Callback", user);
 
           // TODO: call check_user to add user_id to my DB if not already there
           // `http://localhost:5000/auth/v1.0/check_user/${session.user.auth_id}`,
-
 
           // TODO: check if user has the app_metadata.is_authed_with_youtbe property
           // if(!user?.app_metadata.is_authed_with_youtbe) {
@@ -51,9 +42,9 @@ export default handleAuth({
           //     }
           //   })
 
-          //   // after redirect to server /auth/v1.0/authorize to auth user with YouTube
-          //   // and set app_metadata.is_authed_with_youtube to true
-          //   // res.redirect('http://localhost:5000/auth/v1.0/authorize')
+            // after redirect to server /auth/v1.0/authorize to auth user with YouTube
+            // and set app_metadata.is_authed_with_youtube to true
+            // res.redirect('http://localhost:5000/auth/v1.0/authorize')
           // }
 
           return session;
