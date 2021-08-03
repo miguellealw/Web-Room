@@ -142,7 +142,7 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({
               </Link>
             </li>
             {categories.length === 0 ? (
-              <li>No categories available</li>
+              <li className="text-center my-4 text-gray-400">You have no categories...</li>
             ) : (
               categories.map((category) => (
                 <NavCategoryListItem key={category.id} category={category} />
