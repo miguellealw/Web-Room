@@ -117,16 +117,16 @@ def logout():
 ### AUTH0
 
 # This will be called after user logs in to check if user is in DB
-@bp.route('/check_user/<string:user_id>', methods=['GET'])
+@bp.route('/check_user', methods=['GET'])
 @cross_origin(headers=["Content-Type", "Authorization"])
 @requires_auth
-def check_user(user_id):
+def check_user(auth_id):
   # get user from db
-  user_found = User.query.filter_by(auth_id=user_id).first()
+  user_found = User.query.filter_by(auth_id=auth_id).first()
 
   # if user is not in db then insert it
   if user_found is None:
-    user_found = User(auth_id = user_id)
+    user_found = User(auth_id = auth_id)
     db.session.add(user_found)
     db.session.commit()
 

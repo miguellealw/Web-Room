@@ -50,15 +50,11 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
   user,
   ...props
 }) => {
+  const { data: YTAuthedData, error } = useSWR("/api/auth/is-yt-authed", () =>
+    axios.get("/api/auth/is-yt-authed").then((res) => res.data)
+  );
+
   const { isLoading: isCategoriesLoading } = useFetchCategories();
-
-  // TODO: figure out where to call check_user
-  // await axios.get("/api/auth/check_user");
-
-  // const isYTAuthed = await axios.get("/api/auth/is-yt-authed");
-  const fetcher = () =>
-    axios.get("/api/auth/is-yt-authed").then((res) => res.data);
-  const { data: YTAuthedData, error } = useSWR("/api/auth/is-yt-authed", fetcher);
 
   if (user.isLoading || !YTAuthedData || isCategoriesLoading) {
     return (

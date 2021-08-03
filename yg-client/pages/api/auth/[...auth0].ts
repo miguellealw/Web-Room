@@ -32,13 +32,23 @@ export default handleAuth({
     try {
       await handleCallback(req, res, {
         afterCallback: async (req, res, session, state) => {
-
           // Assign if authed with youtube to session
           const auth0User = await management.users.get({
             id: session.user.sub,
           });
           session.isAuthedWithYouTube =
             auth0User.app_metadata.is_authed_with_youtube;
+
+          // Calling http://localhost:3000/api/auth/check_user will cause 401 unauthorized
+          // error 
+          await axios(
+            `${process.env.API_URL}/auth/v1.0/check_user?auth_id=${session.user.sub}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session.accessToken}`,
+              },
+            }
+          );
 
           return session;
         },
