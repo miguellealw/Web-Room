@@ -16,16 +16,15 @@ export const LandingPage: React.FC = () => {
 
   const getCurrentUser = async () => {
     try {
-      const userFetched = await axios.get(`/api/check_user?auth_id=${user?.sub}`)
-      console.log("user fetched", userFetched)
-
-    } catch(e) {
-      console.log("ERROR FETCHING")
+      const userFetched = await axios.get(`/api/auth/check_user`);
+      console.log("user fetched", userFetched);
+    } catch (e) {
+      console.log("ERROR FETCHING");
     }
   };
 
-  if(isLoading) {
-    <div>Lodaing user...</div>
+  if (isLoading) {
+    <div>Loading...</div>;
   }
 
   return (
@@ -122,11 +121,3 @@ export const LandingPage: React.FC = () => {
     </Layout>
   );
 };
-
-export async function getServerSideProps() {
-  // Fetch data from external API
-  // const res = await fetch(`https://.../data`)
-  // const data = await res.json()
-  // Pass data to the page via props
-  // return { props: { data } }
-}
