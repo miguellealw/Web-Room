@@ -83,8 +83,6 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
 
   const { isLoading: isCategoriesLoading } = useFetchCategories();
 
-  console.log("USER", user);
-
   if (user.isLoading || !YTAuthedData || isCategoriesLoading) {
     return (
       <div className="w-full h-screen flex justify-center items-center font-bold text-red-500">

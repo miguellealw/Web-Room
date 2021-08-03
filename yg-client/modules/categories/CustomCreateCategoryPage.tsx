@@ -1,19 +1,36 @@
 import AuthedLayout from "../layouts/authed_layout";
-import Link from "next/link";
-import { ArrowNarrowLeftIcon } from "@heroicons/react/outline";
 import React, { ReactDOM, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useCategories from "../../shared-hooks/useCategories";
 import BackToCategoriesLink from "../../components/BackToCategoriesLink";
 import useCategory from "../../shared-hooks/useCategory";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import CategoryInput from "./CategoryInput";
+
+type Inputs = {
+  categoryName: string;
+};
+
+const schema = yup.object().shape({
+  categoryName: yup.string().required().min(2).max(60).trim(),
+});
 
 export const CustomCreateCategoryPage: React.FC = () => {
-  const [value, setValue] = useState("");
-  const [isError, setIsError] = useState(false);
   const [channelName, setChannelName] = useState<string | null>(null);
   const [channelId, setChannelId] = useState<string | null>(null);
   const router = useRouter();
   const { addChannelToCategory } = useCategory();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: yupResolver(schema),
+  });
 
   const { createCategory } = useCategories();
 
@@ -31,16 +48,9 @@ export const CustomCreateCategoryPage: React.FC = () => {
     }
   }, [router, channelId, channelName]);
 
-  const handleCreateCategory = async (e: React.FormEvent) => {
-    // TODO: data validtion
-    if (!channelId && !channelName)
-      console.error("NO CHANNEL ID OR NAME PROVIDED");
-    e.preventDefault();
-    setIsError(false);
-
+  const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     try {
-
-      const newCategory = await createCategory(value);
+      const newCategory = await createCategory(data.categoryName);
       console.log("new category", newCategory);
 
       await addChannelToCategory(
@@ -53,8 +63,9 @@ export const CustomCreateCategoryPage: React.FC = () => {
 
       localStorage.removeItem("channelToAdd");
     } catch (err) {
-      console.log("ERROR in creating cat", err)
-      setIsError(true);
+      if (errors.categoryName?.message)
+        errors.categoryName.message =
+          "Something went wrong creating the category";
     }
   };
 
@@ -74,31 +85,17 @@ export const CustomCreateCategoryPage: React.FC = () => {
 
             <form
               className="flex flex-col mt-10"
-              onSubmit={handleCreateCategory}
+              // onSubmit={handleCreateCategory}
+              onSubmit={handleSubmit(onSubmit)}
             >
-              <div>
-                <label
-                  htmlFor="name"
-                  className="text-base lg:text-lg font-bold block mb-1"
-                >
-                  Category Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  required
-                  placeholder="Cooking Channels"
-                  className="w-full rounded-md p-1 lg:p-2"
-                  onChange={(e) => {
-                    setValue(e.target.value);
-                  }}
-                />
-              </div>
-
-              {/* TODO: show api errors */}
-              {isError && (
-                <div className="mt-2 text-red-500">
-                  Error occured creating category. Try Again.
+              <CategoryInput
+                label={"categoryName"}
+                register={register}
+                required
+              />
+              {errors.categoryName && (
+                <div className="mt-3 bg-red-200 text-red-500 font-bold text-sm p-2 rounded-md">
+                  {errors.categoryName?.message}
                 </div>
               )}
 
@@ -111,7 +108,6 @@ export const CustomCreateCategoryPage: React.FC = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     localStorage.removeItem("channelToAdd");
-                    setValue("");
                     router.push("/categories");
                   }}
                 >

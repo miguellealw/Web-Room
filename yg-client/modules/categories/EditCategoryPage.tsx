@@ -1,3 +1,4 @@
+// Path - /categories/edit/<category_id>
 import Link from "next/link";
 import { ArrowNarrowLeftIcon } from "@heroicons/react/outline";
 import AuthedLayout from "../layouts/authed_layout";
@@ -8,33 +9,52 @@ import useCategoriesStore from "../../stores/useCategoriesStore";
 import useFetchCategories from "../../shared-hooks/useFetchCategories";
 import React from "react";
 import BackToCategoriesLink from "../../components/BackToCategoriesLink";
-// Path - /categories/edit/<category_id>
+import { SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import CategoryInput from "./CategoryInput";
+
+type Inputs = {
+  categoryName: string;
+};
+
+const schema = yup.object().shape({
+  categoryName: yup.string().required().min(2).max(60).trim(),
+});
 
 export const EditCategoryPage: React.FC = () => {
-  const [value, setValue] = useState("");
+  // const [value, setValue] = useState("");
   const [isError, setIsError] = useState(false);
+
   const router = useRouter();
   const { updateCategory } = useCategories();
-  // const { error, isLoading } = useFetchCategories();
-  const getCategory = useCategoriesStore((state) => state.getCategory);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+  } = useForm<Inputs>({
+    resolver: yupResolver(schema),
+  });
 
   // Get category from store
+  const getCategory = useCategoriesStore((state) => state.getCategory);
   const { edit_category_id } = router.query;
   const categoryToEdit = getCategory(parseInt(edit_category_id as string));
   React.useEffect(() => {
-    if (categoryToEdit) setValue(categoryToEdit?.name);
-  }, [categoryToEdit]);
+    if (categoryToEdit) setValue("categoryName", categoryToEdit?.name);
+  }, [categoryToEdit, setValue]);
 
-  const handleUpdateCategory = async (e: React.FormEvent) => {
-    // TODO: data validtion
-    e.preventDefault();
-    setIsError(false);
-
+  const onSubmit: SubmitHandler<Inputs> = (data: Inputs) => {
     try {
-      updateCategory(parseInt(edit_category_id as string), value);
+      updateCategory(parseInt(edit_category_id as string), data.categoryName);
       router.push("/categories");
     } catch (err) {
-      setIsError(true);
+      if (errors.categoryName?.message)
+        errors.categoryName.message =
+          "Something went wrong creating the category";
     }
   };
 
@@ -51,32 +71,16 @@ export const EditCategoryPage: React.FC = () => {
 
             <form
               className="flex flex-col mt-10"
-              onSubmit={handleUpdateCategory}
+              onSubmit={handleSubmit(onSubmit)}
             >
-              <div>
-                <label
-                  htmlFor="name"
-                  className="text-base lg:text-lg font-bold block mb-1"
-                >
-                  Category Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  required
-                  placeholder="Cooking Channels"
-                  className="w-full rounded-md p-1 lg:p-2"
-                  value={value}
-                  onChange={(e) => {
-                    setValue(e.target.value);
-                  }}
-                />
-              </div>
-
-              {/* TODO: show api errors */}
-              {isError && (
-                <div className="mt-2 text-red-500">
-                  Error occured creating category. Try Again.
+              <CategoryInput
+                label={"categoryName"}
+                register={register}
+                required
+              />
+              {errors.categoryName && (
+                <div className="mt-3 bg-red-200 text-red-500 font-bold text-sm p-2 rounded-md">
+                  {errors.categoryName?.message}
                 </div>
               )}
 
@@ -88,7 +92,6 @@ export const EditCategoryPage: React.FC = () => {
                   className="ml-3"
                   onClick={(e) => {
                     e.preventDefault();
-                    setValue("");
                     router.push("/categories");
                   }}
                 >

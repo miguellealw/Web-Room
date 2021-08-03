@@ -5,24 +5,42 @@ import React, { ReactDOM, useState } from "react";
 import { useRouter } from "next/router";
 import useCategories from "../../shared-hooks/useCategories";
 import BackToCategoriesLink from "../../components/BackToCategoriesLink";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import CategoryInput from "./CategoryInput";
+
+type Inputs = {
+  categoryName: string;
+};
+
+const schema = yup.object().shape({
+  categoryName: yup.string().required().min(2).max(60).trim(),
+});
 
 export const CreateCategoryPage: React.FC = () => {
-  const [value, setValue] = useState("");
-  const [isError, setIsError] = useState(false);
   const router = useRouter();
-
   const { createCategory } = useCategories();
 
-  const handleCreateCategory = async (e: React.FormEvent) => {
-    // TODO: data validtion
-    e.preventDefault();
-    setIsError(false);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: yupResolver(schema),
+  });
 
+  // console.log(watch("categoryName"))
+
+  const onSubmit: SubmitHandler<Inputs> = (data: Inputs) => {
     try {
-      createCategory(value);
+      createCategory(data.categoryName);
       router.push("/categories");
     } catch (err) {
-      setIsError(true);
+      if (errors.categoryName?.message)
+        errors.categoryName.message =
+          "Something went wrong creating the category";
     }
   };
 
@@ -35,30 +53,11 @@ export const CreateCategoryPage: React.FC = () => {
           Create Category
         </h1>
 
-        <form className="flex flex-col mt-10" onSubmit={handleCreateCategory}>
-          <div>
-            <label
-              htmlFor="name"
-              className="text-base lg:text-lg font-bold block mb-1"
-            >
-              Category Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              required
-              placeholder="Cooking Channels"
-              className="w-full rounded-md p-1 lg:p-2"
-              onChange={(e) => {
-                setValue(e.target.value);
-              }}
-            />
-          </div>
-
-          {/* TODO: show api errors */}
-          {isError && (
-            <div className="mt-2 text-red-500">
-              Error occured creating category. Try Again.
+        <form className="flex flex-col mt-10" onSubmit={handleSubmit(onSubmit)}>
+          <CategoryInput label={"categoryName"} register={register} required />
+          {errors.categoryName && (
+            <div className="mt-3 bg-red-200 text-red-500 font-bold text-sm p-2 rounded-md">
+              {errors.categoryName?.message}
             </div>
           )}
 
@@ -70,7 +69,6 @@ export const CreateCategoryPage: React.FC = () => {
               className="ml-3"
               onClick={(e) => {
                 e.preventDefault();
-                setValue("");
                 router.push("/categories");
               }}
             >
