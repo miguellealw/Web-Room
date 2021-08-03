@@ -1,9 +1,14 @@
-import {
-  handleAuth,
-  handleLogin,
-  handleCallback,
-} from "@auth0/nextjs-auth0";
+import { handleAuth, handleLogin, handleCallback } from "@auth0/nextjs-auth0";
+import axios from "axios";
 import management from "../../../lib/ManagementClient";
+
+function NotAuthedWithYouTubeException() {
+  // this.value = value;
+  this.message = "User is not authorized with YouTube";
+  this.toString = function () {
+    return this.message;
+  };
+}
 
 export default handleAuth({
   // This is here to access the access token using the getAccessToken
@@ -27,25 +32,13 @@ export default handleAuth({
     try {
       await handleCallback(req, res, {
         afterCallback: async (req, res, session, state) => {
-          const user = await management.users.get({ id: session.user.sub });
-          console.log("USER in Callback", user);
 
-          // TODO: call check_user to add user_id to my DB if not already there
-          // `http://localhost:5000/auth/v1.0/check_user/${session.user.auth_id}`,
-
-          // TODO: check if user has the app_metadata.is_authed_with_youtbe property
-          // if(!user?.app_metadata.is_authed_with_youtbe) {
-          //   // if they do not add it and set to false
-          //   const updatedUser = await management.users.update({id: user.sub}, {
-          //     app_metadata: {
-          //       "is_authed_with_youtube": true
-          //     }
-          //   })
-
-            // after redirect to server /auth/v1.0/authorize to auth user with YouTube
-            // and set app_metadata.is_authed_with_youtube to true
-            // res.redirect('http://localhost:5000/auth/v1.0/authorize')
-          // }
+          // Assign if authed with youtube to session
+          const auth0User = await management.users.get({
+            id: session.user.sub,
+          });
+          session.isAuthedWithYouTube =
+            auth0User.app_metadata.is_authed_with_youtube;
 
           return session;
         },

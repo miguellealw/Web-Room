@@ -18,24 +18,58 @@ import { UsersApi } from "../../pages/api/users";
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0";
 import axios from "axios";
 
+import Button from "../../components/Button";
+import Link from "next/link";
+import useSWR from "swr";
+
+export const YouTubeMessage = () => {
+  return (
+    <div className="w-full h-screen flex justify-center items-center flex-col">
+      <h1 className="text-5xl font-bold">Connect to YouTube</h1>
+      <p className="text-gray-500 py-3">
+        Connect to your YouTube account to get started
+      </p>
+      <Link href="/api/auth/yt-authorize" passHref>
+        <a>
+          <Button tw_className="text-sm flex justify-center items-center">
+            Connect Now
+          </Button>
+        </a>
+      </Link>
+    </div>
+  );
+};
+
 interface AuthedLayoutProps {
   tw_className?: string;
 }
 
 const AuthedLayout: React.FC<AuthedLayoutProps> = ({
   children,
-  user,
   tw_className = "",
+  user,
   ...props
 }) => {
-  const { data, isLoading: isCategoriesLoading } = useFetchCategories();
+  const { isLoading: isCategoriesLoading } = useFetchCategories();
 
-  if (user.isLoading || isCategoriesLoading) {
+  // TODO: figure out where to call check_user
+  // await axios.get("/api/auth/check_user");
+
+  // const isYTAuthed = await axios.get("/api/auth/is-yt-authed");
+  const fetcher = () =>
+    axios.get("/api/auth/is-yt-authed").then((res) => res.data);
+  const { data: YTAuthedData, error } = useSWR("/api/auth/is-yt-authed", fetcher);
+
+  if (user.isLoading || !YTAuthedData || isCategoriesLoading) {
     return (
       <div className="w-full h-screen flex justify-center items-center font-bold text-red-500">
         Dashboard Loading...
       </div>
     );
+  }
+
+  if (!YTAuthedData.isAuthedWithYouTube) {
+    return <YouTubeMessage />;
   }
 
   return (
@@ -59,5 +93,9 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
     </DndProvider>
   );
 };
+
+export async function getServerSideProps(ctx) {
+  // // TODO: call check_user to add user_id to my DB if not already there
+}
 
 export default withPageAuthRequired(AuthedLayout);
