@@ -17,6 +17,7 @@ import {
 import { UsersApi } from "../../pages/api/users";
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0";
 import axios from "axios";
+import Image from "next/image";
 
 import Button from "../../components/Button";
 import Link from "next/link";
@@ -40,6 +41,32 @@ export const YouTubeMessage = () => {
   );
 };
 
+const EmailVerifiedMessage = ({ user }) => {
+  return (
+    <div className="w-full h-screen flex justify-center items-center flex-col">
+      {/* <img src={user.picture} alt="" /> */}
+      <Image
+        src={user.picture}
+        alt="User Profile Picture"
+        width={150}
+        height={150}
+      />
+      <h1 className="text-5xl font-bold mt-10">Verify Email</h1>
+      <p className="text-gray-500 py-3 text-center px-7">
+        Please verify your email to connect your YouTube account.
+        <span className="font-bold"> After you verify your email log out and log back in.</span>
+      </p>
+      <Link href="/api/auth/logout" passHref>
+        <a>
+          <Button tw_className="text-sm flex justify-center items-center">
+            Logout
+          </Button>
+        </a>
+      </Link>
+    </div>
+  );
+};
+
 interface AuthedLayoutProps {
   tw_className?: string;
 }
@@ -56,12 +83,18 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
 
   const { isLoading: isCategoriesLoading } = useFetchCategories();
 
+  console.log("USER", user);
+
   if (user.isLoading || !YTAuthedData || isCategoriesLoading) {
     return (
       <div className="w-full h-screen flex justify-center items-center font-bold text-red-500">
         Dashboard Loading...
       </div>
     );
+  }
+
+  if (!user.email_verified) {
+    return <EmailVerifiedMessage user={user} />;
   }
 
   if (!YTAuthedData.isAuthedWithYouTube) {
@@ -89,9 +122,5 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
     </DndProvider>
   );
 };
-
-export async function getServerSideProps(ctx) {
-  // // TODO: call check_user to add user_id to my DB if not already there
-}
 
 export default withPageAuthRequired(AuthedLayout);
