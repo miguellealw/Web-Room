@@ -85,7 +85,7 @@ const AuthedLayout: React.FC<AuthedLayoutProps> = ({
 
   if (user.isLoading || !YTAuthedData || isCategoriesLoading) {
     return (
-      <div className="w-full h-screen flex justify-center items-center font-bold text-red-500">
+      <div className="w-full h-screen flex justify-center items-center font-bold text-gray-700">
         Dashboard Loading...
       </div>
     );
