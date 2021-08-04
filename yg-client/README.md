@@ -38,8 +38,8 @@ Create `.env.local` file
 	* `MM_AUTH0_CLIENT_ID=...` - 
 	* `MM_AUTH0_CLIENT_SECRET=...`
 
-In .env.development
-* `API_URL=<URL to server>` - this server url in this project is `http://localhost:5000`
+In `.env.development`. Already in project.
+* `API_URL=<URL to server>` - the server url in this project is `http://localhost:5000`
 
 Example:
 **env.local**
