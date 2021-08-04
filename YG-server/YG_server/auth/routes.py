@@ -194,7 +194,6 @@ def oauth2callback():
       'client_secret': credentials.client_secret,
       'scopes': credentials.scopes
   }
-
-  # TODO: change to client route
-  return redirect('http://localhost:3000/api/auth/yt-callback')
-  # return redirect(url_for('api.get_user_yt_channels'))
+  
+  FRONTEND_SERVER = environ.get("FRONTEND_SERVER")
+  return redirect(f'http://{FRONTEND_SERVER}/api/auth/yt-callback')
