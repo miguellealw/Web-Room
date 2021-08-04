@@ -1,27 +1,16 @@
 import Head from "next/head";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Layout from "../layouts/layout";
 import WaveSVG from "./WaveSVG";
 import Image from "next/image";
 import CategoriesImage from "../../public/categories-landing-image.png";
-import { AuthApi } from "../../pages/api/auth";
-import { useRouter } from "next/router";
-import axios from "axios";
-import { CategoryApi } from "../../pages/api/old_categories";
 import { useUser } from "@auth0/nextjs-auth0";
+import Button from "../../components/Button";
+import { LoginIcon } from "@heroicons/react/outline";
 
 export const LandingPage: React.FC = () => {
   const { user, error, isLoading } = useUser();
-
-  const getCurrentUser = async () => {
-    try {
-      const userFetched = await axios.get(`/api/auth/check_user`);
-      console.log("user fetched", userFetched);
-    } catch (e) {
-      console.log("ERROR FETCHING");
-    }
-  };
 
   if (isLoading) {
     <div>Loading...</div>;
@@ -29,7 +18,7 @@ export const LandingPage: React.FC = () => {
 
   return (
     <Layout>
-      <div className="flex flex-col justify-center items-center w-full">
+      <div className="flex flex-col justify-center items-center w-full bg-gray-50">
         <Head>
           <title>YouTube+</title>
           <meta
@@ -39,71 +28,52 @@ export const LandingPage: React.FC = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <WaveSVG
+        {/* <WaveSVG
           className="absolute top-56 left-0 right-0"
           width="100%"
           height="100vh"
           svgWidth="1439"
           svgHeight="522"
-        />
+        /> */}
         <main className="min-h-screen flex-1 flex flex-col justify-center items-center z-10">
           <h1 className="text-2xl lg:text-6xl font-bold mt-24">
             A Better YouTube Experience
           </h1>
           <h2 className="text-xs lg:text-lg font-medium my-2 text-gray-400">
-            Categorize and Share your Favorite YouTube Channels
+            {/* Categorize and Share your Favorite YouTube Channels */}
+            Categorize your Favorite YouTube Channels
           </h2>
 
           {!user ? (
             <>
-              <Link href="/register" passHref>
-                <button className="bg-red-600 hover:bg-red-500 font-bold mt-4 w-44 py-3 text-white rounded-md uppercase text-xs">
-                  Register
-                </button>
-              </Link>
-
-              <button
-                className="bg-red-600 hover:bg-red-500 font-bold mt-4 w-44 py-3 text-white rounded-md uppercase text-xs"
-                onClick={() => getCurrentUser()}
-              >
-                Get User Info
-              </button>
-
               <Link href="/api/auth/login" passHref>
                 <a>
-                  <button
-                    className="bg-red-600 hover:bg-red-500 font-bold mt-4 w-44 py-3 text-white rounded-md uppercase text-xs"
-                    // onClick={() => loginWithRedirect()}
-                  >
-                    Log In
-                  </button>
+                  <Button tw_className="font-bold uppercase text-xs flex justify-center items-center">
+                    <>
+                      Log In
+                      <LoginIcon className="w-5 h-5 ml-2" />
+                    </>
+                  </Button>
                 </a>
               </Link>
             </>
           ) : (
-            <>
+            <div className="flex">
               <Link href="/categories" passHref>
-                <button className="bg-red-600 hover:bg-red-500 font-bold mt-4 w-44 py-3 text-white rounded-md uppercase text-xs">
-                  Categories
-                </button>
-              </Link>
-              <button
-                className="bg-red-600 hover:bg-red-500 font-bold mt-4 w-44 py-3 text-white rounded-md uppercase text-xs"
-                onClick={() => getCurrentUser()}
-              >
-                Get User Info
-              </button>
-              <Link href="/api/auth/logout" passHref>
                 <a>
-                  <button
-                    className="bg-red-600 hover:bg-red-500 font-bold mt-4 w-44 py-3 text-white rounded-md uppercase text-xs"
-                    // onClick={() => logout({ returnTo: "http://localhost:3000" })}
-                  >
-                    Logout
-                  </button>
+                  <Button tw_className="font-bold uppercase text-xs mr-3 w-36">
+                    Your Categories
+                  </Button>
                 </a>
               </Link>
-            </>
+              <Link href="/api/auth/logout" passHref>
+                <a>
+                  <Button tw_className="font-bold uppercase text-xs">
+                    Logout
+                  </Button>
+                </a>
+              </Link>
+            </div>
           )}
 
           <div className="mt-5">
@@ -114,8 +84,6 @@ export const LandingPage: React.FC = () => {
               height="353"
             />
           </div>
-
-          {/* <LoginForm /> */}
         </main>
       </div>
     </Layout>
