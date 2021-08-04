@@ -66,7 +66,7 @@ class CategorySchema(ma.SQLAlchemyAutoSchema):
 
   name = fields.String(
     required=True,
-    validate=validate.Length(1, 30)
+    validate=validate.Length(1, 60)
   )
 
   channels = ma.Nested(ChannelSchema, many=True)
