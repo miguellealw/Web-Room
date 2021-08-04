@@ -22,6 +22,7 @@
 	* `SECRET_KEY` - generate 
 	* `SESSION_COOKIE_NAME` - random string of chars
 * Database
+	* `PROD_DATABASE_URI` - for production DB's
 	* `SQLALCHEMY_DATABASE_URI`=`postgresql://postgres:<PASSWORD>@localhost:5432/<DB_NAME>`
 		* Local DB
 	* `TEST_DATABASE_URI`=`postgresql://postgres:<PASSWORD>@localhost:5432/<DB_NAME>`
@@ -52,6 +53,7 @@ FLASK_ENV=development # or production or testing
 
 # DB's
 SQLALCHEMY_DATABASE_URI=postgresql://postgres:<password>@localhost:5432/<DB NAME>
+# or PROD_DATABASE_URI=...
 TEST_DATABASE_URI=postgresql://postgres:<password>@localhost:5432/<DB NAME>
 
 # YouTube API
