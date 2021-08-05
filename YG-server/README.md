@@ -16,7 +16,7 @@
 * API
 	* `API_VERSION` - version of api
 * Flask
-	* `FLASK_APP` - name of app (YG_server)
+	* `FLASK_APP` - name of script that will start app (youtubebox.py)
 	* `FLASK_ENV` - environment var specifying development, testing, production
 	* `SECRET_KEY` - generate 
 	* `SESSION_COOKIE_NAME` - random string of chars
@@ -47,7 +47,7 @@ SECRET_KEY=...
 SESSION_COOKIE_NAME=...
 
 # Flask
-FLASK_APP=YG_server
+FLASK_APP=youtubebox.py
 FLASK_ENV=development # or production or testing
 
 # DB's
