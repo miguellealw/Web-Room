@@ -4,14 +4,14 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 from httplib2 import REDIRECT_CODES
-from flask import session
+from flask import session, current_app
 
-from os import environ, path
+from os import path
 from dotenv import load_dotenv
 
 baseddir = path.abspath(path.dirname(__file__))
 load_dotenv(path.join(baseddir, '.env'))
-CLIENT_SECRETS_FILE = environ.get('CLIENT_SECRET_FILENAME')
+CLIENT_SECRETS_FILE = current_app.CLIENT_SECRET_FILENAME
 
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account.

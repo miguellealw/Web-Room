@@ -12,7 +12,7 @@
 ---
 ### Set up environment variables
 * Frontend
-	* `FRONTEND_SERVER` - the address of frontend server. In this case it is `localhost:3000`
+	* `FRONTEND_SERVER` - the address of frontend server. In this case it is `http://localhost:3000`
 * API
 	* `API_VERSION` - version of api
 * Flask
@@ -39,7 +39,7 @@
 Example:
 ```
 # API
-FRONTEND_SERVER=localhost:3000
+FRONTEND_SERVER=http://localhost:3000
 API_VERSION=v1.0
 
 # Sessions

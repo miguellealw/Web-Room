@@ -1,3 +1,4 @@
+from flask.globals import current_app
 from YG_server.decorators import requires_auth
 from flask_cors.decorator import cross_origin
 from YG_server.auth.oauth import CLIENT_SECRETS_FILE, SCOPES
@@ -14,7 +15,6 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 
-from os import environ, path
 from dotenv import load_dotenv
 
 @login_manager.user_loader
@@ -195,5 +195,5 @@ def oauth2callback():
       'scopes': credentials.scopes
   }
   
-  FRONTEND_SERVER = environ.get("FRONTEND_SERVER")
-  return redirect(f'http://{FRONTEND_SERVER}/api/auth/yt-callback')
+  FRONTEND_SERVER = current_app.FRONTEND_SERVER
+  return redirect(f'{FRONTEND_SERVER}/api/auth/yt-callback')

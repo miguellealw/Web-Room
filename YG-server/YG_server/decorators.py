@@ -1,6 +1,5 @@
 from functools import wraps
-from os import environ
-from flask import redirect, session, _request_ctx_stack, request, abort
+from flask import redirect, session, _request_ctx_stack, request, abort, current_app
 from flask.json import jsonify
 from YG_server.auth.oauth import get_authenticated_service
 
@@ -29,9 +28,9 @@ def yt_auth_required(f):
 ############### AUTH0 ###############
 # For Auth0 - from https://auth0.com/docs/quickstart/backend/python#create-the-jwt-validation-decorator
 
-AUTH0_DOMAIN = environ.get("AUTH0_DOMAIN")
-ALGORITHMS = environ.get("ALGORITHMS")
-API_AUDIENCE = environ.get("API_AUDIENCE")
+AUTH0_DOMAIN = current_app.AUTH0_DOMAIN
+ALGORITHMS = current_app.ALGORITHMS
+API_AUDIENCE = current_app.API_AUDIENCE
 
 # Format error response and append status code
 def get_token_auth_header():

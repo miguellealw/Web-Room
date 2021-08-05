@@ -1,4 +1,3 @@
-from os import environ
 import os
 from flask import Flask, make_response, jsonify
 from werkzeug.exceptions import HTTPException
@@ -69,6 +68,12 @@ def create_app(config_type=None):
   ma.init_app(app)
   migrate.init_app(app, db)
 
+  # Environment variables that will be used in other parts of the app
+  app.AUTH0_DOMAIN = app.config["AUTH0_DOMAIN"]
+  app.ALGORITHMS = app.config["ALGORITHMS"]
+  app.API_AUDIENCE = app.config["API_AUDIENCE"]
+  app.CLIENT_SECRET_FILENAME = app.config["CLIENT_SECRET_FILENAME"]
+  app.FRONTEND_SERVER = app.config["FRONTEND_SERVER"]
 
   ## SETUP ERROR HANDLERS
   app.register_error_handler(404, resource_not_found)
@@ -88,7 +93,7 @@ def create_app(config_type=None):
     from YG_server.auth import bp as auth_bp
     from YG_server.api import bp as api_bp
 
-    API_VERSION = environ.get("API_VERSION")
+    API_VERSION = app.config["API_VERSION"]
     app.register_blueprint(api_bp, url_prefix=f'/api/{API_VERSION}')
     app.register_blueprint(auth_bp, url_prefix=f'/auth/{API_VERSION}')
 
