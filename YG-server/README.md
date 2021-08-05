@@ -23,8 +23,8 @@
 	* `SESSION_COOKIE_NAME` - random string of chars
 * Database
 	* `PROD_DATABASE_URI` - for production DB's
-	* `SQLALCHEMY_DATABASE_URI`=`postgresql://postgres:<PASSWORD>@localhost:5432/<DB_NAME>`
-		* Local DB
+	* `DATABASE_URI`=`postgresql://postgres:<PASSWORD>@localhost:5432/<DB_NAME>`
+		* Local or Production DB
 	* `TEST_DATABASE_URI`=`postgresql://postgres:<PASSWORD>@localhost:5432/<DB_NAME>`
 		* DB for testing
 * YouTube API
@@ -52,15 +52,16 @@ FLASK_APP=YG_server
 FLASK_ENV=development # or production or testing
 
 # DB's
-SQLALCHEMY_DATABASE_URI=postgresql://postgres:<password>@localhost:5432/<DB NAME>
-# or PROD_DATABASE_URI=...
+# For dev and prod
+DATABASE_URI=postgresql://postgres:<password>@localhost:5432/<DB NAME>
 TEST_DATABASE_URI=postgresql://postgres:<password>@localhost:5432/<DB NAME>
 
 # YouTube API
 YOUTUBE_API_CLIENT_ID=...
 YOUTUBE_API_CLIENT_SECRET=...
-OAUTHLIB_INSECURE_TRANSPORT=1
 CLIENT_SECRET_FILENAME=...
+# only in dev
+OAUTHLIB_INSECURE_TRANSPORT=1
 
 # Auth0
 AUTH0_DOMAIN=...
@@ -107,3 +108,23 @@ API_AUDIENCE=...
 
 ### Other Notes
 - After installing dependency do `pip freeze > requirements.txt` to add to requirements.txt file
+
+- When deploying go to the `wsgi.py` file and comment out the dev config and use the prod config. This will load the proper environment variables from `config.py`
+```python
+...
+# ====== For DEV
+app = create_app()
+
+# ====== For PROD
+# app = create_app('prod')
+...
+```
+to 
+```python
+
+# ====== For DEV
+# app = create_app()
+
+# ====== For PROD
+app = create_app('prod')
+```

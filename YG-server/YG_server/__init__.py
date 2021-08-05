@@ -43,20 +43,19 @@ class AuthError(Exception):
     self.status_code = status_code
 
 # config_name will be development, production, testing
-def create_app(is_test_config=None):
+def create_app(config_type=None):
   ## CREATE APP AND LOAD CONFIG
   app = Flask(__name__, instance_relative_config=True)
 
-  # app.config.from_object('config.DevConfig')
-  # app.config.from_object('config.ProdConfig')
-  # app.config.from_object('config.TestingConfig')
-
-  # TODO: allow for ProdConfig
-  if is_test_config is None:
+  if config_type is None:
     app.config.from_object('config.DevConfig')
-  else:
-    # load test config if passed in
+  elif config_type == 'prod':
+    app.config.from_object('config.ProdConfig')
+  elif config_type == 'testing':
     app.config.from_object('config.TestingConfig')
+  else:
+    print("Configuration type not valid. Pass a valid config type to create_app in wsgi.py")
+    return app
 
   try:
     os.makedirs(app.instance_path)
