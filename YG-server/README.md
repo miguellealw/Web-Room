@@ -1,14 +1,13 @@
 # Instructions on how to set up project
-
----
 ### API's 
 ---
 * Auth0
+	* Instructions in [client readme](https://github.com/miguellealw/YouTube-Box/tree/main/yg-client)
 * [YouTube Data API](https://developers.google.com/youtube/v3/guides/authentication)
 	* [How to get auth credentials](https://developers.google.com/youtube/registering_an_application)
 		* Get YouTube client ID
 		* Get YouTube client secret
-		* Download client secret file from google console
+		* Download client secret file from google console and store in root of YG-server
 	* [Using API Keys](https://cloud.google.com/docs/authentication/api-keys)
 ---
 ### Set up environment variables
@@ -106,25 +105,35 @@ API_AUDIENCE=...
 ### How to run tests
 * TODO
 
-### Other Notes
-- After installing dependency do `pip freeze > requirements.txt` to add to requirements.txt file
-
+---
+### Deployment
+- Set up environment variables. Instructions above.
 - When deploying go to the `wsgi.py` file and comment out the dev config and use the prod config. This will load the proper environment variables from `config.py`
 ```python
 ...
+
 # ====== For DEV
 app = create_app()
 
 # ====== For PROD
 # app = create_app('prod')
+
 ...
 ```
+
 to 
+
 ```python
+...
 
 # ====== For DEV
 # app = create_app()
 
 # ====== For PROD
 app = create_app('prod')
+
+...
 ```
+---
+### Other Notes
+- After installing dependency do `pip freeze > requirements.txt` to add to requirements.txt file
