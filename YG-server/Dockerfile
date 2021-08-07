@@ -9,7 +9,7 @@ FROM python:3.9-slim-buster
 
 RUN adduser --disabled-password youtubebox
 
-WORKDIR /home/youtubebox
+WORKDIR /home/youtubebox-server
 
 # Install dependencies in venv
 COPY requirements.txt requirements.txt
@@ -55,6 +55,7 @@ RUN chmod a+x boot.sh
 
 # Required by the flask commadn
 ENV FLASK_APP youtubebox.py
+ENV FLASK_ENV production
 
 # Move files to the youtubebox user
 RUN chown -R youtubebox:youtubebox ./
