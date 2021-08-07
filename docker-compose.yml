@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:latest
+    restart: unless-stopped
+    env_file:
+      - pg.env
+
+  server:
+    build: ./YG-server
+    env_file:
+      - ./YG-server/.env
+    # links:
+    #   - postgres
+    depends_on:
+      - postgres
+    # Volumes are to map the local disk to the container disk. If a change
+    # happens in local disk it is also done in the container. Good for dev.
+    # volumes:
+
+  client:
+    stdin_open: true
+    build: ./yg-client
+    ports:
+      - 3000:3000
+    env_file:
+      - ./yg-client/.env.local
+      - ./yg-client/.env.development
+    # volumes:
+    # environment:
