@@ -4,6 +4,7 @@ services:
   postgres:
     image: postgres:latest
     restart: unless-stopped
+    # restart: always
     env_file:
       - pg.env
 
@@ -11,8 +12,10 @@ services:
     build: ./YG-server
     env_file:
       - ./YG-server/.env
-    # links:
-    #   - postgres
+    links:
+      - postgres
+    ports:
+      - 8000:5000
     depends_on:
       - postgres
     # Volumes are to map the local disk to the container disk. If a change
