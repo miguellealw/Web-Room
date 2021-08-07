@@ -46,15 +46,12 @@ def create_app(config_type=None):
   ## CREATE APP AND LOAD CONFIG
   app = Flask(__name__, instance_relative_config=True)
 
-  if config_type is None:
-    app.config.from_object('config.DevConfig')
-  elif config_type == 'prod':
+  if config_type == 'production':
     app.config.from_object('config.ProdConfig')
   elif config_type == 'testing':
     app.config.from_object('config.TestingConfig')
   else:
-    print("Configuration type not valid. Pass a valid config type to create_app in wsgi.py")
-    return app
+    app.config.from_object('config.DevConfig')
 
   try:
     os.makedirs(app.instance_path)
