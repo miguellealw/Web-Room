@@ -2,16 +2,16 @@
 # Script by Miguel Grinberg
 
 # this script is used to boot a Docker container
-source venv/bin/activate
+# source venv/bin/activate
 
 while true; do
-	# Apply db migrations
-	flask db upgrade
-	if [[ "$?" == "0" ]]; then
-			break
-	fi
-	echo Deploy command failed, retrying in 5 secs...
-	sleep 5
+		# Apply db migrations (create db tables and columns)
+		flask db upgrade
+		if [[ "$?" == "0" ]]; then
+				break
+		fi
+		echo Deploy command failed, retrying in 5 secs...
+		sleep 5
 done
 
 # flask translate compile

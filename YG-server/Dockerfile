@@ -13,7 +13,7 @@ WORKDIR /home/youtubebox
 
 # Install dependencies in venv
 COPY requirements.txt requirements.txt
-RUN python -m venv venv
+# RUN python -m venv venv
 
 
 # Issues with alpine but not slim-buster
@@ -37,8 +37,10 @@ RUN python -m venv venv
 # Alternate: https://github.com/psycopg/psycopg2/issues/684#issuecomment-431929976
 RUN apt-get update && apt-get -y install libpq-dev gcc
 
-RUN venv/bin/pip install -r requirements.txt
-RUN venv/bin/pip install gunicorn 
+# RUN venv/bin/pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
+# RUN venv/bin/pip install gunicorn 
+RUN pip3 install gunicorn 
 # RUN venv/bin/pip install gunicorn pymysql
 
 # Unistall tools that built psycopg2 from source
