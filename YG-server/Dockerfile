@@ -50,6 +50,8 @@ RUN apt-get -y --purge remove libpq-dev gcc
 COPY YG_server YG_server
 COPY migrations migrations
 COPY youtubebox.py config.py boot.sh ./
+COPY client_secret_*.json ./
+# TODO: copy client secret file from YouTube API to container. Get filename from env variables
 # Make shell script executable
 RUN chmod a+x boot.sh
 

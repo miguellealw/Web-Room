@@ -24,6 +24,8 @@
 	* `PROD_DATABASE_URI` - for production DB's
 	* `DATABASE_URI`=`postgresql://postgres:<PASSWORD>@localhost:5432/<DB_NAME>`
 		* Local or Production DB
+		*	If you are using `docker-compose up` the host will be `db` instaed of `localhost`
+
 	* `TEST_DATABASE_URI`=`postgresql://postgres:<PASSWORD>@localhost:5432/<DB_NAME>`
 		* DB for testing
 * YouTube API
