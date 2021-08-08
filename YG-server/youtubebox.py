@@ -10,5 +10,5 @@ FLASK_ENV = environ.get('FLASK_ENV')
 ## When deploying configure server so this is the entry point 
 app = create_app(FLASK_ENV)
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+# if __name__ == "__main__":
+#     app.run(host='0.0.0.0')

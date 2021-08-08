@@ -23,6 +23,6 @@
 # command given. Important for docker since the life of the container is the first process it sees
 # access-logfile and error-logfile - sends log to standard output that they are stored as logs by Docker.
 
-# exec gunicorn -b :5000 --access-logfile - --error-logfile - youtubebox-server:YG-server
+exec gunicorn -b :5000 --access-logfile - --error-logfile - youtubebox:app
 # TEMPORARY since gunicorn is not working
-flask run
+# flask run
