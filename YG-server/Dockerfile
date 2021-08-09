@@ -12,8 +12,9 @@ RUN adduser --disabled-password youtubebox
 WORKDIR /home/youtubebox-server
 
 # Install dependencies in venv
-COPY requirements.txt requirements.txt
 # RUN python -m venv venv
+
+COPY requirements.txt requirements.txt
 
 
 # Issues with alpine but not slim-buster
@@ -43,7 +44,7 @@ RUN pip3 install -r requirements.txt
 RUN pip3 install gunicorn 
 # RUN venv/bin/pip install gunicorn pymysql
 
-# Unistall tools that built psycopg2 from source
+# Uninstall tools that built psycopg2 from source
 RUN apt-get -y --purge remove libpq-dev gcc
 
 # Move files and folders into container
@@ -55,11 +56,11 @@ COPY client_secret_*.json ./
 # Make shell script executable
 RUN chmod a+x boot.sh
 
-# Required by the flask commadn
+# Required by the flask command
 ENV FLASK_APP youtubebox.py
 ENV FLASK_ENV production
 
-# Move files to the youtubebox user
+# Change permissions from root to youtubebox user
 RUN chown -R youtubebox:youtubebox ./
 # Makes the youtubebox user the default for any subsequent instructions
 USER youtubebox
