@@ -5,6 +5,8 @@ services:
     image: postgres:latest
     restart: unless-stopped
     # restart: always
+    # Volumes are to map the local disk to the container disk. If a change
+    # happens in local disk it is also done in the container. Good for dev.
     volumes:
       # runs init_db.sql startup script
       - ./YG-server/db:/docker-entrypoint-initdb.d
@@ -15,27 +17,29 @@ services:
 
   server:
     build: ./YG-server
-    env_file:
-      - ./YG-server/.env
     depends_on:
       - db
-    # Implies depends_on
+    # Implies 'depends_on'
     links:
       - db
     ports:
-      - 5000:5000
-    # Volumes are to map the local disk to the container disk. If a change
-    # happens in local disk it is also done in the container. Good for dev.
-    # volumes:
+      - "5000:5000"
+      # - 5000:5000
+    env_file:
+      - ./YG-server/.env
 
-  # Will be on vercel
-  # client:
-  #   stdin_open: true
-  #   build: ./yg-client
-  #   ports:
-  #     - 3000:3000
-  #   env_file:
-  #     - ./yg-client/.env.local
-  #     - ./yg-client/.env.development
-    # volumes:
-    # environment:
+  # For Dev
+  client:
+    stdin_open: true
+    depends_on: 
+      - server
+    links:
+      - server
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./yg-client
+    ports:
+      - 3000:3000
+    env_file:
+      - ./yg-client/.env.local
+      - ./yg-client/.env.development
