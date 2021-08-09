@@ -18,7 +18,7 @@
 * Flask
 	* `FLASK_APP` - name of script that will start app (youtubebox.py)
 	* `FLASK_ENV` - environment var specifying development, testing, production
-	* `SECRET_KEY` - generate 
+	* `SECRET_KEY` - generate using `python -c 'import os; print(os.urandom(16))'`
 	* `SESSION_COOKIE_NAME` - random string of chars
 * Database
 	* `PROD_DATABASE_URI` - for production DB's
