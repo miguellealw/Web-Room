@@ -29,7 +29,7 @@ Create `.env.local` file
 	* `AUTH0_ISSUER_BASE_URL=...` - the url of your Auth0 tenant domain like `https://app-name.auth0.com`. **Make sure you add `https://`**
 	* `AUTH0_DOMAIN=...` - same as issuer base url above w/out `https://`
 	* `AUTH0_SECRET=` - a long secret value used to encrypt the session cookie (can be generated using nodejs). *Not the same as client secret*
-
+		*	Generate w/ `node -e "console.log(crypto.randomBytes(32).toString('hex'))"`
 * Create an API applciation
 	* `AUTH0_AUDIENCE=...` - API identifier from Auth0
 

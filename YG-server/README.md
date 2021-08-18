@@ -21,7 +21,6 @@
 	* `SECRET_KEY` - generate using `python -c 'import os; print(os.urandom(16))'`
 	* `SESSION_COOKIE_NAME` - random string of chars
 * Database
-	* `PROD_DATABASE_URI` - for production DB's
 	* `DATABASE_URI`=`postgresql://postgres:<PASSWORD>@localhost:5432/<DB_NAME>`
 		* Local or Production DB
 		*	If you are using `docker-compose up` the host will be `db` instaed of `localhost`
@@ -110,32 +109,7 @@ API_AUDIENCE=...
 ---
 ### Deployment
 - Set up environment variables. Instructions above.
-- When deploying go to the `wsgi.py` file and comment out the dev config and use the prod config. This will load the proper environment variables from `config.py`
-```python
-...
-
-# ====== For DEV
-app = create_app()
-
-# ====== For PROD
-# app = create_app('prod')
-
-...
-```
-
-to 
-
-```python
-...
-
-# ====== For DEV
-# app = create_app()
-
-# ====== For PROD
-app = create_app('prod')
-
-...
-```
+	- Make sure to set `FLASK_ENV` to `production` so the proper config is loaded
 ---
 ### Other Notes
 - After installing dependency do `pip freeze > requirements.txt` to add to requirements.txt file
