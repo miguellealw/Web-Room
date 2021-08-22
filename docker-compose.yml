@@ -19,7 +19,7 @@ services:
     build: ./YG-server
     depends_on:
       - db
-    # Implies 'depends_on'
+    # links Implies 'depends_on'
     links:
       - db
     ports:
@@ -27,6 +27,28 @@ services:
       # - 5000:5000
     env_file:
       - ./YG-server/.env
+
+  nginx: 
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx.conf:/config/nginx/nginx.conf
+      - ./prod.conf:/config/nginx/site-confs/default
+    environment:
+      - PUID=1050
+      - PGID=1050
+      # - URL=...
+      - SUBDOMAINS=${SUBDOMAIN}
+      - ONLY_SUBDOMAINS=true
+      # - TZ=Australia/Melboure
+    depends_on:
+      - server
+      # - client
 
   # For Dev
   client:
